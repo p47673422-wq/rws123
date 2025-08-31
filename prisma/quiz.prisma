@@ -1,0 +1,8 @@
+model QuizAttempt {
+  id        String   @id @default(uuid())
+  name      String?
+  mobile    String?
+  answers   Json
+  score     Int
+  createdAt DateTime @default(now())
+}

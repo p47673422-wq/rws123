@@ -1,0 +1,126 @@
+.responsive-event-shell {
+  max-width: 700px;
+  margin: 2rem auto;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  /* background: #fff; */
+  padding: 2rem 1rem;
+}
+.event-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #b45309;
+}
+.event-popup-slider-responsive {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #f9e6b3 0%, #ffe5e5 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 1rem 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.event-popup-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.event-popup-content-responsive {
+  margin-left: 1rem;
+  min-width: 200px;
+}
+.event-popup-heading {
+  font-size: 1.3rem;
+  color: #b45309;
+  margin-bottom: 0.5rem;
+}
+.event-popup-desc {
+  color: #444;
+  font-size: 1rem;
+}
+.event-tabs-responsive {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0 1rem 0;
+}
+.event-tab-btn-responsive {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: border 0.2s, background 0.2s;
+  min-width: 220px;
+  max-width: 100%;
+  text-align: left;
+}
+.event-tab-btn-responsive.active {
+  border-color: #fbbf24;
+  background: #fffbe6;
+  color: #b45309;
+}
+.event-tab-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.event-tab-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #b45309;
+}
+.event-tab-content-responsive {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-top: 1rem;
+}
+.event-tab-main-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.event-tab-main-title {
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1.3rem;
+  color: #b45309;
+}
+.event-tab-main-desc {
+  color: #444;
+  font-size: 1rem;
+}
+@media (max-width: 600px) {
+  .responsive-event-shell {
+    padding: 1rem 0.5rem;
+  }
+  .event-tabs-responsive {
+    gap: 0.5rem;
+  }
+  .event-tab-btn-responsive {
+    min-width: 140px;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.5rem;
+  }
+  .event-tab-title {
+    font-size: 0.9rem;
+  }
+  .event-tab-main-img {
+    width: 48px;
+    height: 48px;
+  }
+}

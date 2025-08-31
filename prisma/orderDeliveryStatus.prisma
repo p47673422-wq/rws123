@@ -1,0 +1,7 @@
+model OrderDeliveryStatus {
+  id        String   @id @default(uuid())
+  orderId   String
+  delivered Boolean
+  deliveredAt DateTime?
+  updatedAt DateTime @updatedAt
+}

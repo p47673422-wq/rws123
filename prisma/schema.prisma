@@ -1,0 +1,125 @@
+model OrderDeliveryStatus {
+  id        String   @id @default(uuid())
+  orderId   String
+  delivered Boolean
+  deliveredAt DateTime?
+  updatedAt DateTime @updatedAt
+}
+model BhagavadGitaRegistration {
+  id        String   @id @default(uuid())
+  name      String
+  mobile    String
+  gender    String
+  address   String
+  maritalStatus String?
+  language  String
+  isOffline Boolean @default(false)
+  createdAt DateTime @default(now())
+  @@unique([mobile, language])
+}
+model Order {
+  id        String      @id @default(uuid())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  total     Int
+  createdAt DateTime    @default(now())
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   String
+  title     String
+  price     Int
+  qty       Int
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  mobile    String   @unique
+  gender    String
+  address   String
+  maritalStatus String?
+  createdAt DateTime @default(now())
+  attempts  QuizAttempt[]
+  progresses Progress[]
+  rewards   Reward[]
+  orders    Order[]
+  japaChant JapaChant?
+}
+
+model Quiz {
+  id        String   @id @default(uuid())
+  title     String
+  type      String   @unique
+  maxScore  Int
+  createdAt DateTime @default(now())
+  attempts  QuizAttempt[]
+}
+
+model QuizAttempt {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  quiz      Quiz     @relation(fields: [quizId], references: [id])
+  quizId    String   
+  answers   Json
+  score     Int      
+  reward    Int      
+  createdAt DateTime @default(now())
+}
+model JapaChant {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   @unique
+  chantCount Int
+  createdAt  DateTime @default(now())
+}
+
+model Progress {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  pName     String   // e.g. "Prepare", "Perform", etc.
+  completed Boolean  // true if P is completed
+  percent  Float
+  updatedAt DateTime @updatedAt
+  @@unique([userId, pName])
+}
+
+model Reward {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  type      String   // e.g. "book", "aarti", "donation"
+  points    Int
+  createdAt DateTime @default(now())
+}
+// Prisma schema for selfie contest submissions
+// Run `npx prisma generate && npx prisma migrate dev` after editing this file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SelfieSubmission {
+  id        String   @id @default(uuid())
+  instagram String
+  createdAt DateTime @default(now())
+}
+
+// model QuizAttempt {
+//   id        String   @id @default(uuid())
+//   name      String?
+//   mobile    String?
+//   answers   Json
+//   score     Int
+//   createdAt DateTime @default(now())
+// }

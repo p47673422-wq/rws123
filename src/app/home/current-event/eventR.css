@@ -1,0 +1,36 @@
+@keyframes attractFade {
+  0% { opacity: 0; transform: scale(0.9) translateY(-20px); }
+  50% { opacity: 1; transform: scale(1.05) translateY(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+/* Enhanced animated and attractive style for Ganesh text */
+.ganesha-attract-text {
+  font-size: 2.4rem;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.06em;
+  background: linear-gradient(90deg, #ffb347 0%, #ffe082 40%, #fffbe6 60%, #ffe082 90%, #ffb347 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  text-shadow: 0 4px 24px rgba(196,79,0,0.25), 0 1px 0 #fffbe6;
+  animation: attractFade 1.2s cubic-bezier(.77,0,.18,1), ganeshaGlow 2.5s infinite alternate;
+  filter: drop-shadow(0 0 8px #ffe082);
+  position: relative;
+}
+@keyframes ganeshaGlow {
+  0% { filter: drop-shadow(0 0 8px #ffe082); }
+  50% { filter: drop-shadow(0 0 24px #ffb347); }
+  100% { filter: drop-shadow(0 0 8px #ffe082); }
+}
+
+/* Responsive and visually appealing iframe styles */
+
+@media (max-width: 600px) {
+  .ganesha-attract-text {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+}

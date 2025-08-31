@@ -1,0 +1,197 @@
+/* Cart quantity row styles */
+.cart-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  justify-content: center;
+}
+.qty-btn {
+  background: #ffe082;
+  color: #222;
+  border: none;
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px #ffe08244;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.qty-btn:disabled {
+  background: #bdbdbd;
+  color: #fff;
+  cursor: not-allowed;
+}
+.qty-btn:hover:not(:disabled) {
+  background: #fffde4;
+  color: #bfa100;
+}
+.cart-qty-value {
+  min-width: 1.8rem;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #ffe082;
+  font-weight: bold;
+  background: #222;
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.7rem;
+  border: 1.5px solid #ffe082;
+  margin: 0 0.2rem;
+}
+/* Purchase page manual CSS */
+.comeCustomBox1 {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #1a1a1a 60%, #fffbe6 100%);
+}
+.purchase-main-box-dark {
+  max-width: 900px;
+  width: 100%;
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18);
+  border: 2px solid #ffe082;
+  padding: 2.5rem;
+  margin: 2rem 0;
+  background: rgba(30, 30, 30, 0.98);
+}
+.fancyTitle {
+  color: #ffe082;
+  font-size: 2.2rem;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.flex {
+  display: flex;
+}
+.justify-center {
+  justify-content: center;
+}
+.gap-6 {
+  gap: 1.5rem;
+}
+.purchase-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+.purchase-card-dark {
+  background: #222;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 12px rgba(255,224,130,0.18);
+  border: 2px solid #ffe082;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.purchase-card-dark:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 24px #ffe08244;
+}
+.purchase-img-wrap-dark {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.purchase-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+  border: 2px solid #ffe082;
+  background: #fffbe6;
+}
+.purchase-card-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.purchase-title {
+  font-weight: bold;
+  color: #ffe082;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.purchase-desc {
+  color: #fffbe6;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  min-height: 40px;
+  text-align: center;
+}
+.purchase-price {
+  color: #ffe082;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+.fancy-btn {
+  background: linear-gradient(90deg, #ffe082 10%, #fffde4 90%);
+  color: #222;
+  font-weight: bold;
+  border-radius: 2rem;
+  border: none;
+  padding: 0.7rem 2rem;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px #ffe08244;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.fancy-btn:hover, .fancy-btn.active {
+  background: #ffe082;
+  color: #bfa100;
+  box-shadow: 0 4px 16px #ffe08288;
+}
+.add-to-cart-btn {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+.checkout-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffe082;
+  border-radius: 1.5rem;
+  padding: 1.2rem 2rem;
+  margin-top: 2rem;
+  box-shadow: 0 2px 8px #ffe08244;
+}
+.checkout-total {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #bfa100;
+}
+.proceed-checkout-btn {
+  background: #43a047;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 2rem;
+  padding: 0.7rem 2.5rem;
+  border: none;
+  box-shadow: 0 2px 8px #43a04744;
+  transition: background 0.2s, color 0.2s;
+}
+.proceed-checkout-btn:disabled {
+  background: #bdbdbd;
+  color: #fff;
+  cursor: not-allowed;
+}
