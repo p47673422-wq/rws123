@@ -45,6 +45,7 @@ export default function MahaavatarQuizPage() {
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [tab, setTab] = useState(0); // 0: first 5, 1: next 5
+  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState({ id: "",name: "", mobile: "", gender: "", address: "", maritalStatus: "" });
   const [showUserInfo, setShowUserInfo] = useState(false);
@@ -142,6 +143,7 @@ export default function MahaavatarQuizPage() {
     });
     setScore(s);
     setSubmitted(true);
+    setShowWhatsAppModal(true);
     userInfo.id = userId;
     // Save quiz attempt (no progress or P info for Mahaavatar)
     await fetch("/api/quiz/submit", {
@@ -272,7 +274,40 @@ export default function MahaavatarQuizPage() {
             <div className="quiz-result-score">You scored <span>{score}</span> out of 10!</div>
           </div>
         )}
-      </div>
+      {/* WhatsApp Modal Popup */}
+      {showWhatsAppModal && (
+        <div className="quiz-modal-overlay">
+          <div className="quiz-modal-box">
+            <div className="quiz-modal-title">Join Our Free Mahaavatar Course!</div>
+            <div className="quiz-modal-desc">
+              Congratulations on completing the quiz!<br />
+              Join our WhatsApp group for a free course on Mahaavatar.<br />
+            </div>
+            <div className="quiz-modal-links">
+              {userInfo.gender === "Male" && <a
+                href="https://chat.whatsapp.com/COdoyHIHQQAHiPeEf0dUpr?mode=ems_copy_c"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="quiz-modal-link"
+              >
+                Join Group
+              </a>}
+              {userInfo.gender === "Female" && <a
+                href=""
+                target="_blank"
+                rel="noopener noreferrer"
+                className="quiz-modal-link"
+              >
+                Join Women's Group
+              </a>}
+            </div>
+            <button className="quiz-modal-close" onClick={() => setShowWhatsAppModal(false)}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
+    </div> 
   );
-}
+  }

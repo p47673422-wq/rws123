@@ -257,6 +257,73 @@
   background: #388e3c;
 }
 /* 8Ps Main Page Manual CSS */
+  .quiz-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(44, 62, 80, 0.7);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .quiz-modal-box {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(44,62,80,0.2);
+    padding: 32px 24px;
+    max-width: 350px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    font-family: inherit;
+    color: #2d6a4f;
+    border: 2px solid #2d6a4f;
+  }
+  .quiz-modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #184d47;
+  }
+  .quiz-modal-desc {
+    font-size: 1rem;
+    margin-bottom: 18px;
+    color: #184d47;
+  }
+  .quiz-modal-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .quiz-modal-link {
+    background: #2d6a4f;
+    color: #fff;
+    padding: 10px 0;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+  }
+  .quiz-modal-link:hover, .quiz-modal-link-active {
+    background: #184d47;
+  }
+  .quiz-modal-close {
+    background: #fff;
+    color: #2d6a4f;
+    border: 1px solid #2d6a4f;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  .quiz-modal-close:hover {
+    background: #2d6a4f;
+    color: #fff;
+  }
 .eightps-main-box {
   background: rgba(30,30,30,0.68);
   color: #fff;
