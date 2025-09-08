@@ -293,12 +293,12 @@ export default function MahaavatarQuizPage() {
                 Join Group
               </a>}
               {userInfo.gender === "Female" && <a
-                href=""
+                href="https://chat.whatsapp.com/F0GjUES3NkJ5OHhNOvI1Zr?mode=ems_copy_c"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="quiz-modal-link"
               >
-                Join Women's Group
+                Join Group
               </a>}
             </div>
             <button className="quiz-modal-close" onClick={() => setShowWhatsAppModal(false)}>
