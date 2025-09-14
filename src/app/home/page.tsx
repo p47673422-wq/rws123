@@ -9,17 +9,17 @@ import { GiPrayerBeads } from "react-icons/gi";
 
 export default function HomePage() {
   const [showSummary, setShowSummary] = useState(false);
-  const [showEventPopup, setShowEventPopup] = useState(true);
+  // const [showEventPopup, setShowEventPopup] = useState(false);
   const [glowEvent, setGlowEvent] = useState(false);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowEventPopup(false);
-    }, 3500);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setShowEventPopup(false);
+  //   }, 3500);
+  //   return () => clearTimeout(timer);
+  // }, []);
   return (
     <div className="content-overlay">
-      {showEventPopup && (
+      {/* {showEventPopup && (
         <div className="event-news-popup-bottom">
           <Image src="/images/shutte.png" alt="Lord Ganesh" width={480} height={480} className="event-news-img" />
           <div className="event-news-content">
@@ -27,7 +27,7 @@ export default function HomePage() {
             <p className="event-news-desc">Attend and receive a special gift. Celebrate with us and seek Lord Gaṇeśa's blessings!</p>
           </div>
         </div>
-      )}
+      )} */}
       <div className="homeCustomBox home-main-box">
         <div className="home-header">
           <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={400} height={100} className="home-logo" />
@@ -46,11 +46,11 @@ export default function HomePage() {
             <span className="home-tile-desc">Bhagavad Gita</span>
           </Link>
           {/* Current Event Tile */}
-          <Link href="/home/current-event" className="home-tile home-tile-event home-tile-glow">
+          {/* <Link href="/home/current-event" className="home-tile home-tile-event home-tile-glow">
             <Image src="/images/icon.png" alt="Lord Ganesh" width={48} height={48} className="home-tile-icon" />
             <span className="home-tile-title">Current Event</span>
             <span className="home-tile-desc">Ganesh chaturthi</span>
-          </Link>
+          </Link> */}
         </div>
         <hr className="home-divider" />
         <div className="home-gift-title">Attend this to get free gift</div>
