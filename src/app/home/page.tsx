@@ -19,7 +19,7 @@ export default function HomePage() {
   // }, []);
   return (
     <div className="content-overlay">
-      {/* {showEventPopup && (
+       {/* {showEventPopup && (
         <div className="event-news-popup-bottom">
           <Image src="/images/shutte.png" alt="Lord Ganesh" width={480} height={480} className="event-news-img" />
           <div className="event-news-content">
@@ -46,7 +46,7 @@ export default function HomePage() {
             <span className="home-tile-desc">Bhagavad Gita</span>
           </Link>
           {/* Current Event Tile */}
-          {/* <Link href="/home/current-event" className="home-tile home-tile-event home-tile-glow">
+                    {/* <Link href="/home/current-event" className="home-tile home-tile-event home-tile-glow">
             <Image src="/images/icon.png" alt="Lord Ganesh" width={48} height={48} className="home-tile-icon" />
             <span className="home-tile-title">Current Event</span>
             <span className="home-tile-desc">Ganesh chaturthi</span>
