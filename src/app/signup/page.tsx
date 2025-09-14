@@ -43,7 +43,17 @@ export default function SignupPage() {
         <form onSubmit={handleSignup} className="space-y-4">
           <input type="text" className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Name" value={name} onChange={e => setName(e.target.value)} required />
           <input type="email" className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-          <input type="text" className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Coordinator Type" value={type} onChange={e => setType(e.target.value)} required />
+          <select
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            value={type}
+            onChange={e => setType(e.target.value)}
+            required
+          >
+            <option value="">Select Coordinator Type</option>
+            <option value="PREACHER">PREACHER</option>
+            <option value="LEADER">LEADER</option>
+            <option value="COUNCILER">COUNCILER</option>
+          </select>
           <input type="password" className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Temp Password" value={password} onChange={e => setPassword(e.target.value)} required />
           {error && <div className="text-red-600 text-sm">{error}</div>}
           {success && <div className="text-green-600 text-sm font-semibold">{success}</div>}
