@@ -5,6 +5,62 @@ model OrderDeliveryStatus {
   deliveredAt DateTime?
   updatedAt DateTime @updatedAt
 }
+
+enum CoType {
+  PREACHER
+  LEADER
+  COUNCILER
+}
+enum PlaceType {
+  SCHOOL
+  COOLLEGE
+  COMPANY
+  PUBLIC_PLACE
+  SHRESHTHA
+  OTHER
+}
+
+model cordinatorUser {
+  id                 String           @id @default(uuid())
+  name               String
+  email               String          @unique
+  type               CoType
+  password           String
+  tempPasswordUsed   Boolean          @default(false)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  bookings           Booking[]
+  rewardProgress     RewardProgress?
+}
+
+model Booking {
+  id           String      @id @default(uuid())
+  cordinatorId String
+  placeType    PlaceType
+  placeName    String
+  date         DateTime
+  time         String
+  strength     Int
+  duration     Int
+  resources    String[]    // Array of resource names
+  comment      String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  cordinator   cordinatorUser @relation(fields: [cordinatorId], references: [id])
+}
+
+model RewardProgress {
+  id             String         @id @default(uuid())
+  cordinatorId   String         @unique
+  points         Int            @default(0)
+  level          Int            @default(1)
+  lastRewardedAt DateTime?
+  totalStrength  Int      @default(0)
+  totalBookings  Int      @default(0)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  user           cordinatorUser @relation(fields: [cordinatorId], references: [id])
+}
 model BhagavadGitaRegistration {
   id        String   @id @default(uuid())
   name      String

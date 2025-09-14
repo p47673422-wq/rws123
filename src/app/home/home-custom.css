@@ -34,6 +34,9 @@
     margin-bottom: 0.2rem;
   }
 }
+@media (max-width: 768px) {
+  .home-nav-btn { font-size: 1rem; }
+}
 /* Fade-in animation for event detail page */
 .event-detail-fadein {
   animation: fadeInEventDetail 0.8s cubic-bezier(.77,0,.18,1);

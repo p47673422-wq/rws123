@@ -17,6 +17,24 @@ export default function HomePage() {
   //   }, 3500);
   //   return () => clearTimeout(timer);
   // }, []);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+useEffect(() => {
+  async function checkAuth() {
+    try {
+      const res = await fetch("/api/auth/me");
+      if (res.ok) {
+        const data = await res.json();
+        setIsLoggedIn(!data?.email);
+      } else {
+        setIsLoggedIn(false);
+      }
+    } catch {
+      setIsLoggedIn(false);
+    }
+  }
+  checkAuth();
+}, []);
   return (
     <div className="content-overlay">
        {/* {showEventPopup && (
@@ -29,6 +47,42 @@ export default function HomePage() {
         </div>
       )} */}
       <div className="homeCustomBox home-main-box">
+        {/* Desktop Nav */}
+<nav className="hidden md:flex justify-end gap-4 py-2 px-2">
+  {isLoggedIn ? (
+    <Link href="/booking-home" className="home-nav-btn bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition font-semibold">Home</Link>
+  ) : (
+    <>
+      <Link href="/login" className="home-nav-btn bg-yellow-600 text-white px-4 py-2 rounded shadow hover:bg-yellow-700 transition font-semibold">Login</Link>
+      <Link href="/signup" className="home-nav-btn bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition font-semibold">Sign Up</Link>
+    </>
+  )}
+</nav>
+
+{/* Mobile Dot Nav */}
+<div className="md:hidden fixed bottom-6 right-6 z-50">
+  <button
+    className="w-14 h-14 rounded-full bg-yellow-500 shadow-lg flex items-center justify-center"
+    onClick={() => setShowSummary(true)}
+    aria-label="Open navigation"
+  >
+    <span className="w-4 h-4 rounded-full bg-white" />
+  </button>
+  {showSummary && (
+    <div className="absolute bottom-16 right-0 bg-white rounded-xl shadow-lg p-4 flex flex-col gap-2">
+      {isLoggedIn ? (
+        <Link href="/booking-home" className="home-nav-btn bg-green-600 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Home</Link>
+      ) : (
+        <>
+          <Link href="/login" className="home-nav-btn bg-yellow-600 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Login</Link>
+          <Link href="/signup" className="home-nav-btn bg-yellow-500 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Sign Up</Link>
+        </>
+      )}
+      <button className="mt-2 text-xs text-gray-500" onClick={() => setShowSummary(false)}>Close</button>
+    </div>
+  )}
+</div>
+
         <div className="home-header">
           <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={400} height={100} className="home-logo" />
           <h1 className="fancyTitle">Welcome to ISKCON Sri Sri Radha Madanmohan</h1>
