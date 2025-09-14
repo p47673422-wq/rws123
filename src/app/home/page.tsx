@@ -48,43 +48,50 @@ useEffect(() => {
       )} */}
       <div className="homeCustomBox home-main-box">
         {/* Desktop Nav */}
-<nav className="hidden md:flex justify-end gap-4 py-2 px-2">
-  {isLoggedIn ? (
-    <Link href="/booking-home" className="home-nav-btn bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition font-semibold">Home</Link>
-  ) : (
-    <>
-      <Link href="/login" className="home-nav-btn bg-yellow-600 text-white px-4 py-2 rounded shadow hover:bg-yellow-700 transition font-semibold">Login</Link>
-      <Link href="/signup" className="home-nav-btn bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition font-semibold">Sign Up</Link>
-    </>
-  )}
-</nav>
+        <nav className="hidden md:flex justify-end gap-4 py-2 px-2">
+          <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={120} height={40} className="" />
+          {isLoggedIn ? (
+            <Link href="/booking-home" className="home-nav-btn bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition font-semibold">Home</Link>
+          ) : (
+            <>
+              <Link href="/login" className="home-nav-btn bg-yellow-600 text-white px-4 py-2 rounded shadow hover:bg-yellow-700 transition font-semibold">Login</Link>
+              <Link href="/signup" className="home-nav-btn bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition font-semibold">Sign Up</Link>
+            </>
+          )}
+        </nav>
 
-{/* Mobile Dot Nav */}
-<div className="md:hidden fixed bottom-6 right-6 z-50">
-  <button
-    className="w-14 h-14 rounded-full bg-yellow-500 shadow-lg flex items-center justify-center"
-    onClick={() => setShowSummary(true)}
-    aria-label="Open navigation"
-  >
-    <span className="w-4 h-4 rounded-full bg-white" />
-  </button>
-  {showSummary && (
-    <div className="absolute bottom-16 right-0 bg-white rounded-xl shadow-lg p-4 flex flex-col gap-2">
-      {isLoggedIn ? (
-        <Link href="/booking-home" className="home-nav-btn bg-green-600 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Home</Link>
-      ) : (
-        <>
-          <Link href="/login" className="home-nav-btn bg-yellow-600 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Login</Link>
-          <Link href="/signup" className="home-nav-btn bg-yellow-500 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Sign Up</Link>
-        </>
-      )}
-      <button className="mt-2 text-xs text-gray-500" onClick={() => setShowSummary(false)}>Close</button>
-    </div>
-  )}
-</div>
+        {/* Mobile Top Nav Bar */}
+        <nav className="md:hidden fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-yellow-100 px-4 py-2 shadow">
+          <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={120} height={40} className="" />
+          <button
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-yellow-500"
+            onClick={() => setShowSummary(!showSummary)}
+            aria-label="Open menu"
+          >
+            {/* Menu icon: three horizontal lines */}
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect y="6" width="28" height="3" rx="1.5" fill="white" />
+              <rect y="13" width="28" height="3" rx="1.5" fill="white" />
+              <rect y="20" width="28" height="3" rx="1.5" fill="white" />
+            </svg>
+          </button>
+          {showSummary && (
+            <div className="absolute top-14 right-4 bg-white rounded-xl shadow-lg p-4 flex flex-col gap-2">
+              {isLoggedIn ? (
+                <Link href="/booking-home" className="home-nav-btn bg-green-600 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Home</Link>
+              ) : (
+                <>
+                  <Link href="/login" className="home-nav-btn bg-yellow-600 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Login</Link>
+                  <Link href="/signup" className="home-nav-btn bg-yellow-500 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Sign Up</Link>
+                </>
+              )}
+              <button className="mt-2 text-xs text-gray-500" onClick={() => setShowSummary(false)}>Close</button>
+            </div>
+          )}
+        </nav>
 
         <div className="home-header">
-          <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={400} height={100} className="home-logo" />
+           
           <h1 className="fancyTitle">Welcome to ISKCON Sri Sri Radha Madanmohan</h1>
         </div>
         <div className="home-grid">
