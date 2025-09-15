@@ -9,6 +9,9 @@ export async function POST(req: Request) {
   if (!coordinatorId || !placeType || !placeName || !date || !time || !strength || !duration || !resources) {
     return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
   }
+  // Convert duration to Int if it's a string like "30 min"
+  let durationInt = typeof duration === 'string' ? parseInt(duration) : duration;
+  if (isNaN(durationInt)) durationInt = 0;
   try {
     const booking = await prisma.booking.create({
       data: {
@@ -18,7 +21,7 @@ export async function POST(req: Request) {
         date: new Date(date),
         time,
         strength,
-        duration,
+        duration: durationInt,
         resources,
         comment,
       },

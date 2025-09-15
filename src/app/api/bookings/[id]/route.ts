@@ -7,6 +7,9 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
   const { id } = await context.params;
   const body = await req.json();
   const { placeType, placeName, date, time, strength, duration, resources, comment } = body;
+  // Convert duration to Int if it's a string like "30 min"
+  let durationInt = typeof duration === 'string' ? parseInt(duration) : duration;
+  if (isNaN(durationInt)) durationInt = 0;
   try {
     const oldBooking = await prisma.booking.findUnique({ where: { id } });
     if (!oldBooking) return NextResponse.json({ error: 'Booking not found.' }, { status: 404 });
@@ -18,7 +21,7 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
         date: date ? new Date(date) : undefined,
         time,
         strength,
-        duration,
+        duration: durationInt,
         resources,
         comment,
       },

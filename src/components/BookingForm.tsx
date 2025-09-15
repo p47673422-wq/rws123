@@ -10,10 +10,8 @@ const placeTypes = ["SCHOOL",
 "OTHER"];
 
 const durations = ["30 min", "1 hr", "2 hr", "custom"];
-const resourcesList = ["Japa Mala", "Mantra Card", "Books", "Gift", "Prasadam"];
+const resourcesList = ["Japa Mala", "Mantra Card", "QR Code", "Book for stall", "Gifts", "Ladoo Prasadam"];
 
- 
- 
 import { apiFetch } from "../lib/api";
 
 export default function BookingForm({ user }: { user: { id: string; name: string } }) {
@@ -28,6 +26,7 @@ export default function BookingForm({ user }: { user: { id: string; name: string
     time: "",
     strength: 1,
     duration: "30 min",
+    customDuration: "",
     resources: [] as string[],
     comment: "",
   });
@@ -41,13 +40,16 @@ export default function BookingForm({ user }: { user: { id: string; name: string
       apiFetch<{ booking: any }>(`/api/bookings/${bookingId}`)
         .then(data => {
           if (data.booking) {
+            // If duration matches a preset, use it; else set customDuration
+            const preset = durations.find(d => d === data.booking.duration);
             setForm({
               placeType: data.booking.placeType,
               placeName: data.booking.placeName,
               date: data.booking.date?.slice(0, 10) || "",
               time: data.booking.time || "",
               strength: data.booking.strength,
-              duration: data.booking.duration,
+              duration: preset ? preset : "custom",
+              customDuration: preset ? "" : String(data.booking.duration),
               resources: data.booking.resources || [],
               comment: data.booking.comment || "",
             });
@@ -77,6 +79,9 @@ export default function BookingForm({ user }: { user: { id: string; name: string
     if (!form.placeType || !form.placeName || !form.date || !form.time || !form.strength || !form.duration) {
       return "Please fill all required fields.";
     }
+    if (form.duration === "custom" && (!form.customDuration || isNaN(Number(form.customDuration)) || Number(form.customDuration) <= 0)) {
+      return "Please enter a valid custom duration in minutes.";
+    }
     if (form.strength <= 0) return "Strength must be greater than 0.";
     return "";
   };
@@ -91,9 +96,15 @@ export default function BookingForm({ user }: { user: { id: string; name: string
       return;
     }
     setLoading(true);
+    // Calculate duration value for backend
+    let durationValue = form.duration;
+    if (form.duration === "custom") {
+      durationValue = form.customDuration;
+    }
     const payload = {
       coordinatorId: user.id,
       ...form,
+      duration: durationValue,
     };
     const method = bookingId ? "PUT" : "POST";
     const url = bookingId ? `/api/bookings/${bookingId}` : "/api/bookings";
@@ -151,6 +162,18 @@ export default function BookingForm({ user }: { user: { id: string; name: string
           <select name="duration" value={form.duration} onChange={handleChange} className="w-full px-4 py-2 border rounded" required>
             {durations.map(d => <option key={d} value={d}>{d}</option>)}
           </select>
+          {form.duration === "custom" && (
+            <input
+              type="number"
+              name="customDuration"
+              min={1}
+              value={form.customDuration}
+              onChange={handleChange}
+              className="w-full mt-2 px-4 py-2 border rounded"
+              placeholder="Enter duration in minutes"
+              required
+            />
+          )}
         </div>
         <div>
           <label className="block text-yellow-700 font-semibold mb-1">Resources</label>
@@ -163,7 +186,7 @@ export default function BookingForm({ user }: { user: { id: string; name: string
           </div>
         </div>
         <div>
-          <label className="block text-yellow-700 font-semibold mb-1">Comment</label>
+          <label className="block text-yellow-700 font-semibold mb-1"> Any additional resources</label>
           <textarea name="comment" value={form.comment} onChange={handleChange} className="w-full px-4 py-2 border rounded" rows={2} />
         </div>
         {error && <div className="text-red-600 text-sm">{error}</div>}
