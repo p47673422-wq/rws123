@@ -30,7 +30,7 @@ export default function AllSubmissionsPage() {
     return matchPlace && matchDate;
   });
 
-  const grouped = groupBy(filtered, "cordinator.name");
+  const grouped = Object.groupBy(filtered, (item) => item.cordinator.name);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-100 to-orange-200 py-6 px-2">
