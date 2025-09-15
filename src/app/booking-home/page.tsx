@@ -25,7 +25,7 @@ export default function BookCongregationPage() {
       <div className="w-full max-w-2xl">
         <div className="flex flex-col items-center mb-4">
           <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={180} height={60} />
-          <h1 className="text-2xl md:text-3xl font-bold text-yellow-700 mt-2">Hi, {user.name}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-yellow-700 mt-2">Hare Krishna, {user.name}</h1>
         </div>
         <Carousel />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 mb-4">
