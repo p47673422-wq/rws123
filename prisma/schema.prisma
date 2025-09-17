@@ -6,6 +6,77 @@ model OrderDeliveryStatus {
   updatedAt DateTime @updatedAt
 }
 
+model User_x {
+  id        String   @id @default(uuid())
+  name      String
+  mobile    String   @unique
+  gender    String
+  address   String
+  createdAt DateTime @default(now())
+  quizAnswers QuizAnswer_x[]
+  commitments Commitment_x[]
+  japaProgress JapaProgress_x[]
+  gifts      Gift_x[]
+  badges     Badge_x[]
+}
+
+model QuizAnswer_x {
+  id          String   @id @default(uuid())
+  userId      String
+  level       Int
+  questionKey String
+  answer      String
+  createdAt   DateTime @default(now())
+  user        User_x   @relation(fields: [userId], references: [id])
+}
+
+model Commitment_x {
+  id                String   @id @default(uuid())
+  userId            String
+  roundsPerDay      Int
+  friendsToInspire  Int
+  joinJapa          Boolean
+  createdAt         DateTime @default(now())
+  user              User_x   @relation(fields: [userId], references: [id])
+}
+
+model JapaProgress_x {
+  id        String   @id @default(uuid())
+  userId    String
+  day       Int
+  rounds    Int
+  createdAt DateTime @default(now())
+  user      User_x   @relation(fields: [userId], references: [id])
+  @@unique([userId, day])
+}
+
+enum GiftType_x {
+  QUIZ
+  JAPA
+}
+
+model Gift_x {
+  id        String   @id @default(uuid())
+  userId    String
+  level     Int
+  type      GiftType_x
+  name      String
+  unlocked  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User_x   @relation(fields: [userId], references: [id])
+  @@unique([userId, level, type])
+}
+
+model Badge_x {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  description String
+  unlocked    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  user        User_x   @relation(fields: [userId], references: [id])
+}
+
 enum CoType {
   PREACHER
   LEADER

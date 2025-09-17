@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import "./home-custom.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -91,8 +92,35 @@ useEffect(() => {
         </nav>
 
         <div className="home-header">
-           
           <h1 className="fancyTitle">Welcome to ISKCON Sri Sri Radha Madanmohan</h1>
+        </div>
+
+        {/* Hero Section */}
+        <div className="relative w-full flex flex-col items-center justify-center py-8 mb-6">
+          {/* Animated pulsing aura background */}
+          <motion.div
+            initial={{ opacity: 0.7, scale: 1 }}
+            animate={{ opacity: [0.7, 1, 0.7], scale: [1, 1.08, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="absolute inset-0 z-0 flex items-center justify-center"
+          >
+            <div className="w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-yellow-400 via-pink-200 to-white blur-2xl opacity-60 mx-auto" />
+          </motion.div>
+          <div className="relative z-10 text-center w-full px-4">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-yellow-700 mb-2 drop-shadow-lg">🌸 Holy Name Challenge</h2>
+            <p className="text-lg md:text-xl text-pink-700 mb-6 font-semibold">Take the 3-Level Quiz & 7-Day Japa Challenge</p>
+            <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full">
+                <a href="/holyname/quiz/level1" className="w-full">
+                  <button className="w-full py-3 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">Start Quiz</button>
+                </a>
+                <a href="/holyname/japa" className="w-full">
+                  <button className="w-full py-3 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">Join Japa Challenge</button>
+                </a>
+                <a href="/holyname/gifts" className="w-full">
+                  <button className="w-full py-3 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">View My Gifts</button>
+                </a>
+            </div>
+          </div>
         </div>
         <div className="home-grid">
           {/* Row 1 */}
