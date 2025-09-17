@@ -21,7 +21,7 @@ export function useLocalProfile() {
     if (!mobile) {
       setProfile(null);
       setLoading(false);
-      setError("No mobile found in localStorage.");
+      // Do not set error here, allow UI to render quiz form
       return;
     }
     try {
