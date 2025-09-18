@@ -40,6 +40,9 @@ export default function GiftsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-200 via-pink-100 to-white flex flex-col items-center py-8 px-2">
+      <div className="w-full flex justify-start mb-4">
+        <a href="/holyname/profile" className="px-4 py-2 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">← Back to Profile</a>
+      </div>
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -30 }}
@@ -170,13 +173,13 @@ export default function GiftsPage() {
     </div>
   );
   // ...existing code...
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-200 via-white to-orange-50 flex flex-col items-center py-8 px-2">
-      {/* Navigation to Profile */}
-      <div className="w-full flex justify-start mb-4">
-        <a href="/holyname/profile" className="px-4 py-2 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">← Back to Profile</a>
-      </div>
-      {/* ...existing code for gifts page... */}
-    </div>
-  );
+  // return (
+  //   <div className="min-h-screen bg-gradient-to-br from-yellow-200 via-white to-orange-50 flex flex-col items-center py-8 px-2">
+  //     {/* Navigation to Profile */}
+  //     <div className="w-full flex justify-start mb-4">
+  //       <a href="/holyname/profile" className="px-4 py-2 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">← Back to Profile</a>
+  //     </div>
+  //     {/* ...existing code for gifts page... */}
+  //   </div>
+  // );
 }
