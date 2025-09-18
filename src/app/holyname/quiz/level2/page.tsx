@@ -6,6 +6,7 @@ import GlowingButton from "../../../../components/ui/GlowingButton";
 import GiftCard from "../../../../components/ui/GiftCard";
 import { useLocalProfile } from "../../../../hooks/useLocalProfile";
 import { motion, AnimatePresence } from "framer-motion";
+import Confetti from "../../../../components/ui/Confetti";
 
 const stories = [
 	{
@@ -285,6 +286,7 @@ export default function QuizLevel2Page() {
 						</a>
 					</div>
 					<h2 className="text-2xl font-bold text-orange-700 mb-4">Level 2 Quiz Summary</h2>
+					<Confetti />
 					{gift && gift.unlocked && (
 						<GiftCard unlocked name="Laddoo Gift" />
 					)}
@@ -434,11 +436,11 @@ export default function QuizLevel2Page() {
 							<FlipCard
 								frontImg={stories[step].img}
 								backContent={
-									<div className="flex flex-col gap-4 items-center p-4">
-										<div className="text-lg font-semibold text-orange-700 mb-2 text-center" style={{ fontFamily: 'serif' }}>
-											{stories[step].text}
-										</div>
-									</div>
+														<div className="flex flex-col gap-4 items-center h-64 overflow-y-auto">
+															<div className="text-lg font-semibold text-orange-700 mb-2 text-center" style={{ fontFamily: 'serif' }}>
+																{stories[step].text}
+															</div>
+														</div>
 								}
 								width="100%"
 								imgClassName="w-full h-64 object-cover rounded-xl"

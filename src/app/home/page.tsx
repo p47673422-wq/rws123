@@ -38,6 +38,8 @@ useEffect(() => {
 }, []);
   return (
     <div className="content-overlay">
+      {/* Eye-catching scrolling message for spiritual program contact */}
+      
        {/* {showEventPopup && (
         <div className="event-news-popup-bottom">
           <Image src="/images/shutte.png" alt="Lord Ganesh" width={480} height={480} className="event-news-img" />
@@ -47,7 +49,7 @@ useEffect(() => {
           </div>
         </div>
       )} */}
-      <div className="homeCustomBox home-main-box">
+  <div className="homeCustomBox home-main-box">
         {/* Desktop Nav */}
         <nav className="hidden md:flex justify-end gap-4 py-2 px-2">
           <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={120} height={40} className="" />
@@ -121,6 +123,16 @@ useEffect(() => {
                 </a>
             </div>
           </div>
+          {/* <div className="w-full py-2 bg-gradient-to-r from-pink-200 via-yellow-100 to-orange-100 shadow-lg border-b-2 border-yellow-400 sticky top-0 z-50"> */}
+        
+          <div className="inline-block whitespace-nowrap animate-slide-x text-md font-bold text-pink-700 tracking-wide px-2">
+            For a spiritual programme <br />at your location, 
+            <br />please contact us:
+            <span className="mx-2 text-yellow-700">📞 98765-43210</span>
+            {/* <span className="mx-2 text-pink-700">✉️ info@iskconhyderabad.com</span> */}
+          
+        </div>
+      {/* </div> */}
         </div>
         <div className="home-grid">
           {/* Row 1 */}

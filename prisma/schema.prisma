@@ -24,6 +24,7 @@ model User_x {
   gender    String
   address   String
   createdAt DateTime @default(now())
+  friends   Friend_x[]
   quizAnswers QuizAnswer_x[]
   commitments Commitment_x[]
   japaProgress JapaProgress_x[]

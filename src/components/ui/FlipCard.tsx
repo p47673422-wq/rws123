@@ -32,7 +32,7 @@ export default function FlipCard({ frontImg, label, backContent, showFlipButton 
           className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-yellow-100 rounded-xl ${flipped ? 'z-10' : 'z-0'}`}
           style={{ backfaceVisibility: "hidden" }}
         >
-          <div className="w-full h-full flex flex-col items-center justify-center p-4 overflow-y-auto">
+          <div className="w-full h-full flex flex-col items-center justify-center p-1 overflow-y-auto">
             {backContent ? (
               <>{backContent}</>
             ) : (
