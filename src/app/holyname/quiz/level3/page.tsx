@@ -8,7 +8,10 @@ import BadgeModal from "../../../../components/ui/BadgeModal";
 
 export default function QuizLevel3Page() {
   const { profile, loading, error, refresh } = useLocalProfile();
-  const [commitment, setCommitment] = useState({ rounds: "", friends: "", japaChallenge: false });
+  const [commitment, setCommitment] = useState({ rounds: "", japaChallenge: false }); // Remove friends from commitment
+  const [friends, setFriends] = useState<any[]>([]);
+  const [newFriend, setNewFriend] = useState({ name: "", mobile: "", address: "", gender: "", maritalStatus: "" });
+  const [expandedFriend, setExpandedFriend] = useState<number | null>(null);
   const [status, setStatus] = useState<"new" | "incomplete" | "locked" | "unlocked">("new");
   const [gift, setGift] = useState<any>(null);
   const [badge, setBadge] = useState<any>(null);
@@ -21,33 +24,19 @@ export default function QuizLevel3Page() {
 
   useEffect(() => {
     if (!profile) return;
-    const level3Commit = profile.commitments?.find((c: any) => c.level === 3);
-    const giftObj = profile.gifts?.find((g: any) => g.level === 3 && g.type === "QUIZ");
-    const badgeObj = profile.badges?.find((b: any) => b.level === 3 && b.type === "QUIZ_COMPLETION");
-    if (!level3Commit) {
-      setStatus("new");
-      setCommitment({ rounds: "", friends: "", japaChallenge: false });
-    } else if (!level3Commit.isComplete) {
-      setStatus("incomplete");
-      setCommitment({
-        rounds: level3Commit.rounds || "",
-        friends: level3Commit.friends || "",
-        japaChallenge: !!level3Commit.japaChallenge,
+    // Fetch friends from backend for real-time updates
+    const fetchFriends = async () => {
+      const res = await fetch("/api/holyname/friend/list", {
+        method: "POST",
+        body: JSON.stringify({ userId: profile.id }),
+        headers: { "Content-Type": "application/json" },
       });
-      setMessage("You started your commitment 🌸 — please complete to unlock your sticker gift!");
-    } else if (giftObj && !giftObj.unlocked) {
-      setStatus("locked");
-      setCommitment({
-        rounds: level3Commit.rounds || "",
-        friends: level3Commit.friends || "",
-        japaChallenge: !!level3Commit.japaChallenge,
-      });
-      setMessage("Complete all commitments to unlock your sticker gift.");
-    } else if (giftObj && giftObj.unlocked) {
-      setStatus("unlocked");
-      setGift(giftObj);
-      setBadge(badgeObj);
-    }
+      if (res.ok) {
+        const data = await res.json();
+        setFriends(data.friends || []);
+      }
+    };
+    fetchFriends();
   }, [profile]);
 
   useEffect(() => {
@@ -62,6 +51,43 @@ export default function QuizLevel3Page() {
       ...c,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+  const handleFriendInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewFriend(f => ({ ...f, [name]: value }));
+  };
+  const handleAddFriend = async () => {
+    if (!profile) {
+      setShowProfileModal(true);
+      return;
+    }
+    if (!newFriend.name || !newFriend.mobile || !newFriend.address || !newFriend.gender || !newFriend.maritalStatus) {
+      setMessage("Please fill all friend details.");
+      return;
+    }
+    // Save friend to backend
+    const res = await fetch("/api/holyname/friend/save", {
+      method: "POST",
+      body: JSON.stringify({ ...newFriend, userId: profile.id }),
+      headers: { "Content-Type": "application/json" },
+    });
+    if (res.ok) {
+      // Refetch friends from backend for real-time update
+      const listRes = await fetch("/api/holyname/friend/list", {
+        method: "POST",
+        body: JSON.stringify({ userId: profile.id }),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (listRes.ok) {
+        const data = await listRes.json();
+        setFriends(data.friends || []);
+      }
+      setNewFriend({ name: "", mobile: "", address: "", gender: "", maritalStatus: "" });
+      setMessage("");
+      refresh();
+    } else {
+      setMessage("Error saving friend. Try again.");
+    }
   };
 
   const handleSubmit = async () => {
@@ -83,8 +109,8 @@ export default function QuizLevel3Page() {
       return;
     }
     // Validate
-    if (!commitment.rounds || !commitment.friends) {
-      setMessage("Please fill all fields to unlock your sticker gift.");
+    if (!commitment.rounds || friends.length === 0) {
+      setMessage("Please fill all fields and add at least one friend to unlock your sticker gift.");
       // Save incomplete
       await fetch("/api/holyname/commitment/save", {
         method: "POST",
@@ -92,7 +118,7 @@ export default function QuizLevel3Page() {
           userId: userProfile.id,
           level: 3,
           rounds: commitment.rounds,
-          friends: commitment.friends,
+          friends: friends.length,
           japaChallenge: commitment.japaChallenge,
           isComplete: false,
         }),
@@ -109,7 +135,7 @@ export default function QuizLevel3Page() {
         userId: userProfile.id,
         level: 3,
         rounds: commitment.rounds,
-        friends: commitment.friends,
+        friends: friends.length,
         japaChallenge: commitment.japaChallenge,
         isComplete: true,
       }),
@@ -194,7 +220,7 @@ export default function QuizLevel3Page() {
             <h3 className="text-lg font-semibold text-pink-700">Your Commitments:</h3>
             <ul className="mt-2 text-pink-900">
               <li>Chant {commitment.rounds} rounds daily</li>
-              <li>Inspire {commitment.friends} friends</li>
+              <li>Inspire {friends.length} friends</li>
               <li>Join Japa Challenge: {commitment.japaChallenge ? "Yes" : "No"}</li>
             </ul>
           </div>
@@ -232,7 +258,7 @@ export default function QuizLevel3Page() {
           <h3 className="text-lg font-semibold text-pink-700">Your Commitments:</h3>
           <ul className="mt-2 text-pink-900">
             <li>Chant {commitment.rounds} rounds daily</li>
-            <li>Inspire {commitment.friends} friends</li>
+            <li>Inspire {friends.length} friends</li>
             <li>Join Japa Challenge: {commitment.japaChallenge ? "Yes" : "No"}</li>
           </ul>
         </div>
@@ -271,16 +297,78 @@ export default function QuizLevel3Page() {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="font-semibold text-pink-700">I will inspire ___ friends.</label>
+            <label className="font-semibold text-pink-700">Add Inspired Friend</label>
             <GlowingInput
-              type="number"
-              name="friends"
-              value={commitment.friends}
-              onChange={handleInput}
-              placeholder="Enter number of friends"
+              type="text"
+              name="name"
+              value={newFriend.name}
+              onChange={handleFriendInput}
+              placeholder="Friend's Name"
               className="bg-pink-50 border-pink-300 focus:ring-pink-400"
               required
             />
+            <GlowingInput
+              type="tel"
+              name="mobile"
+              value={newFriend.mobile}
+              onChange={handleFriendInput}
+              placeholder="Friend's Mobile"
+              className="bg-pink-50 border-pink-300 focus:ring-pink-400"
+              required
+            />
+            <GlowingInput
+              type="text"
+              name="address"
+              value={newFriend.address}
+              onChange={handleFriendInput}
+              placeholder="Friend's Address"
+              className="bg-pink-50 border-pink-300 focus:ring-pink-400"
+              required
+            />
+            <select
+              name="gender"
+              value={newFriend.gender}
+              onChange={handleFriendInput}
+              className="bg-pink-50 border-pink-300 focus:ring-pink-400 rounded px-2 py-2"
+              required
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+            <select
+              name="maritalStatus"
+              value={newFriend.maritalStatus}
+              onChange={handleFriendInput}
+              className="bg-pink-50 border-pink-300 focus:ring-pink-400 rounded px-2 py-2"
+              required
+            >
+              <option value="">Select Marital Status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Other">Other</option>
+            </select>
+            <GlowingButton type="button" onClick={handleAddFriend}>Add Friend</GlowingButton>
+          </div>
+          <div className="flex flex-col gap-2 mt-4">
+            <label className="font-semibold text-pink-700">Inspired Friends ({friends.length})</label>
+            <ul className="mt-2 text-pink-900">
+              {friends.map((f, i) => (
+                <li key={i}>
+                  <button type="button" className="underline text-pink-700" onClick={() => setExpandedFriend(expandedFriend === i ? null : i)}>
+                    {f.name} ({f.mobile})
+                  </button>
+                  {expandedFriend === i && (
+                    <div className="bg-pink-50 border border-pink-200 rounded p-2 mt-2">
+                      <div><b>Address:</b> {f.address}</div>
+                      <div><b>Gender:</b> {f.gender}</div>
+                      <div><b>Marital Status:</b> {f.maritalStatus}</div>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
           <div className="flex items-center gap-2">
             <input
@@ -339,13 +427,17 @@ export default function QuizLevel3Page() {
                 className="focus:ring-pink-400 shadow-pink-200"
                 type="tel"
               />
-              <GlowingInput
-                placeholder="Gender"
+              <select
+                name="gender"
                 value={profileForm.gender}
                 onChange={e => setProfileForm(f => ({ ...f, gender: e.target.value }))}
                 required
-                className="focus:ring-pink-400 shadow-pink-200"
-              />
+                className="focus:ring-pink-400 shadow-pink-200 rounded px-2 py-2"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
               <GlowingInput
                 placeholder="Address"
                 value={profileForm.address}

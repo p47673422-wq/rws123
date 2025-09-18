@@ -162,11 +162,21 @@ export default function GiftsPage() {
         <span className="text-3xl text-yellow-500 animate-pulse">💬</span>
         <div className="flex-1">
           <div className="font-bold text-yellow-700 mb-2">📢 Stay inspired daily! Join our WhatsApp channel for tips and updates.</div>
-        <a href="https://whatsapp.com/channel/inspiration" target="_blank" rel="noopener">
+        <a href="https://whatsapp.com/channel/0029VaZw2iYCxoAsaLVQNl3c" target="_blank" rel="noopener">
           <GlowingButton className="w-full py-3 text-lg mt-2 bg-gradient-to-r from-yellow-400 via-pink-200 to-white">Join Now →</GlowingButton>
         </a>
         </div>
       </motion.div>
+    </div>
+  );
+  // ...existing code...
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-yellow-200 via-white to-orange-50 flex flex-col items-center py-8 px-2">
+      {/* Navigation to Profile */}
+      <div className="w-full flex justify-start mb-4">
+        <a href="/holyname/profile" className="px-4 py-2 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">← Back to Profile</a>
+      </div>
+      {/* ...existing code for gifts page... */}
     </div>
   );
 }

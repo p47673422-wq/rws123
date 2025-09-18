@@ -267,27 +267,38 @@ export default function JapaChallengePage() {
             style={{ display: "none" }}
           />
           <button
-            className={`japa-play-btn${isPlaying ? ' playing' : ''}`}
+            className={`px-6 py-3 rounded-full font-bold text-lg shadow-lg bg-gradient-to-r from-pink-300 via-yellow-200 to-orange-200 text-pink-900 border-2 border-pink-400 hover:scale-105 hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-pink-400 ${isPlaying ? 'opacity-60 cursor-not-allowed' : ''}`}
             onClick={handlePlayClick}
             disabled={isPlaying}
           >
-            ▶ Chant Mantra
+            <span className="mr-2">▶</span> Chant Mantra
           </button>
           <div className="japa-counter">Japa Counter: {playCount}</div>
           <div className="japa-counter">Rounds Today: {rounds}</div>
           <div className="japa-mantra-box">
-            {words.map((word, idx) => (
-              <React.Fragment key={idx}>
+            <div className="flex flex-wrap justify-center items-center gap-2 p-2">
+              {words.map((word, idx) => (
                 <span
-                  className={`japa-mantra-word${idx === currentWord ? ' active' : ''}`}
+                  key={idx}
+                  className={
+                    idx === currentWord
+                      ? "text-pink-600 font-bold text-lg animate-pulse transition-all duration-300"
+                      : "text-yellow-900 font-semibold text-lg"
+                  }
+                  style={{ marginRight: (idx + 1) % 4 === 0 ? "0.5rem" : "0.25rem" }}
                 >
-                  {word} {" "}
+                  {word}
                 </span>
-                {(idx + 1) % 4 === 0 && <br />}
-              </React.Fragment>
-            ))}
+              ))}
+            </div>
           </div>
           <button className="japa-save-btn" onClick={handleSave}>Save Progress</button>
+        <button
+          className="px-6 py-3 mt-4 rounded-full font-bold text-lg shadow-lg bg-gradient-to-r from-yellow-300 via-pink-200 to-orange-200 text-yellow-900 border-2 border-yellow-400 hover:scale-105 hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-yellow-400"
+          onClick={handleSave}
+        >
+          💾 Save Progress
+        </button>
         </div>
         {message && <div className="text-pink-600 font-semibold mt-4">{message}</div>}
       </div>
@@ -326,12 +337,12 @@ export default function JapaChallengePage() {
           style={{ display: "none" }}
         />
         <button
-          className={`japa-play-btn${isPlaying ? ' playing' : ''}`}
-          onClick={handlePlayClick}
-          disabled={isPlaying}
-        >
-          ▶ Chant Mantra
-        </button>
+            className={`px-6 py-3 rounded-full font-bold text-lg shadow-lg bg-gradient-to-r from-pink-300 via-yellow-200 to-orange-200 text-pink-900 border-2 border-pink-400 hover:scale-105 hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-pink-400 ${isPlaying ? 'opacity-60 cursor-not-allowed' : ''}`}
+            onClick={handlePlayClick}
+            disabled={isPlaying}
+          >
+            <span className="mr-2">▶</span> Chant Mantra
+          </button>
         <div className="japa-counter">Japa Counter: {playCount}</div>
         <div className="japa-counter">Rounds Today: {Math.floor(playCount / 108)}</div>
         <div className="japa-mantra-box">
@@ -346,7 +357,12 @@ export default function JapaChallengePage() {
             </React.Fragment>
           ))}
         </div>
-        <button className="japa-save-btn" onClick={handleSave}>Save Progress</button>
+        <button
+          className="px-6 py-3 mt-4 rounded-full font-bold text-lg shadow-lg bg-gradient-to-r from-yellow-300 via-pink-200 to-orange-200 text-yellow-900 border-2 border-yellow-400 hover:scale-105 hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-yellow-400"
+          onClick={handleSave}
+        >
+          💾 Save Progress
+        </button>
       </div>
       <div className="w-full max-w-xl">
         <h3 className="text-lg font-semibold text-yellow-700">Your Progress:</h3>
@@ -413,13 +429,17 @@ export default function JapaChallengePage() {
                 className="focus:ring-pink-400 shadow-pink-200"
                 type="tel"
               />
-              <GlowingInput
-                placeholder="Gender"
+              <select
+                name="gender"
                 value={profileForm.gender}
                 onChange={e => setProfileForm(f => ({ ...f, gender: e.target.value }))}
                 required
-                className="focus:ring-pink-400 shadow-pink-200"
-              />
+                className="focus:ring-pink-400 shadow-pink-200 rounded px-2 py-2"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
               <GlowingInput
                 placeholder="Address"
                 value={profileForm.address}

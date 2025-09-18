@@ -1,3 +1,14 @@
+model Friend_x {
+  id            String   @id @default(uuid())
+  userId        String
+  name          String
+  mobile        String
+  address       String
+  gender        String
+  maritalStatus String
+  createdAt     DateTime @default(now())
+  user          User_x   @relation(fields: [userId], references: [id])
+}
 model OrderDeliveryStatus {
   id        String   @id @default(uuid())
   orderId   String

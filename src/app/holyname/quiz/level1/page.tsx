@@ -164,13 +164,17 @@ export default function QuizLevel1Page() {
                 className="focus:ring-pink-400 shadow-pink-200"
                 type="tel"
               />
-              <GlowingInput
-                placeholder="Gender"
+              <select
+                name="gender"
                 value={profileForm.gender}
                 onChange={e => setProfileForm(f => ({ ...f, gender: e.target.value }))}
                 required
-                className="focus:ring-pink-400 shadow-pink-200"
-              />
+                className="focus:ring-pink-400 shadow-pink-200 rounded px-2 py-2"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
               <GlowingInput
                 placeholder="Address"
                 value={profileForm.address}
