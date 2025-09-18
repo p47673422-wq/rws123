@@ -278,17 +278,19 @@ export default function JapaChallengePage() {
           <div className="japa-mantra-box">
             <div className="flex flex-wrap justify-center items-center gap-2 p-2">
               {words.map((word, idx) => (
-                <span
-                  key={idx}
-                  className={
-                    idx === currentWord
-                      ? "text-pink-600 font-bold text-lg animate-pulse transition-all duration-300"
-                      : "text-yellow-900 font-semibold text-lg"
-                  }
-                  style={{ marginRight: (idx + 1) % 4 === 0 ? "0.5rem" : "0.25rem" }}
-                >
-                  {word}
-                </span>
+                <React.Fragment key={idx}>
+                  <span
+                    className={
+                      idx === currentWord
+                        ? "text-pink-600 font-bold text-lg animate-pulse transition-all duration-300"
+                        : "text-yellow-900 font-semibold text-lg"
+                    }
+                    style={{ marginRight: "0.25rem" }}
+                  >
+                    {word}
+                  </span>
+                  {(idx + 1) % 4 === 0 && <br />}
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -347,17 +349,19 @@ export default function JapaChallengePage() {
         <div className="japa-counter">Rounds Today: {Math.floor(playCount / 108)}</div>
         <div className="japa-mantra-box">
            {words.map((word, idx) => (
-                <span
-                  key={idx}
-                  className={
-                    idx === currentWord
-                      ? "text-pink-600 font-bold text-lg animate-pulse transition-all duration-300"
-                      : "text-yellow-900 font-semibold text-lg"
-                  }
-                  style={{ marginRight: (idx + 1) % 4 === 0 ? "0.5rem" : "0.25rem" }}
-                >
-                  {word}
-                </span>
+                <React.Fragment key={idx}>
+                  <span
+                    className={
+                      idx === currentWord
+                        ? "text-pink-600 font-bold text-lg animate-pulse transition-all duration-300"
+                        : "text-yellow-900 font-semibold text-lg"
+                    }
+                    style={{ marginRight: "0.25rem" }}
+                  >
+                    {word}
+                  </span>
+                  {(idx + 1) % 4 === 0 && <br />}
+                </React.Fragment>
               ))}
         </div>
         <button
