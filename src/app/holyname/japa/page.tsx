@@ -346,16 +346,19 @@ export default function JapaChallengePage() {
         <div className="japa-counter">Japa Counter: {playCount}</div>
         <div className="japa-counter">Rounds Today: {Math.floor(playCount / 108)}</div>
         <div className="japa-mantra-box">
-          {words.map((word, idx) => (
-            <React.Fragment key={idx}>
-              <span
-                className={`japa-mantra-word${idx === currentWord ? ' active' : ''}`}
-              >
-                {word} {" "}
-              </span>
-              {(idx + 1) % 4 === 0 && <br />}
-            </React.Fragment>
-          ))}
+           {words.map((word, idx) => (
+                <span
+                  key={idx}
+                  className={
+                    idx === currentWord
+                      ? "text-pink-600 font-bold text-lg animate-pulse transition-all duration-300"
+                      : "text-yellow-900 font-semibold text-lg"
+                  }
+                  style={{ marginRight: (idx + 1) % 4 === 0 ? "0.5rem" : "0.25rem" }}
+                >
+                  {word}
+                </span>
+              ))}
         </div>
         <button
           className="px-6 py-3 mt-4 rounded-full font-bold text-lg shadow-lg bg-gradient-to-r from-yellow-300 via-pink-200 to-orange-200 text-yellow-900 border-2 border-yellow-400 hover:scale-105 hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-yellow-400"
