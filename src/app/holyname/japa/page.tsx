@@ -29,6 +29,13 @@ export default function JapaChallengePage() {
   const [entries, setEntries] = useState<any[]>([]);
   const [rounds, setRounds] = useState<number>(0);
   const [message, setMessage] = useState<string>("");
+  const [playCount, setPlayCount] = useState<number>(0);
+  const [currentWord, setCurrentWord] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const audioRef = React.useRef<HTMLAudioElement>(null);
+  const mantraText = "Hare Krishna Hare Krishna Krishna Krishna Hare Hare Hare Ram Hare Ram Ram Ram Hare Hare";
+  const words = mantraText.split(" ");
+  const timings = [0, 1.2, 1.7, 2.07, 2.7, 3.2, 3.6, 4.2, 4.7, 5.2, 5.5, 6.0, 6.4, 6.9, 7.3, 7.6];
   const [badges, setBadges] = useState<any[]>([]);
   const [showBadge, setShowBadge] = useState<{ name: string; desc: string } | null>(null);
   const [gift, setGift] = useState<any>(null);
@@ -42,8 +49,15 @@ export default function JapaChallengePage() {
     if (!profile) return;
     const japaEntries = profile.japaProgress || [];
     setEntries(japaEntries.slice(0, MAX_DAYS));
-  setBadges(profile.badges?.filter((b: any) => b.type === "JAPA") || []);
-  setGift(profile.gifts?.find((g: any) => g.type === "JAPA"));
+    setBadges(profile.badges?.filter((b: any) => b.type === "JAPA") || []);
+    setGift(profile.gifts?.find((g: any) => g.type === "JAPA"));
+    // Pre-populate today's count/rounds
+    const today = new Date().getDate();
+    const todayEntry = japaEntries.find((jp: any) => jp.day === today);
+    if (todayEntry) {
+      setPlayCount(todayEntry.count || 0 + (todayEntry.rounds || 0) * 108);
+      setRounds(todayEntry.rounds || 0);
+    }
   }, [profile]);
 
   // Map entries to days
@@ -71,8 +85,39 @@ export default function JapaChallengePage() {
     }
   }, [showBadge]);
 
-  const handleRoundsChange = (val: number) => {
-    setRounds(Math.max(0, val));
+  // Audio word highlight logic
+  const handleTimeUpdate = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const time = audio.currentTime;
+    let wordIdx = timings.length - 1;
+    for (let i = 0; i < timings.length; i++) {
+      if (time < timings[i]) {
+        wordIdx = i - 1;
+        break;
+      }
+    }
+    setCurrentWord(Math.max(0, wordIdx));
+  };
+
+  const handlePlayClick = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play();
+    setPlayCount(prev => prev + 1);
+    setIsPlaying(true);
+  };
+
+  React.useEffect(() => {
+    // Calculate rounds whenever playCount changes
+    const newRounds = Math.floor(playCount / 108);
+    setRounds(newRounds);
+  }, [playCount]);
+
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setCurrentWord(0);
   };
 
   const handleSave = async () => {
@@ -93,17 +138,15 @@ export default function JapaChallengePage() {
       setShowProfileModal(true);
       return;
     }
-    if (rounds < 1) {
-      setMessage("Please enter at least 1 round.");
-      return;
-    }
-    const day = today + 1;
+    const today = new Date().getDate();
+    const countOfDay = playCount % 108;
     await fetch("/api/holyname/japa/save", {
       method: "POST",
       body: JSON.stringify({
         userId: userProfile.id,
-        day,
+        day: today,
         rounds,
+        count: countOfDay,
       }),
       headers: { "Content-Type": "application/json" },
     });
@@ -215,17 +258,36 @@ export default function JapaChallengePage() {
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6 w-full max-w-xl">
           <div className="text-lg font-semibold text-yellow-700 mb-2">Welcome to the 7-Day Japa Challenge!</div>
           <div className="text-yellow-900 mb-4">Chant daily and track your progress. Complete 7 days to unlock your reward!</div>
-          <div className="flex items-center gap-2 mt-4">
-            <span className="font-semibold text-yellow-700">Day 1:</span>
-            <input
-              type="number"
-              value={rounds}
-              onChange={e => handleRoundsChange(Number(e.target.value))}
-              className="w-24 px-2 py-1 border-2 border-yellow-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 bg-white text-yellow-900 font-semibold shadow"
-              min={0}
-            />
-            <GlowingButton onClick={handleSave}>Save My Count 🙏</GlowingButton>
+          {/* Audio mantra UI */}
+          <audio
+            ref={audioRef}
+            src="/audio/japa.mp3"
+            onTimeUpdate={handleTimeUpdate}
+            onEnded={handleEnded}
+            style={{ display: "none" }}
+          />
+          <button
+            className={`japa-play-btn${isPlaying ? ' playing' : ''}`}
+            onClick={handlePlayClick}
+            disabled={isPlaying}
+          >
+            ▶ Chant Mantra
+          </button>
+          <div className="japa-counter">Japa Counter: {playCount}</div>
+          <div className="japa-counter">Rounds Today: {rounds}</div>
+          <div className="japa-mantra-box">
+            {words.map((word, idx) => (
+              <React.Fragment key={idx}>
+                <span
+                  className={`japa-mantra-word${idx === currentWord ? ' active' : ''}`}
+                >
+                  {word} {" "}
+                </span>
+                {(idx + 1) % 4 === 0 && <br />}
+              </React.Fragment>
+            ))}
           </div>
+          <button className="japa-save-btn" onClick={handleSave}>Save Progress</button>
         </div>
         {message && <div className="text-pink-600 font-semibold mt-4">{message}</div>}
       </div>
@@ -255,29 +317,36 @@ export default function JapaChallengePage() {
       </div>
       <div className="bg-white rounded-xl shadow-lg p-6 mb-6 w-full max-w-xl">
         <div className="text-lg font-semibold text-yellow-700 mb-2">Japa Progress</div>
-        <div className="grid grid-cols-1 gap-4">
-          {dayEntries.map((entry: any, i: number) => (
-            <div key={i} className={`flex items-center gap-4 ${i > streak ? "opacity-40" : ""}`}>
-              <span className={`font-semibold text-yellow-700 w-24`}>{getDayLabel(i)}</span>
-              {i < streak ? (
-                <span className="text-yellow-900 font-bold">{entry ? entry.rounds : 0} rounds</span>
-              ) : i === streak ? (
-                <>
-                  <input
-                    type="number"
-                    value={i === streak ? rounds : (entry ? entry.rounds : 0)}
-                    onChange={e => handleRoundsChange(Number(e.target.value))}
-                    className="w-24 px-2 py-1 border-2 border-yellow-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 bg-white text-yellow-900 font-semibold shadow"
-                    min={0}
-                  />
-                  <GlowingButton onClick={handleSave} className={(!entry || entry.rounds === 0) ? "animate-pulse" : ""}>Save My Count 🙏</GlowingButton>
-                </>
-              ) : (
-                <span className="text-gray-400">Future</span>
-              )}
-            </div>
+        {/* Audio mantra UI */}
+        <audio
+          ref={audioRef}
+          src="/audio/japa.mp3"
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={handleEnded}
+          style={{ display: "none" }}
+        />
+        <button
+          className={`japa-play-btn${isPlaying ? ' playing' : ''}`}
+          onClick={handlePlayClick}
+          disabled={isPlaying}
+        >
+          ▶ Chant Mantra
+        </button>
+        <div className="japa-counter">Japa Counter: {playCount}</div>
+        <div className="japa-counter">Rounds Today: {Math.floor(playCount / 108)}</div>
+        <div className="japa-mantra-box">
+          {words.map((word, idx) => (
+            <React.Fragment key={idx}>
+              <span
+                className={`japa-mantra-word${idx === currentWord ? ' active' : ''}`}
+              >
+                {word} {" "}
+              </span>
+              {(idx + 1) % 4 === 0 && <br />}
+            </React.Fragment>
           ))}
         </div>
+        <button className="japa-save-btn" onClick={handleSave}>Save Progress</button>
       </div>
       <div className="w-full max-w-xl">
         <h3 className="text-lg font-semibold text-yellow-700">Your Progress:</h3>

@@ -46,6 +46,7 @@ model JapaProgress_x {
   userId    String
   day       Int
   rounds    Int
+  count     Int      @default(0) // Number of chants not yet a full round
   createdAt DateTime @default(now())
   user      User_x   @relation(fields: [userId], references: [id])
   @@unique([userId, day])
