@@ -5,13 +5,13 @@ import GlowingInput from "../../../../components/ui/GlowingInput";
 import GlowingButton from "../../../../components/ui/GlowingButton";
 import GiftCard from "../../../../components/ui/GiftCard";
 import { useLocalProfile } from "../../../../hooks/useLocalProfile";
-// import Confetti from "../../../components/ui/Confetti"; // If using
+import Confetti from "../../../../components/ui/Confetti"; // If using
 
 const images = [
-  { src: "/images/devotion1.jpg", label: "Image 1" },
-  { src: "/images/devotion2.jpg", label: "Image 2" },
-  { src: "/images/devotion3.jpg", label: "Image 3" },
-  { src: "/images/devotion4.jpg", label: "Image 4" },
+  { src: "/images/devotion1.png", label: "Image 1" },
+  { src: "/images/devotion2.png", label: "Image 2" },
+  { src: "/images/devotion3.png", label: "Image 3" },
+  { src: "/images/devotion4.png", label: "Image 4" },
 ];
 
 export default function QuizLevel1Page() {
@@ -55,26 +55,32 @@ export default function QuizLevel1Page() {
     // Check profile
     let userProfile = profile;
     if (!userProfile) {
-      // Try fetch
-      const res = await fetch("/api/holyname/profile");
-      if (res.ok) {
-        userProfile = await res.json();
+      // Try fetch by mobile from localStorage
+      const mobile = typeof window !== "undefined" ? localStorage.getItem("mkt_mobile") : "";
+      if (mobile) {
+        const res = await fetch(`/api/holyname/profile?mobile=${encodeURIComponent(mobile)}`);
+        if (res.ok) {
+          const data = await res.json();
+          userProfile = data.user;
+        }
       }
     }
     if (!userProfile) {
       setShowProfileModal(true);
       return;
     }
+    // Prepare answers: mark empty answers as null
+    const answersWithNulls = answers.map(a => a === "" ? null : a);
     // Validate
-    if (answers.slice(0, 4).some(a => !a) || !answers[4]) {
+    if (answersWithNulls.slice(0, 4).some(a => a === null) || answersWithNulls[4] === null) {
       setMessage("Please answer all questions to unlock your gift.");
-      // Save incomplete
+      // Save incomplete: send all answers in one API call
       await fetch("/api/holyname/quiz/submit", {
         method: "POST",
         body: JSON.stringify({
           userId: userProfile.id,
           level: 1,
-          answers: answers,
+          answers: answersWithNulls,
           isComplete: false,
         }),
         headers: { "Content-Type": "application/json" },
@@ -83,13 +89,13 @@ export default function QuizLevel1Page() {
       setStatus("locked");
       return;
     }
-    // Save complete
+    // Save complete: send all answers in one API call
     const res = await fetch("/api/holyname/quiz/submit", {
       method: "POST",
       body: JSON.stringify({
         userId: userProfile.id,
         level: 1,
-        answers: answers,
+        answers: answersWithNulls,
         isComplete: true,
       }),
       headers: { "Content-Type": "application/json" },
@@ -133,7 +139,7 @@ export default function QuizLevel1Page() {
               setProfileLoading(false);
               if (res.ok) {
                 const data = await res.json();
-                localStorage.setItem("mobile", profileForm.mobile);
+                localStorage.setItem("mkt_mobile", profileForm.mobile);
                 setShowProfileModal(false);
                 setProfileForm({ name: "", mobile: "", gender: "", address: "" });
                 setTimeout(() => {
@@ -182,19 +188,22 @@ export default function QuizLevel1Page() {
       <h2 className="text-2xl font-bold text-yellow-700 mb-4">Level 1 Quiz</h2>
       {status === "unlocked" ? (
         <div className="flex flex-col items-center gap-6">
-          {/* <Confetti /> */}
+          <Confetti />
           <GiftCard unlocked name="Certificate" />
           <div className="mt-4">
             <h3 className="text-lg font-semibold text-yellow-700">Your Answers:</h3>
             <ul className="mt-2 text-yellow-900">
               {answers.map((a, i) => (
-                <li key={i}>{a}</li>
+                <li key={i}>
+                  <span className="font-bold">Question {i + 1}:</span> {a || <span className="italic text-gray-400">(Unanswered)</span>}
+                </li>
               ))}
             </ul>
           </div>
         </div>
       ) : (
         <form className="w-full max-w-xl flex flex-col items-center gap-6" onSubmit={e => { e.preventDefault(); handleSubmit(); }}>
+           <div className="font-bold text-orange-700 mb-2 text-lg">Identify image</div>
           <div className="grid grid-cols-2 gap-4 w-full">
             {images.map((img, idx) => (
               <div key={idx} className="flex flex-col items-center gap-2">

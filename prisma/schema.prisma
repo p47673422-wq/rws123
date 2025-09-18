@@ -28,6 +28,7 @@ model QuizAnswer_x {
   answer      String
   createdAt   DateTime @default(now())
   user        User_x   @relation(fields: [userId], references: [id])
+  @@unique([userId, level, questionKey])
 }
 
 model Commitment_x {

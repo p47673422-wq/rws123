@@ -80,9 +80,13 @@ export default function JapaChallengePage() {
     let userProfile = profile;
     if (!userProfile) {
       // Try fetch
-      const res = await fetch("/api/holyname/profile");
-      if (res.ok) {
-        userProfile = await res.json();
+      const mobile = typeof window !== "undefined" ? localStorage.getItem("mkt_mobile") : "";
+      if (mobile) {
+        const res = await fetch(`/api/holyname/profile?mobile=${encodeURIComponent(mobile)}`);
+        if (res.ok) {
+          const data = await res.json();
+          userProfile = data.user;
+        }
       }
     }
     if (!userProfile) {
@@ -315,7 +319,7 @@ export default function JapaChallengePage() {
               setProfileLoading(false);
               if (res.ok) {
                 const data = await res.json();
-                localStorage.setItem("mobile", profileForm.mobile);
+                localStorage.setItem("mkt_mobile", profileForm.mobile);
                 setShowProfileModal(false);
                 setProfileForm({ name: "", mobile: "", gender: "", address: "" });
                 setTimeout(() => {

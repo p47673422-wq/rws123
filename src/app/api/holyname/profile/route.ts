@@ -3,13 +3,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function GET(req: Request) {
-  const userId = req.url.split("?userId=")[1];
+  const userId = req.url.split("?mobile=")[1];
   if (!userId) {
     return NextResponse.json({ error: "Missing userId." }, { status: 400 });
   }
   try {
     const user = await prisma.user_x.findUnique({
-      where: { id: userId },
+      where: { mobile: userId },
       include: {
         quizAnswers: true,
         commitments: true,
