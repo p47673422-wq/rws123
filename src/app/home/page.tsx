@@ -37,165 +37,230 @@ useEffect(() => {
   checkAuth();
 }, []);
   return (
-    <div className="content-overlay">
-      {/* Eye-catching scrolling message for spiritual program contact */}
-      
-       {/* {showEventPopup && (
-        <div className="event-news-popup-bottom">
-          <Image src="/images/shutte.png" alt="Lord Ganesh" width={480} height={480} className="event-news-img" />
-          <div className="event-news-content">
-            <h2 className="event-news-title">Ganesh Chaturthi Special!</h2>
-            <p className="event-news-desc">Attend and receive a special gift. Celebrate with us and seek Lord Gaṇeśa's blessings!</p>
+    <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-pink-50 to-white flex flex-col">
+      {/* Sticky Lotus-themed Navigation Bar */}
+      <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-saffron-200 via-pink-50 to-white shadow-lg border-b border-yellow-200">
+        <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-2">
+          {/* Left: Logo */}
+          <div className="flex items-center gap-2">
+            <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={150} height={75} className="rounded-full border-2 border-pink-200" />
+            <span className="font-bold text-xl text-yellow-700 tracking-wide">ISKCON ABIDS</span>
           </div>
-        </div>
-      )} */}
-  <div className="homeCustomBox home-main-box">
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex justify-end gap-4 py-2 px-2">
-          <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={120} height={40} className="" />
-          {isLoggedIn ? (
-            <Link href="/booking-home" className="home-nav-btn bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition font-semibold">Home</Link>
-          ) : (
-            <>
-              <Link href="/login" className="home-nav-btn bg-yellow-600 text-white px-4 py-2 rounded shadow hover:bg-yellow-700 transition font-semibold">Login</Link>
-              <Link href="/signup" className="home-nav-btn bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition font-semibold">Sign Up</Link>
-            </>
-          )}
+          {/* Center: Menu Links (Desktop) */}
+          <div className="hidden md:flex gap-4 items-center flex-1 justify-center">
+            <Link href="/" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Home</Link>
+            <Link href="/home/whatsapp" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Join WhatsApp</Link>
+            <Link href="/home/bhagavad-gita" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Courses</Link>
+            <Link href="#events" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Events</Link>
+            <Link href="/home/krishnabasket/items" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Krishna Basket</Link>
+            <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
+          </div>
+          {/* Right: Auth Buttons (Desktop) */}
+          <div className="hidden md:flex gap-2 items-center">
+            {isLoggedIn ? (
+              <Link href="/booking-home" className="rounded-full px-5 py-2 font-semibold bg-green-600 text-white shadow hover:scale-105 transition">Home</Link>
+            ) : (
+              <>
+                <Link href="/login" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-yellow-500 via-pink-400 to-orange-400 text-white shadow hover:scale-105 transition">Login</Link>
+                <Link href="/signup" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-300 text-white shadow hover:scale-105 transition">Sign Up</Link>
+              </>
+            )}
+          </div>
+          {/* Mobile Hamburger */}
+          <div className="md:hidden flex items-center">
+            <button
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-yellow-400 via-pink-200 to-white shadow-lg border border-yellow-300"
+              onClick={() => setShowSummary(!showSummary)}
+              aria-label="Open menu"
+            >
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect y="6" width="28" height="3" rx="1.5" fill="#eab308" />
+                <rect y="13" width="28" height="3" rx="1.5" fill="#eab308" />
+                <rect y="20" width="28" height="3" rx="1.5" fill="#eab308" />
+              </svg>
+            </button>
+            {/* Slide-in Drawer */}
+            <motion.div
+              initial={{ x: 200, opacity: 0 }}
+              animate={showSummary ? { x: 0, opacity: 1 } : { x: 200, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 200, damping: 30 }}
+              className={`fixed top-0 right-0 h-full w-72 bg-gradient-to-br from-saffron-100 via-pink-50 to-white shadow-2xl z-50 flex flex-col pt-8 px-6 gap-6 ${showSummary ? '' : 'pointer-events-none'}`}
+            >
+              <div className="flex flex-col gap-4 mt-4">
+                <Link href="/" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Home</Link>
+                <Link href="/home/whatsapp" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Join WhatsApp</Link>
+                <Link href="/home/bhagavad-gita" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Courses</Link>
+                <Link href="#events" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Events</Link>
+                <Link href="/home/krishnabasket/items" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Krishna Basket</Link>
+                <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
+              </div>
+              <div className="flex flex-col gap-2 mt-auto mb-8">
+                {isLoggedIn ? (
+                  <Link href="/booking-home" className="rounded-full px-5 py-2 font-semibold bg-green-600 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Home</Link>
+                ) : (
+                  <>
+                    <Link href="/login" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-yellow-500 via-pink-400 to-orange-400 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Login</Link>
+                    <Link href="/signup" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-300 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Sign Up</Link>
+                  </>
+                )}
+                <button className="mt-2 text-xs text-gray-500" onClick={() => setShowSummary(false)}>Close</button>
+              </div>
+            </motion.div>
+          </div>
         </nav>
+      </header>
 
-        {/* Mobile Top Nav Bar */}
-        <nav className="md:hidden fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-yellow-100 px-4 py-2 shadow">
-          <Image src="/iskcon-logo.png" alt="ISKCON Logo" width={120} height={40} className="" />
-          <button
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-yellow-500"
-            onClick={() => setShowSummary(!showSummary)}
-            aria-label="Open menu"
-          >
-            {/* Menu icon: three horizontal lines */}
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect y="6" width="28" height="3" rx="1.5" fill="white" />
-              <rect y="13" width="28" height="3" rx="1.5" fill="white" />
-              <rect y="20" width="28" height="3" rx="1.5" fill="white" />
-            </svg>
+      {/* HERO SECTION */}
+      <section className="relative w-full flex flex-col items-center justify-center py-12 md:py-20 bg-gradient-to-br from-yellow-100 via-pink-50 to-white overflow-hidden">
+        {/* Lotus faded overlay */}
+        <Image src="/images/lotus.png" alt="Lotus Overlay" width={400} height={400} className="absolute left-0 top-0 opacity-10 pointer-events-none select-none hidden md:block" />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2 }}
+          className="relative z-10 text-center w-full px-4"
+        >
+          <h1 className="text-4xl md:text-5xl font-extrabold text-yellow-700 mb-2 drop-shadow-lg flex items-center justify-center gap-2">
+            <span className="inline-block"><Image src="/images/shloka1.png" alt="Lotus" width={40} height={40} className="inline-block mr-2" /></span>
+            ✨ Holy Name Challenge
+            <span className="inline-block"><Image src="/images/shloka1.png" alt="Lotus" width={40} height={40} className="inline-block ml-2" /></span>
+          </h1>
+          <p className="text-xl md:text-2xl text-pink-700 mb-6 font-semibold">Chant • Learn • Win Gifts</p>
+          <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full mb-2">
+            <a href="/holyname/quiz/level1" className="w-full md:w-auto">
+              <button className="w-full md:w-auto py-3 px-6 rounded-xl bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"><span>🚀</span> Start Quiz</button>
+            </a>
+            <a href="/holyname/japa" className="w-full md:w-auto">
+              <button className="w-full md:w-auto py-3 px-6 rounded-xl bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"><span>🙏</span> Join Japa Challenge</button>
+            </a>
+            <a href="/holyname/gifts" className="w-full md:w-auto">
+              <button className="w-full md:w-auto py-3 px-6 rounded-xl bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"><span>🎁</span> My Gifts</button>
+            </a>
+          </div>
+          <div className="text-sm text-pink-700 font-medium mb-2">Step 1: Quiz • Step 2: Japa • Step 3: Claim Gifts</div>
+        </motion.div>
+        {/* Lotus petals divider */}
+        <div className="w-full flex justify-center items-center mt-4 mb-2">
+          <Image src="/images/shloka.png" alt="Lotus Divider" width={120} height={32} className="opacity-30" />
+        </div>
+      </section>
+
+      {/* WHY JOIN STRIP */}
+      <section className="w-full bg-gradient-to-r from-yellow-50 via-pink-50 to-white py-4 flex flex-col md:flex-row justify-center items-center gap-6 border-y border-yellow-200">
+        <div className="flex items-center gap-2 text-green-700 font-semibold"><span>✅</span> Fun & Interactive Quizzes</div>
+        <div className="flex items-center gap-2 text-pink-700 font-semibold"><span>✅</span> Daily Japa Guidance</div>
+        <div className="flex items-center gap-2 text-yellow-700 font-semibold"><span>✅</span> Earn Divine Gifts</div>
+        <div className="flex items-center gap-2 text-orange-700 font-semibold"><span>✅</span> Stay Motivated with Community</div>
+      </section>
+
+      {/* QUIZZES SECTION */}
+      <section className="max-w-5xl mx-auto w-full py-10 px-4" id="quizzes">
+        <h2 className="text-2xl md:text-3xl font-bold text-yellow-700 mb-6 flex items-center gap-2"><span>📘</span> Explore Multiple Quizzes</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-8 justify-center">
+          {/* Card 1: Mahaavatar Quiz */}
+          <Link href="/home/mahaavatar-quiz" className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center hover:scale-105 transition relative w-full max-w-xs mx-auto border border-pink-100">
+            <span className="absolute top-2 right-2"><Image src="/images/shloka.png" alt="Lotus" width={24} height={24} /></span>
+            <FaCamera className="text-4xl text-yellow-600 mb-2" />
+            <span className="font-bold text-lg mb-1">Mahaavatar Quiz</span>
+            <span className="text-sm text-gray-600 text-center">Test your knowledge of Lord's incarnations and avatars.</span>
+          </Link>
+          {/* Card 2: Shloka Contest */}
+          <Link href="/home/shloka-contest" className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center hover:scale-105 transition relative w-full max-w-xs mx-auto border border-pink-100">
+            <span className="absolute top-2 right-2"><Image src="/images/shloka.png" alt="Lotus" width={24} height={24} /></span>
+            <FaOm className="text-4xl text-pink-600 mb-2" />
+            <span className="font-bold text-lg mb-1">Shloka Contest</span>
+            <span className="text-sm text-gray-600 text-center">Recite and learn beautiful shlokas from scriptures.</span>
+          </Link>
+          {/* Card 3: Japa Challenge */}
+          <Link href="/home/japa-challenge" className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center hover:scale-105 transition relative w-full max-w-xs mx-auto border border-pink-100">
+            <span className="absolute top-2 right-2"><Image src="/images/shloka.png" alt="Lotus" width={24} height={24} /></span>
+            <GiPrayerBeads className="text-4xl text-green-600 mb-2" />
+            <span className="font-bold text-lg mb-1">Japa Challenge</span>
+            <span className="text-sm text-gray-600 text-center">Chant daily and track your spiritual progress.</span>
+          </Link>
+          {/* Card 4: 8Ps Divine Journey */}
+          <Link href="/home/8ps" className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center hover:scale-105 transition relative w-full max-w-xs mx-auto border border-pink-100">
+            <span className="absolute top-2 right-2"><Image src="/images/shloka.png" alt="Lotus" width={24} height={24} /></span>
+            <FaGift className="text-4xl text-orange-500 mb-2" />
+            <span className="font-bold text-lg mb-1">8Ps Divine Journey</span>
+            <span className="text-sm text-gray-600 text-center">Embark on a journey of spiritual cultivation.</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* GIFT SECTION */}
+      <section className="w-full py-8 flex flex-col items-center justify-center bg-gradient-to-r from-pink-50 via-yellow-50 to-white">
+        <div className="text-xl font-bold text-pink-700 mb-4 flex items-center gap-2"><span>🎉</span> Complete challenges → Unlock your Free Gift!</div>
+        <a href="/gift-summary" rel="noopener noreferrer" className="inline-block">
+          <button className="px-8 py-4 rounded-xl font-bold text-white bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-400 shadow-lg hover:scale-105 transition glow-effect flex items-center gap-2">
+            <FaListAlt className="text-2xl" /> <span>Claim Gift</span>
           </button>
-          {showSummary && (
-            <div className="absolute top-14 right-4 bg-white rounded-xl shadow-lg p-4 flex flex-col gap-2">
-              {isLoggedIn ? (
-                <Link href="/booking-home" className="home-nav-btn bg-green-600 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Home</Link>
-              ) : (
-                <>
-                  <Link href="/login" className="home-nav-btn bg-yellow-600 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Login</Link>
-                  <Link href="/signup" className="home-nav-btn bg-yellow-500 text-white px-4 py-2 rounded font-semibold" onClick={() => setShowSummary(false)}>Sign Up</Link>
-                </>
-              )}
-              <button className="mt-2 text-xs text-gray-500" onClick={() => setShowSummary(false)}>Close</button>
-            </div>
-          )}
-        </nav>
+        </a>
+      </section>
 
-        <div className="home-header">
-          <h1 className="fancyTitle">Welcome to ISKCON Sri Sri Radha Madanmohan</h1>
+      {/* DAILY ENGAGEMENT STRIP */}
+      <section className="w-full py-3 bg-gradient-to-r from-yellow-50 via-pink-50 to-white flex flex-col md:flex-row justify-center items-center gap-6 border-t border-yellow-200 animate-slide-x">
+        <div className="flex items-center gap-2 text-yellow-700 font-semibold"><span>🌞</span> Morning: 1 Sloka for the Day</div>
+        <div className="flex items-center gap-2 text-pink-700 font-semibold"><span>🕉️</span> Midday: Japa Reminder</div>
+        <div className="flex items-center gap-2 text-orange-700 font-semibold"><span>🌙</span> Evening: Quiz / Reflection Prompt</div>
+      </section>
+
+      {/* KRISHNA BASKET SECTION */}
+      <section className="max-w-5xl mx-auto w-full py-10 px-4 flex flex-col items-center" id="krishna-basket">
+        <h2 className="text-2xl md:text-3xl font-bold text-yellow-700 mb-2 flex items-center gap-2"><span>🛍️</span> Krishna Basket – Affordable Devotional Kits</h2>
+        <p className="text-md text-gray-700 mb-4 text-center">Choose from a variety of spiritual kits and essentials at affordable prices.</p>
+        <Link href="/home/krishnabasket/items" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-yellow-500 via-pink-400 to-orange-400 shadow-lg hover:scale-105 transition flex items-center gap-2 mb-6"><span>🛒</span> Explore Krishna Basket</Link>
+        {/* Sample kits showcase (optional) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+          <div className="bg-white rounded-xl shadow p-4 flex flex-col items-center border border-yellow-100">
+            <Image src="/images/KRSNA.jpg" alt="Kit 1" width={80} height={80} className="mb-2" />
+            <span className="font-bold text-yellow-700">Krishna Kit</span>
+            <span className="text-sm text-gray-600">Includes Krishna book, japa mala, japa bag, certificate, frame, keychain, pen and cookie packet.</span>
+          </div>
+          <div className="bg-white rounded-xl shadow p-4 flex flex-col items-center border border-yellow-100">
+            <Image src="/images/BG.jpg" alt="Kit 2" width={80} height={80} className="mb-2" />
+            <span className="font-bold text-pink-700">Bhagavad Gita Kit</span>
+            <span className="text-sm text-gray-600">Includes Bhagavad gita, japa mala, japa bag, certificate, frame, keychain, pen and cookie packet.</span>
+          </div>
         </div>
+      </section>
 
-        {/* Hero Section */}
-        <div className="relative w-full flex flex-col items-center justify-center py-8 mb-6">
-          {/* Animated pulsing aura background */}
-          <motion.div
-            initial={{ opacity: 0.7, scale: 1 }}
-            animate={{ opacity: [0.7, 1, 0.7], scale: [1, 1.08, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="absolute inset-0 z-0 flex items-center justify-center"
-          >
-            <div className="w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-yellow-400 via-pink-200 to-white blur-2xl opacity-60 mx-auto" />
-          </motion.div>
-          <div className="relative z-10 text-center w-full px-4">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-yellow-700 mb-2 drop-shadow-lg">🌸 Holy Name Challenge</h2>
-            <p className="text-lg md:text-xl text-pink-700 mb-6 font-semibold">Take the 3-Level Quiz & 7-Day Japa Challenge</p>
-            <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full">
-                <a href="/holyname/quiz/level1" className="w-full">
-                  <button className="w-full py-3 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">Start Quiz</button>
-                </a>
-                <a href="/holyname/japa" className="w-full">
-                  <button className="w-full py-3 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">Join Japa Challenge</button>
-                </a>
-                <a href="/holyname/gifts" className="w-full">
-                  <button className="w-full py-3 rounded bg-gradient-to-r from-yellow-400 via-pink-200 to-white text-yellow-900 font-bold shadow hover:scale-105 transition">View My Gifts</button>
-                </a>
+      {/* SPIRITUAL PROGRAMS SECTION */}
+      <section className="w-full py-10 px-4 flex flex-col items-center bg-gradient-to-r from-yellow-50 via-pink-50 to-white" id="events">
+        <h2 className="text-2xl md:text-3xl font-bold text-green-700 mb-2 flex items-center gap-2"><span>🌿</span> Join Our Spiritual Programs</h2>
+        <p className="text-md text-gray-700 mb-4 text-center">Want to organize or participate in spiritual events? Please contact us.</p>
+        <a href="tel:9985181358" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>📩</span> Contact Us: 9985181358</a>
+      </section>
+
+      {/* DONATE / SUPPORT SECTION */}
+      <section className="w-full py-6 flex flex-col items-center justify-center bg-gradient-to-r from-pink-50 via-yellow-50 to-white">
+        <div className="text-lg font-bold text-pink-700 mb-2 flex items-center gap-2"><span>💖</span> Support Krishna Seva</div>
+        <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><FaDonate className="text-2xl" /> Donate</a>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="w-full bg-gradient-to-r from-saffron-100 via-pink-50 to-white py-8 mt-8 border-t border-yellow-200 relative">
+        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none">
+          <Image src="/images/shloka.png" alt="Lotus Mandala" width={180} height={180} className="opacity-10" />
+        </div>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 relative z-10">
+          <div className="flex flex-col gap-2 mb-4 md:mb-0">
+            <span className="font-bold text-yellow-700 text-lg">MyKrishnaTouch.in</span>
+            <div className="flex gap-4 text-sm text-pink-700">
+              <Link href="/">Home</Link>
+              <Link href="/home/whatsapp">Join WhatsApp</Link>
+              <Link href="/home/bhagavad-gita">Courses</Link>
+              <Link href="/home/krishnabasket/items">Krishna Basket</Link>
             </div>
           </div>
-          {/* <div className="w-full py-2 bg-gradient-to-r from-pink-200 via-yellow-100 to-orange-100 shadow-lg border-b-2 border-yellow-400 sticky top-0 z-50"> */}
-        
-          <div className="inline-block whitespace-nowrap animate-slide-x text-md font-bold text-pink-700 tracking-wide px-2">
-            For a spiritual programme <br />at your location, 
-            <br />please contact us:
-            <span className="mx-2 text-yellow-700">📞 98765-43210</span>
-            {/* <span className="mx-2 text-pink-700">✉️ info@iskconhyderabad.com</span> */}
-          
+          <div className="flex gap-4 items-center mb-4 md:mb-0">
+            <a href="https://wa.me/9985181358" target="_blank" rel="noopener noreferrer" className="text-green-600 text-2xl"><FaWhatsapp /></a>
+            <a href="https://instagram.com/iskconhyd" target="_blank" rel="noopener noreferrer" className="text-pink-600 text-2xl"><FaGift /></a>
+            <a href="https://youtube.com/@iskconhyderabad" target="_blank" rel="noopener noreferrer" className="text-red-600 text-2xl"><FaCamera /></a>
+          </div>
+          <div className="text-sm text-gray-500">© {new Date().getFullYear()} MyKrishnaTouch.in</div>
         </div>
-      {/* </div> */}
-        </div>
-        <div className="home-grid">
-          {/* Row 1 */}
-          <Link href="/home/whatsapp" className="home-tile home-tile-connect">
-            <FaWhatsapp className="home-tile-icon" />
-            <span className="home-tile-title">Connect</span>
-            <span className="home-tile-desc">Join WhatsApp</span>
-          </Link>
-          <Link href="/home/bhagavad-gita" className="home-tile home-tile-course">
-            <FaBookOpen className="home-tile-icon" />
-            <span className="home-tile-title">Course</span>
-            <span className="home-tile-desc">Bhagavad Gita</span>
-          </Link>
-          {/* Current Event Tile */}
-                    {/* <Link href="/home/current-event" className="home-tile home-tile-event home-tile-glow">
-            <Image src="/images/icon.png" alt="Lord Ganesh" width={48} height={48} className="home-tile-icon" />
-            <span className="home-tile-title">Current Event</span>
-            <span className="home-tile-desc">Ganesh chaturthi</span>
-          </Link> */}
-        </div>
-        <hr className="home-divider" />
-        <div className="home-gift-title">Attend this to get free gift</div>
-        <div className="home-grid home-grid-2">
-          {/* Row 2 */}
-          <Link href="/home/mahaavatar-quiz" className="home-tile home-tile-challenge">
-            <FaCamera className="home-tile-icon" />
-            <span className="home-tile-title">Challenge</span>
-            <span className="home-tile-desc">Mahaavatar Quiz</span>
-          </Link>
-          <Link href="/home/shloka-contest" className="home-tile home-tile-contest">
-            <FaOm className="home-tile-icon" />
-            <span className="home-tile-title">Contest</span>
-            <span className="home-tile-desc">Shloka Contest</span>
-          </Link>
-          {/* Row 3 */}
-          <Link href="/home/japa-challenge" className="home-tile home-tile-chanting">
-            <GiPrayerBeads className="home-tile-icon" />
-            <span className="home-tile-title">Chanting</span>
-            <span className="home-tile-desc">Japa Challenge</span>
-          </Link>
-          <Link href="/home/8ps" className="home-tile home-tile-cultivate">
-            <FaGift className="home-tile-icon" />
-            <span className="home-tile-title">Cultivate</span>
-            <span className="home-tile-desc">8 Ps Divine Journey</span>
-          </Link>
-        </div>
-        <div className="home-actions">
-          <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="home-action-btn home-donate-btn"><FaDonate className="home-action-icon" /> Donate</a>
-          <Link href="/home/krishnabasket/items" className="home-action-btn home-basket-btn"><FaShoppingBasket className="home-action-icon" /> Krishna Basket</Link>
-        </div>
-        <div className="home-gift-summary-left">
-          <a
-            href="/gift-summary"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="home-gift-summary-btn"
-            title="Show Gift Summary"
-          >
-            <FaListAlt className="home-gift-summary-icon" />
-            <span className="home-gift-summary-label">Gifts</span>
-          </a>
-        </div>
-      </div>
+      </footer>
     </div>
   );
 }
