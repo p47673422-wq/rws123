@@ -8,8 +8,10 @@ export default function DamodaraMalaPage() {
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-blue-50 to-pink-50 flex flex-col">
       {/* Top Section */}
       <section className="w-full py-10 px-4 flex flex-col items-center justify-center bg-gradient-to-r from-yellow-100 via-pink-50 to-white">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg">🌼 Dāmodara Mālā – Kartik Month Vrata 🌼</h1>
-        <p className="text-lg md:text-xl text-blue-700 mb-4 font-semibold">From Oct 8 to Nov 5 | Registration closes Oct 8</p>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg">🌼 Dāmodara Mālā🌼</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg">🌼 Kartik Month Vrata 🌼</h1>
+        <p className="text-lg md:text-xl text-blue-700 mb-4 font-semibold">From Oct 8 to Nov 5</p>
+        <p className="text-lg md:text-xl text-blue-700 mb-4 font-semibold">Registration closes Oct 8</p>
         <a href="https://rzp.io/rzp/c11BnYk" target="_blank">
           <GlowingButton className="mb-4 text-lg">Register Now</GlowingButton>
         </a>
@@ -20,7 +22,7 @@ export default function DamodaraMalaPage() {
         <div className="bg-yellow-100 rounded-xl shadow-lg p-6 flex flex-col items-center hover:scale-105 transition border border-yellow-200">
           <span className="text-3xl mb-2">🟨</span>
           <h2 className="font-bold text-xl text-yellow-700 mb-1">Śraddhāvān</h2>
-          <p className="text-gray-700 text-center mb-4">Beginners – Simple daily practices, easy entry.</p>
+          <p className="text-gray-700 text-center mb-4">Beginners – Simple daily practices and easy entry.</p>
           <a href="https://rzp.io/rzp/c11BnYk" target="_blank">
           <GlowingButton className="w-full">Register at this Level</GlowingButton></a>
         </div>
@@ -36,7 +38,7 @@ export default function DamodaraMalaPage() {
         <div className="bg-green-100 rounded-xl shadow-lg p-6 flex flex-col items-center hover:scale-105 transition border border-green-200">
           <span className="text-3xl mb-2">🟩</span>
           <h2 className="font-bold text-xl text-green-700 mb-1">Niṣṭhāvān</h2>
-          <p className="text-gray-700 text-center mb-4">Regulars – Advanced standards, full sadhana.</p>
+          <p className="text-gray-700 text-center mb-4">Regulars – Advanced standards and full sadhana.</p>
           <a href="https://rzp.io/rzp/c11BnYk" target="_blank">
             <GlowingButton className="w-full">Register at this Level</GlowingButton>
           </a>
