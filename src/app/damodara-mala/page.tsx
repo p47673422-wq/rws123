@@ -44,7 +44,7 @@ export default function DamodaraMalaPage() {
       </section>
       {/* Section 2: Standards Table */}
       <section className="max-w-5xl mx-auto w-full py-8 px-4">
-        <h2 className="text-2xl font-bold text-pink-700 mb-4">Standards Table</h2>
+        <h2 className="text-2xl font-bold text-pink-700 mb-4">Standards Information</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full rounded-xl overflow-hidden shadow border border-pink-100">
             <thead>
@@ -61,19 +61,24 @@ export default function DamodaraMalaPage() {
                 <td className="px-4 py-2">Ready by 4:30AM</td>
               </tr>
               <tr className="hover:bg-blue-50">
-                <td className="px-4 py-2">16 rounds japa (min 1 round)</td>
-                <td className="px-4 py-2">16 rounds japa (min 4 rounds)</td>
-                <td className="px-4 py-2">16 rounds japa (min 16 rounds)</td>
+                <td className="px-4 py-2">Formal dress code(for men, if possible Dhoti Kurta)</td>
+                <td className="px-4 py-2">Formal dress code(for men, if possible Dhoti Kurta)</td>
+                <td className="px-4 py-2">Formal dress code(for men, if possible Dhoti Kurta)</td>
               </tr>
               <tr className="hover:bg-green-50">
-                <td className="px-4 py-2">Attend 1 session/week</td>
-                <td className="px-4 py-2">Attend 2 sessions/week</td>
-                <td className="px-4 py-2">Attend all sessions</td>
+                <td className="px-4 py-2">4 regs</td>
+                <td className="px-4 py-2">4 regs, No Onion-Garlic, No Tea-Coffe</td>
+                <td className="px-4 py-2">4 regs, No Onion-Garlic, No Tea-Coffe, No outside food, No unoffered food</td>
               </tr>
               <tr className="hover:bg-yellow-50">
-                <td className="px-4 py-2">Basic mala kit</td>
-                <td className="px-4 py-2">Standard mala kit</td>
-                <td className="px-4 py-2">Premium mala kit</td>
+                <td className="px-4 py-2">No Bad words, No fight with anyone</td>
+                <td className="px-4 py-2">No Bad words, No fight with anyone</td>
+                <td className="px-4 py-2">Glorifying atleast one devotee daily, personally & genuinely</td>
+              </tr>
+              <tr className="hover:bg-blue-50">
+                <td className="px-4 py-2">Chanting daily min 4 rounds</td>
+                <td className="px-4 py-2">Chanting daily min 6 rounds</td>
+                <td className="px-4 py-2">Chanting daily min 4 extra rounds</td>
               </tr>
             </tbody>
           </table>
