@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import "./home-custom.css";
 import Link from "next/link";
 import Image from "next/image";
+import GlowingButton from "../../components/GlowingButton";
+import CountdownTimer from "../../components/CountdownTimer";
 import { FaWhatsapp, FaBookOpen, FaGift, FaCamera,FaOm, FaChalkboardTeacher, FaPrayingHands, FaShoppingBasket, FaDonate, FaListAlt } from "react-icons/fa";
 import { GiPrayerBeads } from "react-icons/gi";
 
@@ -110,10 +112,42 @@ useEffect(() => {
         </nav>
       </header>
 
+      {/* HERO SECTION - Dāmodara Mālā 2025 */}
+      <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
+        <Image src="/images/damodar-hero.png" alt="Radha Damodar" width={1600} height={600} className="absolute inset-0 w-full h-full opacity-80 object-cover pointer-events-none select-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 via-blue-100 to-pink-100 opacity-70" />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2 }}
+          className="relative z-10 text-center w-full px-4"
+        >
+          <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg flex items-center justify-center gap-2">
+            🌸 Dāmodara Mālā 2025 🌸
+          </h1>
+          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Kartik Month Special Vrata (Oct 8 – Nov 5)</p>
+          <div className="mb-4">
+            <span className="text-lg font-bold text-pink-600 animate-pulse">Registration closes Oct 8!</span>
+          </div>
+          <div className="mb-6">
+            <CountdownTimer />
+          </div>
+          <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full mb-2">
+            <a href="https://rzp.io/rzp/c11BnYk" target="_blank" rel="noopener noreferrer">
+              <GlowingButton className="text-lg">Register Now</GlowingButton>
+            </a>
+            <Link href="/damodara-mala">
+              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">View Details</button>
+            </Link>
+          </div>
+        </motion.div>
+      </section>
+      {/* ...existing homepage content... */}
+
       {/* HERO SECTION */}
-      <section className="relative w-full flex flex-col items-center justify-center py-12 md:py-20 bg-gradient-to-br from-yellow-100 via-pink-50 to-white overflow-hidden">
+      {/* <section className="relative w-full flex flex-col items-center justify-center py-12 md:py-20 bg-gradient-to-br from-yellow-100 via-pink-50 to-white overflow-hidden"> */}
         {/* Lotus faded overlay */}
-        <Image src="/images/lotus.png" alt="Lotus Overlay" width={400} height={400} className="absolute left-0 top-0 opacity-10 pointer-events-none select-none hidden md:block" />
+        {/* <Image src="/images/lotus.png" alt="Lotus Overlay" width={400} height={400} className="absolute left-0 top-0 opacity-10 pointer-events-none select-none hidden md:block" />
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -138,12 +172,12 @@ useEffect(() => {
             </a>
           </div>
           <div className="text-sm text-pink-700 font-medium mb-2">Step 1: Quiz • Step 2: Japa • Step 3: Claim Gifts</div>
-        </motion.div>
+        </motion.div> */}
         {/* Lotus petals divider */}
-        <div className="w-full flex justify-center items-center mt-4 mb-2">
+        {/* <div className="w-full flex justify-center items-center mt-4 mb-2">
           <Image src="/images/shloka.png" alt="Lotus Divider" width={120} height={32} className="opacity-30" />
         </div>
-      </section>
+      </section> */}
 
       {/* WHY JOIN STRIP */}
       <section className="w-full bg-gradient-to-r from-yellow-50 via-pink-50 to-white py-4 flex flex-col md:flex-row justify-center items-center gap-6 border-y border-yellow-200">
