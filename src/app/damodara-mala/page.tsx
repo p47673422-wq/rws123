@@ -57,6 +57,9 @@ export default function DamodaraMalaPage() {
               </tr>
             </thead>
             <tbody>
+              <tr className="bg-yellow-70 hover:bg-yellow-40">
+                <td className="px-4 py-2" colSpan={3}>Sadachar Standards</td>
+              </tr>
               <tr className="hover:bg-yellow-50">
                 <td className="px-4 py-2">Rise max by 5AM</td>
                 <td className="px-4 py-2">Rise max by 5AM</td>
@@ -76,6 +79,9 @@ export default function DamodaraMalaPage() {
                 <td className="px-4 py-2">No Bad words, No fight with anyone</td>
                 <td className="px-4 py-2">No Bad words, No fight with anyone</td>
                 <td className="px-4 py-2">Glorifying atleast one devotee daily, personally & genuinely</td>
+              </tr>
+              <tr className="bg-yellow-70 hover:bg-yellow-40">
+                <td className="px-4 py-2" colSpan={3}>Sadhana Standards</td>
               </tr>
               <tr className="hover:bg-blue-50">
                 <td className="px-4 py-2">Completing DHARMA book + 8 Shlokas of BG</td>
@@ -102,6 +108,9 @@ export default function DamodaraMalaPage() {
                 <td className="px-4 py-2">Attending min 5 Harinaams</td>
                 <td className="px-4 py-2">Attending min 5 Harinaams</td>
               </tr>
+              <tr className="bg-yellow-70 hover:bg-yellow-40">
+                <td className="px-4 py-2" colSpan={3}>Seva Standards</td>
+              </tr>
               <tr className="hover:bg-yellow-50">
                 <td className="px-4 py-2">Min 20hrs of Temple Seva</td>
                 <td className="px-4 py-2">Min 30hrs of Temple Seva</td>
@@ -111,6 +120,9 @@ export default function DamodaraMalaPage() {
                 <td className="px-4 py-2">-</td>
                 <td className="px-4 py-2">Conducting min 2 Damodar Programs</td>
                 <td className="px-4 py-2">Conducting min 5 Damodar Programs</td>
+              </tr>
+              <tr className="bg-yellow-70 hover:bg-yellow-40">
+                <td className="px-4 py-2" colSpan={3}>Mala Kits offered for the Participants</td>
               </tr>
               <tr className="hover:bg-green-50">
                 <td className="px-4 py-2">Damodara Wrist band, Dharma Book, Japa Mala, Japa Bag, Counter, Shloka Notes</td>

@@ -4,25 +4,45 @@ import { useEffect, useState } from "react";
 export default function RamaRavana() {
   const TOTAL_HEADS = 10;
   const [heads, setHeads] = useState(Array.from({ length: TOTAL_HEADS }, (_, i) => i));
+  const [turnRight, setTurnRight] = useState(false); // alternate head removal side
   const [flyingHead, setFlyingHead] = useState<number | null>(null);
   const [arrowActive, setArrowActive] = useState(false);
   const [fireballActive, setFireballActive] = useState(false);
   const [jivaSteps, setJivaSteps] = useState(0);
 
   // When arrow is fired, remove one head
-  const shootArrow = async () => {
-    if (heads.length === 0 || arrowActive) return;
-    setArrowActive(true);
-    setFlyingHead(heads[heads.length - 1]);
+ const shootArrow = async () => {
+  if (heads.length === 0 || arrowActive) return;
+  setArrowActive(true);
 
-    // wait for head animation to finish
-    await new Promise((res) => setTimeout(res, 1000));
-    setHeads((h) => h.slice(0, -1));
-    setFlyingHead(null);
-    setArrowActive(false);
-    setJivaSteps((s) => s + 1);
-  };
+  const mid = Math.floor(TOTAL_HEADS / 2);
 
+  setHeads((prev) => {
+    // if only center head remains → remove it
+    if (prev.length === 1 && prev[0] === mid) {
+      setFlyingHead(mid);
+      return [];
+    }
+
+    let targetIndex;
+    if (turnRight) {
+      targetIndex = prev.findLast((id) => id !== mid);
+    } else {
+      targetIndex = prev.find((id) => id !== mid);
+    }
+    if (targetIndex === undefined) targetIndex = null;
+
+    setFlyingHead(targetIndex);
+    setTurnRight((t) => !t);
+    return prev.filter((id) => id !== targetIndex);
+  });
+
+  // Wait until animation completes
+  await new Promise((res) => setTimeout(res, 1800));
+  setFlyingHead(null);
+  setArrowActive(false);
+  setJivaSteps((s) => s + 1);
+};
   // Fireball → shakes Jiva
   const launchFireball = async () => {
     if (fireballActive) return;
@@ -31,100 +51,53 @@ export default function RamaRavana() {
     setFireballActive(false);
   };
 
-  // Renders Ravana’s 10 heads stacked
   const renderHeads = () => {
-    const baseBottom = 22;
-    const baseRight = 11;
-    const gap = 5.5;
-    const shift = -0.5;
-
-    
+    const mid = Math.floor(TOTAL_HEADS / 2);
 
     return heads.map((id, idx) => {
-      const centerX = 14.3; // neck anchor
-      const centerY = 51;
-      if (idx === 0) {
-        // main head on neck
-        return (
-          <img
-            key={id}
-            src="/images/ravan-head.png"
-            className="absolute"
-            style={{
-              bottom: `${centerY}%`,
-              right: `${centerX}%`,
-              width: "22%",
-              zIndex: 30,
-            }}
-            alt="Ravana head"
-          />
-        );
-      }
-      const side = idx % 2 === 0 ? 1 : -1; // alternate left/right
-      const row = Math.ceil(idx / 2);
+      const relativeIndex = idx - mid;
+
+      // horizontal spread (moves left/right)
+      const offsetX = relativeIndex * 3.5;
+
+      // gentle curve → only slight vertical shift
+      const offsetY = Math.abs(relativeIndex) * 0.9;
+
+      // scale → center is biggest, sides taper
+      const scale = 1 - Math.abs(relativeIndex) * 0.06;
+
       return (
         <img
           key={id}
           src="/images/ravan-head.png"
           className="absolute"
           style={{
-            bottom: `${centerY + row * 1.4}%`,
-            right: `${centerX + side * row * 3.4}%`,
-            width: "20%",
-            zIndex: 20 + row,
+            bottom: `${54 + offsetY}%`,    // anchor above Ravana’s neck
+            right: `${15.1 + offsetX}%`,     // spread horizontally
+            width: `${12.5 * scale}%`,       // relative size
+            transform: `scale(${scale})`,
+            zIndex: 100 - Math.abs(relativeIndex),
           }}
           alt="Ravana head"
         />
       );
     });
   };
-// Renders Ravana’s 10 heads in an arc
-//   const renderHeads = () => {
-//     const centerX = 14; // anchor over body
-//     const centerY = 55; // arc baseline
-//     const radius = 30;  // arc radius
-
-//     const angleStep = (Math.PI / 8); // spread arc
-//     const startAngle = -Math.PI / 2 - (angleStep * 4); // center arc
-
-//     return heads.map((id, idx) => {
-//       const angle = startAngle + idx * angleStep;
-//       const x = centerX + radius * Math.cos(angle);
-//       const y = centerY + radius * Math.sin(angle);
-
-//       return (
-//         <img
-//           key={id}
-//           src="/images/ravan-head.png"
-//           className="absolute"
-//           style={{
-//             bottom: `${y}%`,
-//             right: `${x}%`,
-//             width: "20%",
-//             zIndex: 30 - idx,
-//             transform: `rotate(${(angle * 180) / Math.PI / 6}deg)`,
-//           }}
-//           alt="Ravana head"
-//         />
-//       );
-//     });
-//   };
-
   // Flying head when arrow hits
   const renderFlyingHead = () =>
-    flyingHead !== null && (
-      <img
-        src="/images/ravan-head.png"
-        className="absolute flying-head"
-        style={{
-          right: "14%",
-          bottom: "84%",
-          width: "22%",
-          zIndex: 999,
-        }}
-        alt="Flying head"
-      />
-    );
+  flyingHead !== null && (
+    <img
+      src="/images/ravan-head.png"
+      className="absolute flying-head"
+      style={{
+        right: `${14 + flyingHead * -2}%`,
+        bottom: `${28 + flyingHead * 6.2}%`,
+        width: "22%",
+        zIndex: 999,
+      }}
+      alt="Flying head"
+    />
+  );
 
   return (
     <div className="min-h-screen flex z-30 items-start justify-center bg-black pt-0 md:pt-8">
@@ -305,22 +278,25 @@ export default function RamaRavana() {
           animation: fireballFly 1.2s linear forwards;
         }
 
-        @keyframes headFly {
-          0% {
-            transform: translate(0, 0) rotate(0);
-            opacity: 1;
-          }
-          50% {
-            transform: translate(-20vw, -10vh) rotate(-90deg);
-          }
-          100% {
-            transform: translate(-25vw, 50vh) rotate(-180deg);
-            opacity: 0;
-          }
-        }
-        .flying-head {
-          animation: headFly 1s ease forwards;
-        }
+        @keyframes flyAway {
+  0% {
+    transform: translate(0, 0) rotate(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-20vw, -15vh) rotate(-90deg) scale(1.1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-30vw, 50vh) rotate(-180deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+.flying-head {
+  animation: flyAway 1.8s ease forwards;
+  pointer-events: none;
+}
 
         @keyframes jivaShake {
           0% {
