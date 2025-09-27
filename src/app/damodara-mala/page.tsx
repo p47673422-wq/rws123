@@ -78,9 +78,47 @@ export default function DamodaraMalaPage() {
                 <td className="px-4 py-2">Glorifying atleast one devotee daily, personally & genuinely</td>
               </tr>
               <tr className="hover:bg-blue-50">
+                <td className="px-4 py-2">Completing DHARMA book + 8 Shlokas of BG</td>
+                <td className="px-4 py-2">Completing DYS course + Memorising min 15 Shlokas of BG + Reading BG daily min 1 page</td>
+                <td className="px-4 py-2">Completing 10 Verses of MM + Studying Daily min 30 minutes of SB</td>
+              </tr>
+              <tr className="hover:bg-green-50">
                 <td className="px-4 py-2">Chanting daily min 4 rounds</td>
                 <td className="px-4 py-2">Chanting daily min 6 rounds</td>
                 <td className="px-4 py-2">Chanting daily min 4 extra rounds</td>
+              </tr>
+              <tr className="hover:bg-yellow-50">
+                <td className="px-4 py-2">Min 4 Morning Programs (4:30 to 9:30AM)</td>
+                <td className="px-4 py-2">Min 8 Morning Programs (4:30 to 9:30AM)</td>
+                <td className="px-4 py-2">Min 10 Morning Programs (4:30 to 9:30AM)</td>
+              </tr>
+              <tr className="hover:bg-blue-50">
+                <td className="px-4 py-2">Daily Lamp Offering to Damodar</td>
+                <td className="px-4 py-2">Daily Lamp Offering to Damodar</td>
+                <td className="px-4 py-2">Daily Lamp Offering to Damodar</td>
+              </tr>
+              <tr className="hover:bg-green-50">
+                <td className="px-4 py-2">Attending min 5 Harinaams</td>
+                <td className="px-4 py-2">Attending min 5 Harinaams</td>
+                <td className="px-4 py-2">Attending min 5 Harinaams</td>
+              </tr>
+              <tr className="hover:bg-yellow-50">
+                <td className="px-4 py-2">Min 20hrs of Temple Seva</td>
+                <td className="px-4 py-2">Min 30hrs of Temple Seva</td>
+                <td className="px-4 py-2">Min 40hrs of Temple Seva</td>
+              </tr>
+              <tr className="hover:bg-blue-50">
+                <td className="px-4 py-2">-</td>
+                <td className="px-4 py-2">Conducting min 2 Damodar Programs</td>
+                <td className="px-4 py-2">Conducting min 5 Damodar Programs</td>
+              </tr>
+              <tr className="hover:bg-green-50">
+                <td className="px-4 py-2">Damodara Wrist band, Dharma Book, Japa Mala, Japa Bag, Counter, Shloka Notes</td>
+                <td className="px-4 py-2">Damodara Wrist band, JSD Book, Japa Mala, Japa Bag, Counter, Shloka Notes</td>
+                <td className="px-4 py-2">Damodara Wrist band, MM Book, Japa Mala, Japa Bag, Counter, Shloka Notes</td>
+              </tr>
+              <tr className="hover:bg-yellow-50">
+                <td className="px-4 py-2" colSpan={3}>Unmarried Boys from 18 years and above can avail the stay facility as well for this one month at the temple (on selection basis) 			</td>
               </tr>
             </tbody>
           </table>
