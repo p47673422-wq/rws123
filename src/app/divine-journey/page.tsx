@@ -273,6 +273,18 @@ export default function RamaRavana() {
         .jiva-shake {
           animation: jivaShake 0.6s ease;
         }
+        .battlefield-container {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding-bottom: 177.78%; /* if ratio is 9:16 => 9/16 = 56.25% so inverse */
+  overflow: hidden;
+}
+.battlefield-container > .background {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
       `}</style>
     </div>
   );
