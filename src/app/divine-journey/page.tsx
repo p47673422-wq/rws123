@@ -76,10 +76,10 @@ export default function RamaRavana() {
     );
 
   return (
-    <div className="min-h-screen z-30 flex items-center justify-center bg-black">
+    <div className="min-h-screen flex z-30 items-start justify-center bg-black pt-0 md:pt-8">
       <div
         className="relative w-full max-w-md h-screen bg-cover bg-center overflow-hidden"
-        style={{ backgroundImage: "url('/images/ramb.png')" }}
+        style={{ backgroundImage: "url('/images/ramb.png')", top: 0, position: 'absolute', left: '50%', transform: 'translateX(-50%)', maxHeight: '100vh' }}
       >
         {/* Ravana Heads */}
         {renderHeads()}
@@ -106,7 +106,7 @@ export default function RamaRavana() {
         >
           {/* label */}
           <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-white bg-black/60 px-2 py-1 rounded-full">
-            It’s you ✨
+            You ✨
           </div>
           <svg viewBox="0 0 100 200" className="w-12 h-20">
             <circle
@@ -171,7 +171,7 @@ export default function RamaRavana() {
         </div>
 
         {/* Buttons */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3">
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-3">
           <button
             onClick={launchFireball}
             className="px-3 py-2 bg-red-600 text-white rounded-lg shadow"
