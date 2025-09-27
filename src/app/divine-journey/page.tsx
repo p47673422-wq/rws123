@@ -33,31 +33,82 @@ export default function RamaRavana() {
 
   // Renders Ravana’s 10 heads stacked
   const renderHeads = () => {
-    const baseBottom = 28;
-    const baseRight = 14;
-    const gap = 6.2;
-    const shift = -2;
+    const baseBottom = 22;
+    const baseRight = 11;
+    const gap = 5.5;
+    const shift = -0.5;
+
+    
 
     return heads.map((id, idx) => {
-      const i = heads.length - 1 - idx;
-      const bottom = baseBottom + i * gap;
-      const right = baseRight + i * shift;
+      const centerX = 14.3; // neck anchor
+      const centerY = 51;
+      if (idx === 0) {
+        // main head on neck
+        return (
+          <img
+            key={id}
+            src="/images/ravan-head.png"
+            className="absolute"
+            style={{
+              bottom: `${centerY}%`,
+              right: `${centerX}%`,
+              width: "22%",
+              zIndex: 30,
+            }}
+            alt="Ravana head"
+          />
+        );
+      }
+      const side = idx % 2 === 0 ? 1 : -1; // alternate left/right
+      const row = Math.ceil(idx / 2);
       return (
         <img
           key={id}
           src="/images/ravan-head.png"
           className="absolute"
           style={{
-            bottom: `${bottom}%`,
-            right: `${right}%`,
-            width: "22%",
-            zIndex: 20 + i,
+            bottom: `${centerY + row * 1.4}%`,
+            right: `${centerX + side * row * 3.4}%`,
+            width: "20%",
+            zIndex: 20 + row,
           }}
           alt="Ravana head"
         />
       );
     });
   };
+// Renders Ravana’s 10 heads in an arc
+//   const renderHeads = () => {
+//     const centerX = 14; // anchor over body
+//     const centerY = 55; // arc baseline
+//     const radius = 30;  // arc radius
+
+//     const angleStep = (Math.PI / 8); // spread arc
+//     const startAngle = -Math.PI / 2 - (angleStep * 4); // center arc
+
+//     return heads.map((id, idx) => {
+//       const angle = startAngle + idx * angleStep;
+//       const x = centerX + radius * Math.cos(angle);
+//       const y = centerY + radius * Math.sin(angle);
+
+//       return (
+//         <img
+//           key={id}
+//           src="/images/ravan-head.png"
+//           className="absolute"
+//           style={{
+//             bottom: `${y}%`,
+//             right: `${x}%`,
+//             width: "20%",
+//             zIndex: 30 - idx,
+//             transform: `rotate(${(angle * 180) / Math.PI / 6}deg)`,
+//           }}
+//           alt="Ravana head"
+//         />
+//       );
+//     });
+//   };
 
   // Flying head when arrow hits
   const renderFlyingHead = () =>
@@ -86,14 +137,30 @@ export default function RamaRavana() {
         {renderFlyingHead()}
 
         {/* Arrow animation */}
-        {arrowActive && (
-          <div className="absolute arrow" style={{ left: "20%", bottom: "50%" }}></div>
+        {arrowActive && flyingHead !== null && (
+          <div
+            className="absolute arrow"
+            style={{
+              left: "20%",
+              bottom: "50%",
+              transform: `rotate(-10deg)`,
+            }}
+          ></div>
         )}
 
         {/* Fireball */}
-        {fireballActive && (
-          <div className="absolute fireball" style={{ right: "20%", bottom: "55%" }}></div>
-        )}
+        {fireballActive &&
+          [0, 1, 2].map((f) => (
+            <div
+              key={f}
+              className="absolute fireball"
+              style={{
+                right: "20%",
+                bottom: "55%",
+                animationDelay: `${f * 0.2}s`
+              }}
+            ></div>
+          ))}
 
         {/* Jiva (stick figure) */}
         <div
@@ -112,9 +179,9 @@ export default function RamaRavana() {
             <circle
               cx="50"
               cy="20"
-              r="12"
+              r="16"
               className={`transition-colors duration-1000 ${
-                heads.length === 0 ? "fill-yellow-400" : "fill-black"
+                heads.length >= 7 ? "fill-black" : heads.length <= 4 ? "fill-yellow-600" : "fill-yellow-400"
               }`}
             />
             <line
@@ -124,7 +191,7 @@ export default function RamaRavana() {
               y2="110"
               strokeWidth="6"
               className={`transition-colors duration-1000 ${
-                heads.length === 0 ? "stroke-yellow-400" : "stroke-black"
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
               }`}
             />
             <line
@@ -134,7 +201,7 @@ export default function RamaRavana() {
               y2="80"
               strokeWidth="5"
               className={`${
-                heads.length === 0 ? "stroke-yellow-400" : "stroke-black"
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
               }`}
             />
             <line
@@ -144,7 +211,7 @@ export default function RamaRavana() {
               y2="80"
               strokeWidth="5"
               className={`${
-                heads.length === 0 ? "stroke-yellow-400" : "stroke-black"
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
               }`}
             />
             <line
@@ -154,7 +221,7 @@ export default function RamaRavana() {
               y2="160"
               strokeWidth="5"
               className={`${
-                heads.length === 0 ? "stroke-yellow-400" : "stroke-black"
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
               }`}
             />
             <line
@@ -164,7 +231,7 @@ export default function RamaRavana() {
               y2="160"
               strokeWidth="5"
               className={`${
-                heads.length === 0 ? "stroke-yellow-400" : "stroke-black"
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
               }`}
             />
           </svg>
@@ -195,44 +262,46 @@ export default function RamaRavana() {
             opacity: 1;
           }
           100% {
-            transform: translateX(50vw);
+            transform: translateX(80vw);
             opacity: 0;
           }
         }
         .arrow {
-          width: 60px;
-          height: 4px;
-          background: linear-gradient(to right, #facc15, #f59e0b);
-          animation: arrowFly 0.9s linear forwards;
-          border-radius: 2px;
-          box-shadow: 0 0 6px #facc15;
+          width: 80px;
+          height: 6px;
+          background: linear-gradient(to right, #fff7d6, #facc15, #f59e0b);
+          animation: arrowFly 0.8s linear forwards;
+          border-radius: 4px;
+          box-shadow: 0 0 15px 6px rgba(255, 215, 0, 0.8);
+          
         }
         .arrow::after {
           content: "";
           position: absolute;
-          right: -12px;
-          top: -4px;
-          border-left: 12px solid #f59e0b;
-          border-top: 6px solid transparent;
-          border-bottom: 6px solid transparent;
+          right: -14px;
+          top: -6px;
+          border-left: 14px solid #fff7d6;
+          border-top: 8px solid transparent;
+          border-bottom: 8px solid transparent;
+          filter: drop-shadow(0 0 6px #ffd700);
         }
 
         @keyframes fireballFly {
           0% {
-            transform: translateX(0) scale(0.9);
+            transform: translate(0, 0) scale(0.9);
             opacity: 1;
           }
           100% {
-            transform: translateX(-50vw) scale(1.2);
+            transform: translate(-40vw, 145vh) scale(1.2);
             opacity: 0;
           }
         }
         .fireball {
-          width: 40px;
-          height: 40px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
-          background: radial-gradient(circle at center, #f87171, #b91c1c);
-          box-shadow: 0 0 20px 8px rgba(239, 68, 68, 0.6);
+          background: radial-gradient(circle at 30% 30%, #ffdd00, #ff6600, #cc0000);
+          box-shadow: 0 0 20px 6px rgba(255, 120, 0, 0.7);
           animation: fireballFly 1.2s linear forwards;
         }
 
