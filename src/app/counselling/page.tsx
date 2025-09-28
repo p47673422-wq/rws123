@@ -1,111 +1,55 @@
 "use client";
-import { useState } from "react";
 
-// Placeholder function
-function saveCounsellingSlot(details: any) {
-  // Simulate API call
-  console.log("Counselling slot saved:", details);
-}
+import React, { useState } from "react";
 
 export default function CounsellingPage() {
-  const [form, setForm] = useState({
-    name: "",
-    mobile: "",
-    gender: "",
-    maritalStatus: "",
-    date: "",
-    time: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [status, setStatus] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  async function saveCounsellingSlot(slot: any) {
+    // TODO: replace with real API
+    console.log("saveCounsellingSlot placeholder", slot);
+    return Promise.resolve({ ok: true });
+  }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    saveCounsellingSlot(form);
-    setSubmitted(true);
+    if (!name || !mobile || !date || !time) {
+      setStatus("Please fill all fields.");
+      return;
+    }
+    setStatus("Saving...");
+    await saveCounsellingSlot({ name, mobile, date, time, createdAt: Date.now() });
+    setStatus("Saved! We'll contact you to confirm the slot.");
+    setName("");
+    setMobile("");
+    setDate("");
+    setTime("");
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-green-100 via-yellow-50 to-pink-100 py-12 px-4">
-      <div className="bg-white rounded-xl shadow-lg border-2 border-green-200 max-w-md w-full p-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-green-700 mb-6 text-center">Free Counselling</h1>
-        {!submitted ? (
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              className="w-full border rounded px-3 py-2"
-              value={form.name}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="mobile"
-              placeholder="Mobile Number"
-              className="w-full border rounded px-3 py-2"
-              value={form.mobile}
-              onChange={handleChange}
-              required
-            />
-            <select
-              name="gender"
-              className="w-full border rounded px-3 py-2"
-              value={form.gender}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-            <select
-              name="maritalStatus"
-              className="w-full border rounded px-3 py-2"
-              value={form.maritalStatus}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Marital Status</option>
-              <option value="Single">Single</option>
-              <option value="Married">Married</option>
-              <option value="Other">Other</option>
-            </select>
-            <input
-              type="date"
-              name="date"
-              className="w-full border rounded px-3 py-2"
-              value={form.date}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="time"
-              name="time"
-              className="w-full border rounded px-3 py-2"
-              value={form.time}
-              onChange={handleChange}
-              required
-            />
-            <button
-              type="submit"
-              className="w-full bg-green-500 text-white py-2 rounded font-bold mt-2 hover:bg-green-600"
-            >
-              Book Counselling Slot
-            </button>
-          </form>
-        ) : (
-          <div className="text-center py-8">
-            <h2 className="text-xl font-bold text-pink-700 mb-4">Thank you!</h2>
-            <p className="text-green-700">Your counselling slot has been booked. We will contact you soon.</p>
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-rose-50 py-12">
+      <main className="max-w-2xl mx-auto bg-white/90 rounded-3xl p-8 shadow-xl">
+        <h1 className="text-2xl font-bold">Free Counselling</h1>
+        <p className="mt-2 text-sm text-slate-700">Choose a preferred date and time and we will reach out to confirm.</p>
+
+        <form onSubmit={submit} className="mt-6 space-y-4">
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full Name" className="w-full p-3 rounded-lg border" />
+          <input value={mobile} onChange={(e) => setMobile(e.target.value)} placeholder="Mobile Number" className="w-full p-3 rounded-lg border" />
+          <div className="grid grid-cols-2 gap-4">
+            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="p-3 rounded-lg border" />
+            <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="p-3 rounded-lg border" />
           </div>
-        )}
-      </div>
+
+          <div className="flex items-center justify-between">
+            <button type="submit" className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold">Request Slot</button>
+            {status && <div className="text-sm text-slate-700">{status}</div>}
+          </div>
+        </form>
+      </main>
     </div>
   );
 }
