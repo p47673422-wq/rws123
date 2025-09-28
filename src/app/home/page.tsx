@@ -27,6 +27,7 @@ useEffect(() => {
     try {
       const res = await fetch("/api/auth/me");
       if (res.ok) {
+   
         const data = await res.json();
         setIsLoggedIn(!data?.email);
       } else {
@@ -38,6 +39,48 @@ useEffect(() => {
   }
   checkAuth();
 }, []);
+  // QuizButton component for Begin/Resume logic
+  function QuizButton() {
+    const [hasProgress, setHasProgress] = useState(false);
+    useEffect(() => {
+      try {
+        const progress = window.localStorage.getItem("quizProgress");
+        setHasProgress(!!progress);
+      } catch {}
+    }, []);
+    const handleClick = () => {
+      window.location.href = "/divine-journey";
+    };
+    return (
+      <button
+        type="button"
+        onClick={handleClick}
+        className="w-full md:w-auto px-8 py-4 rounded-xl font-bold text-white bg-gradient-to-r from-yellow-400 via-amber-300 to-orange-400 shadow-lg hover:scale-105 transition-all flex items-center justify-center gap-2 text-lg md:text-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 animate-bounce-on-hover"
+        aria-label={hasProgress ? "Resume Divine Journey Quiz" : "Begin Divine Journey Quiz"}
+      >
+        {hasProgress ? "Resume Quiz" : "Begin Quiz"}
+      </button>
+    );
+  }
+
+  // Custom bounce animation for button
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @keyframes bounce {
+        0%, 100% { transform: scale(1); }
+        30% { transform: scale(1.08); }
+        50% { transform: scale(0.97); }
+        70% { transform: scale(1.04); }
+      }
+      .animate-bounce-on-hover:hover {
+        animation: bounce 0.6s;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => { document.head.removeChild(style); };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-pink-50 to-white flex flex-col">
       {/* Sticky Lotus-themed Navigation Bar */}
@@ -189,6 +232,47 @@ useEffect(() => {
         <div className="flex items-center gap-2 text-orange-700 font-semibold"><span>✅</span> Stay Motivated with Community</div>
       </section>
 
+ {/* Divine Journey Section */}
+    <section
+      className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-pink-50 to-white overflow-hidden"
+      aria-label="Divine Journey Section"
+    >
+      {/* Lotus petal background overlay */}
+      <div className="absolute inset-0 pointer-events-none select-none flex justify-center items-center">
+        <img
+          src="/images/shloka.png"
+          alt="Lotus Petal Pattern"
+          className="opacity-10 w-[400px] h-[400px] md:w-[600px] md:h-[600px] object-cover"
+          aria-hidden="true"
+        />
+      </div>
+      <div className="relative z-10 w-full flex flex-col items-center justify-center">
+        <h2 className="text-3xl md:text-5xl font-extrabold text-yellow-700 mb-4 text-center drop-shadow-lg animate-fadein">
+          🪔 Divine Journey – Defeat Ravana, Take Shelter of Lord Ram
+        </h2>
+        <p className="text-base md:text-lg text-pink-700 mb-6 font-medium text-center max-w-xl mx-auto animate-fadein delay-100">
+          Meditate and commit ourselves to following Rama. By taking shelter of Rama, we liberate ourselves from this Ravana within: lust, envy, anger, pride, greed, illusion.
+        </p>
+        <div className="w-full flex flex-col items-center justify-center">
+          <div className="bg-white/90 rounded-xl shadow-2xl p-8 border border-yellow-100 max-w-lg w-full flex flex-col items-center animate-fadein delay-200">
+            {/* Quiz Button Logic */}
+            <QuizButton />
+          </div>
+        </div>
+      </div>
+      {/* Custom fade-in animation */}
+      <style jsx>{`
+        @keyframes fadein {
+          0% { opacity: 0; transform: translateY(40px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadein {
+          animation: fadein 1.2s cubic-bezier(0.4,0,0.2,1) both;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+      `}</style>
+    </section>
       {/* QUIZZES SECTION */}
       <section className="max-w-5xl mx-auto w-full py-10 px-4" id="quizzes">
         <h2 className="text-2xl md:text-3xl font-bold text-yellow-700 mb-6 flex items-center gap-2"><span>📘</span> Explore Multiple Quizzes</h2>

@@ -3,21 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-/**
- * Divine Journey - Dusshera Quiz page
- *
- * - Reuses shootArrow / launchFireball logic (adapted to return Promises)
- * - Implements quiz flow:
- *   Start -> sticky intro -> question cards -> hide card on submit -> play animation -> interstitial -> next
- * - Q1 triggers user-details modal if missing (saved into localStorage and placeholder saveUserDetails)
- * - After Q10 resets heads and shows final Q11. Final correct triggers finalHit() and Victory Flow.
- * - Victory Flow: petal confetti + conch sound + Claim Your Gift -> /gift
- *
- * IMPORTANT:
- * - Place conch sound at /public/sounds/conch.mp3
- * - Replace/adjust images paths under /public/images/ as needed
- */
-
 const TOTAL_HEADS = 10;
 const ANIMATION_DURATIONS = { arrow: 1800, fireball: 1200, finalHit: 2000, buffer: 200 };
 
@@ -25,7 +10,7 @@ type Question = {
   id: number;
   text: string;
   options: string[];
-  correct: string[]; // letters: ["A","B"]
+  correct: string[]; // letters e.g. ["A","B"]
   multiple?: boolean;
   allowExplanation?: boolean;
 };
@@ -72,12 +57,7 @@ const QUESTIONS: Question[] = [
   {
     id: 4,
     text: "Find the odd one out: Ravana, Kumbhakarna, & Vibhishana.",
-    options: [
-      "A Ravana",
-      "B Kumbhakarna",
-      "C Vibhishana",
-      "D None is odd one out as all 3 are brothers together",
-    ],
+    options: ["A Ravana", "B Kumbhakarna", "C Vibhishana", "D None is odd one out as all 3 are brothers together"],
     correct: ["C"],
     allowExplanation: true,
   },
@@ -86,10 +66,10 @@ const QUESTIONS: Question[] = [
     text:
       "How did Ravana miss making his choices correct? (Bhagavad Gita 2.62-63) Select the correct options.",
     options: [
-      "A Maricha warned Ravana ... Ravana’s intelligence blinded by Lust - desire to have mother Sita",
-      "B Ravana was given advice by wife Madodari/Vibhishana but no change - blinded by lust",
-      "C Lord Rama was allured by Shurpanakha but Rama held to Dharma, so no lust developed",
-      "D Social Media bombardment → contemplation → lust → loss of intelligence (analogy)",
+      "A Maricha warned Ravana how Lord Rama is so powerful, but still Ravana was not ready to listen; Ravana’s good intelligence is blinded by Lust - adamant desire to have mother Sita;",
+      "B Ravana was given advice by his wife Madodari, brother Vibhishana, but no change - as he is blinded by lust;",
+      "C Lord Rama was also allured by Shurpanakha - but as Lord Rama showed the importance of holding to the Dharma in life, there was no thought of contemplation about that proposal - so no question of developing lust and no question of losing the intelligence.",
+      "D Isn’t it important for us to safeguard ourselves while handling the constant bombardment of Social Media which forces us to get into contemplation and then developing insatiable lust for the things making us lose our intelligence and losing oneself eventually.",
     ],
     correct: ["A", "B", "C", "D"],
     multiple: true,
@@ -98,11 +78,11 @@ const QUESTIONS: Question[] = [
     id: 6,
     text: "Select the right answers and get the right definition of Love.",
     options: [
-      "A Ravana wanted to enjoy mother Sita for his own sense enjoyment called Kama (lust)",
-      "B Hanuman wanted to give enjoyment to Lord Rama and mother Sita - Prema (selfless)",
+      "A Ravana wanted to enjoy mother Sita for his own sense enjoyment which is called as the lust or Kama - adamant desire to enjoy",
+      "B Hanuman wanted to give the enjoyment to Lord Rama and mother Sita which can be called as Love or Prema - selfless sacrifice for the beloved",
       "C Kama or Lust means working for gratifying one’s own senses",
       "D Prema or Love means working for satisfying the Lord’s senses",
-      "E Lust means Selfish, Love means Selfless; Lust means Destruction, Love means Devotion",
+      "E Lust means Selfish, Love means Selfless; Lust means Destruction, Love means Devotion;",
     ],
     correct: ["A", "B", "C", "D", "E"],
     multiple: true,
@@ -110,11 +90,11 @@ const QUESTIONS: Question[] = [
   {
     id: 7,
     text:
-      "When Vibhishana joins Lord Rama, what do we infer? (Choose best inference)",
+      "When Vibhishana joins Lord Rama, many of the associates of Lord Rama were questioning the acceptance of Vibhishana as he was the brother of Ravana. The Lord says He would forgive even Ravana if he surrenders. What do we infer from this? (Select the best inference)",
     options: [
       "A Lord Rama was desperate for allies, even wicked ones.",
       "B Ravana was secretly plotting to surrender later.",
-      "C The power of Surrender to the Lord is that all our sins are forgiven, as the Lord is very kind.",
+      "C The power of Surrender to the Lord is that all our sins are forgiven, as the Lord is very kind to all.",
       "D Lord Rama was simply being diplomatic.",
     ],
     correct: ["C"],
@@ -122,11 +102,11 @@ const QUESTIONS: Question[] = [
   {
     id: 8,
     text:
-      "In the analogy of zeroes and a single 1, what do the 1 and 0's represent?",
+      "In the analogy of 'No matter how many zeroes we gather, they have no value until we add a digit 1 before it,' what do the 1 and the 0's represent?",
     options: [
-      "A Ravana had wealth/skill but without Lord Rama (1) they were like 0s",
-      "B Vibhishana never left that 1 - Lord Rama from his life",
-      "C Academics/profession/family without God/satsang/Gita/Bhagavatam remain 0s",
+      "A Ravana had so much wealth, power, skills but all are like 0’s which without adding Lord Rama who is like 1, has made his whole life useless.",
+      "B Vibhishana never left that 1 - Lord Rama from his life although he has lost some 0’s like his kingdom, wealth, property share, etc.",
+      "C I am giving my time for academics/profession/family but with all these things only, my value will remain 0’s if i don’t give time to God by coming to satsang, temple, meditation, studying Bhagavad Gita & Srimad Bhagavatam which all are like adding 1.",
     ],
     correct: ["A", "B", "C"],
     multiple: true,
@@ -134,24 +114,24 @@ const QUESTIONS: Question[] = [
   {
     id: 9,
     text:
-      "Our life may be surrounded with people who are against Dharma. What should we do (based on Vibhishana)?",
+      "Our life may be surrounded with people who are against the path of Dharma. What should we do (based on Vibhishana's example)?",
     options: [
       "A Surrender to their plan out of family loyalty (like Kumbhakarna).",
       "B Compromise one's own Dharma temporarily to keep the peace.",
-      "C Seeing the majority and siding with them is more important than Dharma.",
-      "D Try to make them understand, and if they persist in Adharma, separate and align with Dharma.",
+      "C Seeing the majority and side them as the majority is more important than Dharma.",
+      "D Try to make them understand, and if they persist in Adharma, we must separate from them and align with Dharma.",
     ],
     correct: ["D"],
   },
   {
     id: 10,
     text:
-      "Lord Rama’s army was materially inferior. What was the victory factor in life?",
+      "Lord Rama’s army was materially inferior (monkeys with sticks and stones) to Ravana's army (full of mystic powers). What was the victory factor in life?",
     options: [
       "A Strategic brilliance and political maneuvering.",
       "B The immense power of the monkeys' sticks and stones.",
-      "C The principle of Dharmo rakṣati rakṣitaḥ (Dharma protects those who protect Dharma).",
-      "D Divine grace and holding on to the Lord.",
+      "C The principle of Dharmo rakṣati rakṣitaḥ (Dharma protects those who protect Dharma) and Divine grace.",
+      "D We may be small in the worldly sense but when we hold on to the Lord, the impossible can become possible.",
     ],
     correct: ["C", "D"],
     multiple: true,
@@ -159,11 +139,11 @@ const QUESTIONS: Question[] = [
   {
     id: 11,
     text:
-      "Mother Sita maintained virtue while captured. What essential quality do we adopt from this?",
+      "Mother Sita gets caught by Ravana but still she maintained her virtue against Ravana's threats. What is the essential quality we need to adopt from this?",
     options: [
-      "A Not crossing the limits of Dharma (Laxmana Rekha) to avoid being trapped.",
-      "B Honest desire to be with the Lord and chanting the Holy Names with a pure lifestyle.",
-      "C Never leave the 1 — Lord/Dharma — from our life.",
+      "A Mother Sita crosses Laxmana Rekha and gets caught by Ravana. We also if we cross the limits of Laxmana Rekha set for us by Dharma & our kind superiors - we are sure to get trapped by evils like Ravana.",
+      "B Honest Desire to be with the Lord and expressing that by chanting everyday the Holy Names in accordance with a pure lifestyle.",
+      "C Never to leave 1 - Lord - Dharma - from our life no matter what external demands.",
     ],
     correct: ["A", "B", "C"],
     multiple: true,
@@ -171,10 +151,13 @@ const QUESTIONS: Question[] = [
 ];
 
 export default function DivineJourneyPage() {
-  // Ravana heads state + animation
+  // Ravana heads state
   const initialHeads = Array.from({ length: TOTAL_HEADS }, (_, i) => i);
   const [heads, setHeads] = useState<number[]>(initialHeads);
-  const [turnRight, setTurnRight] = useState(false);
+
+  // first head removal should be from right side, then left, alternating
+  const [turnRight, setTurnRight] = useState<boolean>(true);
+
   const [flyingHead, setFlyingHead] = useState<number | null>(null);
   const [arrowActive, setArrowActive] = useState(false);
   const [fireballActive, setFireballActive] = useState(false);
@@ -182,124 +165,114 @@ export default function DivineJourneyPage() {
 
   // Quiz state
   const [quizStarted, setQuizStarted] = useState(false);
-  const [introCollapsed, setIntroCollapsed] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState<number>(() => {
-    // restore from localStorage if present
-    try {
-      const s = localStorage.getItem("dq_currentIndex");
-      return s ? parseInt(s, 10) : 0;
-    } catch {
-      return 0;
-    }
-  });
-  const [showQuestionCard, setShowQuestionCard] = useState(false);
-  const [selected, setSelected] = useState<Record<string, boolean | string>>({});
-  const [explanation, setExplanation] = useState("");
-  const [showInterstitial, setShowInterstitial] = useState(false);
-  const [lastAnswerCorrect, setLastAnswerCorrect] = useState<boolean | null>(null);
-  const [showUserModal, setShowUserModal] = useState(false);
-  const [userDetails, setUserDetails] = useState<any>(() => {
-    try {
-      const s = localStorage.getItem("dq_userDetails");
-      return s ? JSON.parse(s) : null;
-    } catch {
-      return null;
-    }
-  });
-  const [victory, setVictory] = useState(false);
-  const [petalBurst, setPetalBurst] = useState(false);
+  const [showCard, setShowCard] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
+  const [animating, setAnimating] = useState(false);
+  const [explanation, setExplanation] = useState<string>("");
 
+  const [completed, setCompleted] = useState(false);
   const conchRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // store progress
+    conchRef.current = new Audio("/sounds/conch.mp3");
+    // pre-load silently
     try {
-      localStorage.setItem("dq_currentIndex", String(currentIndex));
+      conchRef.current.load();
     } catch {}
-  }, [currentIndex]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("dq_userDetails", JSON.stringify(userDetails || null));
-    } catch {}
-  }, [userDetails]);
-
-  // Put placeholder audio element
-  useEffect(() => {
-    conchRef.current = new Audio("/audio/conch.mp3");
-    conchRef.current.load();
   }, []);
 
-  // Helper: compare selected set with correct letters
-  const isAnswerCorrect = (q: Question) => {
-    const selLetters = Object.entries(selected)
-      .filter(([k, v]) => v === true || (typeof v === "string" && v === "selected"))
-      .map(([k]) => k); // keys are letters like 'A'
-    // for radio, if selected contains a letter as string, return that
-    const finalSelected: string[] = selLetters.length
-      ? selLetters
-      : Object.entries(selected).reduce<string[]>((acc, [k, v]) => {
-          if (v && typeof v === "string" && v !== "false") acc.push(k);
-          return acc;
-        }, []);
+  // helper to get option letter
+  const optionLetter = (i: number) => String.fromCharCode(65 + i); // A, B, C...
 
-    // If radio: find any single selection
-    if (!q.multiple) {
-      // find selected letter
-      for (const [k, v] of Object.entries(selected)) {
-        if (v === "selected") return q.correct.includes(k);
-      }
-    }
-
-    // Normalize sets
-    const normA = q.correct.slice().sort();
-    const normB = finalSelected.slice().sort();
-    if (normA.length !== normB.length) return false;
-    for (let i = 0; i < normA.length; i++) {
-      if (normA[i] !== normB[i]) return false;
-    }
-    return true;
+  // render ravana heads
+  const renderHeads = () => {
+    const mid = Math.floor(TOTAL_HEADS / 2);
+    return heads.map((id, idx) => {
+      const relativeIndex = idx - Math.floor(heads.length / 2);
+      const offsetX = relativeIndex * 3.5;
+      const offsetY = Math.abs(relativeIndex) * 0.9;
+      const scale = 1 - Math.abs(relativeIndex) * 0.06;
+      return (
+        <img
+          key={id}
+          src="/images/ravan-head.png"
+          className="absolute transition-all"
+          style={{
+            bottom: `${54 + offsetY}%`,
+            right: `${15.1 + offsetX}%`,
+            width: `${12.5 * scale}%`,
+            transform: `scale(${scale})`,
+            zIndex: 100 - Math.abs(relativeIndex),
+          }}
+          alt="Ravana head"
+        />
+      );
+    });
   };
 
-  // --- Animation functions adapted from your original code (return Promises) ---
+  // flying head
+  const renderFlyingHead = () =>
+    flyingHead !== null ? (
+      <img
+        src="/images/ravan-head.png"
+        className="absolute flying-head"
+        style={{
+          right: `${14 + (flyingHead ?? 0) * -2}%`,
+          bottom: `${28 + (flyingHead ?? 0) * 6.2}%`,
+          width: "22%",
+          zIndex: 999,
+        }}
+        alt="Ravana flying head"
+      />
+    ) : null;
+
+  // shootArrow returns promise resolved after animation
   const shootArrow = (isFinal = false) =>
     new Promise<void>((resolve) => {
-      if (heads.length === 0 || arrowActive) {
+      if (arrowActive) {
         resolve();
         return;
       }
       setArrowActive(true);
 
-      const mid = Math.floor(TOTAL_HEADS / 2);
-
       setHeads((prev) => {
-        // if only center head remains → remove it
-        if (prev.length === 1 && prev[0] === mid) {
-          setFlyingHead(mid);
-          return [];
+        if (prev.length === 0) {
+          return prev;
         }
+        const mid = Math.floor(TOTAL_HEADS / 2);
 
-        // pick a target (left/right alternating)
+        // choose target based on turnRight flag: if true, choose rightmost non-mid; else leftmost non-mid
         let targetId: number | null = null;
+
         if (prev.length === 1) {
           targetId = prev[0];
         } else {
           if (turnRight) {
-            // choose rightmost not-center
-            targetId = [...prev].reverse().find((id) => id !== mid) ?? null;
+            // iterate from end to find first not mid
+            for (let i = prev.length - 1; i >= 0; i--) {
+              if (prev[i] !== mid) {
+                targetId = prev[i];
+                break;
+              }
+            }
+            if (targetId === null) targetId = prev[prev.length - 1];
           } else {
-            targetId = prev.find((id) => id !== mid) ?? null;
+            for (let i = 0; i < prev.length; i++) {
+              if (prev[i] !== mid) {
+                targetId = prev[i];
+                break;
+              }
+            }
+            if (targetId === null) targetId = prev[0];
           }
         }
 
-        if (targetId === null) {
-          // fallback
-          targetId = prev[0];
-        }
-
+        // set flying head and toggle side for next time
         setFlyingHead(targetId);
         setTurnRight((t) => !t);
-        // remove that head id
+
+        // remove target from heads
         return prev.filter((id) => id !== targetId);
       });
 
@@ -326,214 +299,134 @@ export default function DivineJourneyPage() {
     });
 
   const finalHit = async () => {
-    // For final, we want dramatic hit: call shootArrow(true) then clear heads
+    // dramatic final hit: call shootArrow(true)
     await shootArrow(true);
-    // make sure all heads gone
+    // ensure heads cleared
     setHeads([]);
   };
 
-  // Render heads (positions derived from your original logic)
-  const renderHeads = () => {
-    const mid = Math.floor(TOTAL_HEADS / 2);
-    return heads.map((id, idx) => {
-      // compute current index among remaining heads
-      const relativeIndex = idx - Math.floor(heads.length / 2);
-      const offsetX = relativeIndex * 3.5;
-      const offsetY = Math.abs(relativeIndex) * 0.9;
-      const scale = 1 - Math.abs(relativeIndex) * 0.06;
-      return (
-        <img
-          key={id}
-          src="/images/ravan-head.png"
-          className="absolute transition-all"
-          style={{
-            bottom: `${54 + offsetY}%`,
-            right: `${15.1 + offsetX}%`,
-            width: `${12.5 * scale}%`,
-            transform: `scale(${scale})`,
-            zIndex: 100 - Math.abs(relativeIndex),
-          }}
-          alt="Ravana head"
-        />
-      );
-    });
-  };
-
-  const renderFlyingHead = () =>
-    flyingHead !== null && (
-      <img
-        src="/images/ravan-head.png"
-        className="absolute flying-head"
-        style={{
-          right: `${14 + flyingHead * -2}%`,
-          bottom: `${28 + flyingHead * 6.2}%`,
-          width: "22%",
-          zIndex: 999,
-        }}
-        alt="Ravana head flying"
-      />
-    );
-
-  // Petal confetti: create small DOM petals
-  const launchPetalConfetti = (count = 40) => {
-    setPetalBurst(true);
-    // auto clear after some time
-    setTimeout(() => setPetalBurst(false), 6000);
-  };
-
-  // Placeholder backend hooks
-  async function saveUserDetails(details: any) {
-    // TODO: replace with real API call
-    console.log("saveUserDetails (placeholder):", details);
-    return Promise.resolve({ ok: true });
-  }
-  async function saveQuizAttempt(attempt: any) {
-    console.log("saveQuizAttempt (placeholder):", attempt);
-    return Promise.resolve({ ok: true });
-  }
-  async function saveCounsellingSlot(slot: any) {
-    console.log("saveCounsellingSlot (placeholder):", slot);
-    return Promise.resolve({ ok: true });
-  }
-
-  // Submit answer handler
-  const handleSubmitAnswer = async (q: Question) => {
-    // hide card immediately so animation visible
-    setShowQuestionCard(false);
-
-    // evaluate correctness
-    const correct = isAnswerCorrect(q);
-    setLastAnswerCorrect(correct);
-
-    // trigger animation
-    if (correct) {
-      // call shootArrow or finalHit if final question
-      if (q.id === 11) {
-        await finalHit();
-      } else {
-        await shootArrow(false);
-      }
-    } else {
-      await launchFireball();
+  // check selected vs correct
+  const isCorrectForQuestion = (q: Question) => {
+    const selected = selectedLetters.slice().map((s) => s.toUpperCase()).sort();
+    const correct = q.correct.slice().map((s) => s.toUpperCase()).sort();
+    if (selected.length !== correct.length) return false;
+    for (let i = 0; i < correct.length; i++) {
+      if (selected[i] !== correct[i]) return false;
     }
+    return true;
+  };
 
-    // Special: Q1 -> ensure user details
-    if (q.id === 1 && !userDetails) {
-      setShowUserModal(true);
-      // showUserModal will on save call saveUserDetails and then continue to interstitial
+  // submit handler
+  const handleSubmit = async () => {
+    if (animating) return;
+    const q = QUESTIONS[currentIndex];
+    if (!q) return;
+    if (selectedLetters.length === 0) {
+      alert("Please select an answer.");
       return;
     }
 
-    // show interstitial
-    setShowInterstitial(true);
-  };
+    // hide card immediately so background animations visible
+    setShowCard(false);
+    setAnimating(true);
 
-  // Called after interstitial "Take Shelter..." clicked
-  const handleTakeShelterContinue = async () => {
-    setShowInterstitial(false);
+    const correct = isCorrectForQuestion(q);
 
-    // move to next question / handle progression
-    const isLastBeforeFinal = currentIndex + 1 === 10; // answered Q10 just now (0-based)
-    if (currentIndex + 1 < QUESTIONS.length) {
-      // if we just answered question 10 (index 9), reset heads then go to 11th
-      if (isLastBeforeFinal) {
-        // reset all heads to full array
-        setHeads(initialHeads);
-        // small pause to show heads restored
-        await new Promise((res) => setTimeout(res, 600));
+    if (correct) {
+      // if this was question 10 (index 9), after removing head restore all heads then move to final
+      if (currentIndex === 10) {
+        // final question answered correctly
+        await finalHit();
+        // play conch if available
+        try {
+          conchRef.current?.play();
+        } catch {}
+        setAnimating(false);
+        setCompleted(true);
+        return;
       }
-      setCurrentIndex((i) => i + 1);
-      // reset selected/explanation for next question
-      setSelected({});
+
+      // normal correct: shoot one head
+      await shootArrow(false);
+
+      // if just answered question index 9 (10th question), restore heads then go to final (index 10)
+      if (currentIndex === 9) {
+        // restore heads
+        setHeads(initialHeads.slice());
+        // small pause for user to see restored heads
+        await new Promise((res) => setTimeout(res, 600));
+        setCurrentIndex((ci) => ci + 1); // move to question 11 (index 10)
+      } else {
+        setCurrentIndex((ci) => ci + 1);
+      }
+
+      // prepare for next question
+      setSelectedLetters([]);
       setExplanation("");
-      setShowQuestionCard(true);
+      setAnimating(false);
+      // show next question card
+      setTimeout(() => setShowCard(true), 200);
     } else {
-      // finished all questions
-      // mark attempt
-      const attempt = { timestamp: Date.now(), answers: "saved-locally", user: userDetails || null };
-      await saveQuizAttempt(attempt);
-      try {
-        localStorage.setItem("dq_quiz_attempted", "true");
-      } catch {}
-      // trigger victory modal / flow (should have already been triggered on finalHit true)
-      setVictory(true);
-      // play conch
-      try {
-        conchRef.current?.play();
-      } catch {}
-      launchPetalConfetti();
+      // incorrect: play fireball, then re-show same question
+      await launchFireball();
+      setAnimating(false);
+      setSelectedLetters([]);
+      setExplanation("");
+      setTimeout(() => setShowCard(true), 200);
     }
   };
 
-  // Save user details from modal
-  const handleSaveUserDetails = async (details: any) => {
-    await saveUserDetails(details);
-    setUserDetails(details);
-    setShowUserModal(false);
-    // after saving details show interstitial
-    setShowInterstitial(true);
+  // UI handlers for selecting options
+  const toggleOption = (letter: string, multi?: boolean) => {
+    const upper = letter.toUpperCase();
+    if (multi) {
+      setSelectedLetters((prev) => (prev.includes(upper) ? prev.filter((p) => p !== upper) : [...prev, upper]));
+    } else {
+      setSelectedLetters([upper]);
+    }
   };
 
-  // Start quiz
-  const onBeginQuiz = () => {
-    setQuizStarted(true);
-    setShowQuestionCard(true);
+  // Reset quiz (for testing)
+  const resetQuiz = () => {
+    setHeads(initialHeads.slice());
+    setTurnRight(true);
+    setFlyingHead(null);
+    setArrowActive(false);
+    setFireballActive(false);
+    setJivaSteps(0);
+    setQuizStarted(false);
+    setShowCard(false);
     setCurrentIndex(0);
-    setSelected({});
+    setSelectedLetters([]);
+    setAnimating(false);
     setExplanation("");
-    try {
-      localStorage.setItem("dq_currentIndex", "0");
-    } catch {}
+    setCompleted(false);
   };
-
-  // Resume if progress present
-  useEffect(() => {
-    // if quizStarted from persisted currentIndex, show intro collapsed false and show question if needed
-    const tried = localStorage.getItem("dq_currentIndex");
-    if (tried && parseInt(tried, 10) > 0) {
-      // don't auto-start, but keep progress
-    }
-  }, []);
 
   const currentQuestion = QUESTIONS[currentIndex];
 
-  // UI Helpers: option letters A,B,C...
-  const optionLetter = (i: number) => String.fromCharCode(65 + i);
-
-  // small helper for checkbox/radio change
-  const handleOptionToggle = (letter: string, multi?: boolean) => {
-    if (multi) {
-      setSelected((s) => ({ ...s, [letter]: !s[letter] }));
-    } else {
-      // set only this letter to "selected", others to undefined
-      const newS: Record<string, any> = {};
-      newS[letter] = "selected";
-      setSelected(newS);
-    }
-  };
-
   return (
-    <div className="min-h-screen flex z-30 items-start justify-center bg-black pt-0 md:pt-8">
+     <div className="min-h-screen flex z-30 items-start justify-center bg-black pt-0 md:pt-8">
       {/* battlefield / background container */}
       <div
         className="relative w-full max-w-md h-screen bg-cover bg-center overflow-hidden"
         style={{ backgroundImage: "url('/images/ramb.png')", top: 0, position: 'absolute', left: '50%', transform: 'translateX(-50%)', maxHeight: '100vh' }}
       >
-        {/* Ravana heads + flying head */}
+        {/* Render heads and flying head */}
         {renderHeads()}
         {renderFlyingHead()}
 
         {/* Arrow */}
         {arrowActive && flyingHead !== null && (
           <div
-            className={`absolute arrow ${arrowActive ? "arrow-anim" : ""}`}
+            className="absolute arrow"
             style={{
               left: "20%",
               bottom: "50%",
               transform: `rotate(-10deg)`,
             }}
             aria-hidden
-          ></div>
+          />
         )}
 
         {/* Fireballs */}
@@ -545,12 +438,12 @@ export default function DivineJourneyPage() {
               style={{
                 right: "20%",
                 bottom: "55%",
-                animationDelay: `${f * 0.2}s`,
+                animationDelay: `${f * 0.18}s`,
               }}
             />
           ))}
 
-        {/* Jiva */}
+        {/* Jiva (stick figure) */}
         <div
           className={`absolute jiva ${fireballActive ? "jiva-shake" : ""}`}
           style={{
@@ -571,191 +464,140 @@ export default function DivineJourneyPage() {
                 heads.length >= 7 ? "fill-black" : heads.length <= 4 ? "fill-yellow-600" : "fill-yellow-400"
               }`}
             />
-            <line
-              x1="50"
-              y1="32"
-              x2="50"
-              y2="110"
-              strokeWidth="6"
-              className={`transition-colors duration-1000 ${
-                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
-              }`}
-            />
-            <line x1="50" y1="50" x2="20" y2="80" strokeWidth="5" className={`${heads.length >= 7 ? "stroke-black" : "stroke-yellow-400"}`} />
-            <line x1="50" y1="50" x2="80" y2="80" strokeWidth="5" className={`${heads.length >= 7 ? "stroke-black" : "stroke-yellow-400"}`} />
-            <line x1="50" y1="110" x2="25" y2="160" strokeWidth="5" className={`${heads.length >= 7 ? "stroke-black" : "stroke-yellow-400"}`} />
-            <line x1="50" y1="110" x2="75" y2="160" strokeWidth="5" className={`${heads.length >= 7 ? "stroke-black" : "stroke-yellow-400"}`} />
+            <line x1="50" y1="32" x2="50" y2="110" strokeWidth="6" className="stroke-yellow-400" />
+            <line x1="50" y1="50" x2="20" y2="80" strokeWidth="5" className="stroke-yellow-400" />
+            <line x1="50" y1="50" x2="80" y2="80" strokeWidth="5" className="stroke-yellow-400" />
+            <line x1="50" y1="110" x2="25" y2="160" strokeWidth="5" className="stroke-yellow-400" />
+            <line x1="50" y1="110" x2="75" y2="160" strokeWidth="5" className="stroke-yellow-400" />
           </svg>
         </div>
 
-        {/* Sticky Intro Card (collapsible) */}
-        <div
-          className={`absolute top-6 left-1/2 -translate-x-1/2 w-11/12 md:w-3/4 rounded-2xl p-4 shadow-2xl backdrop-blur-md border border-white/10 transition-all ${
-            introCollapsed ? "max-h-12 overflow-hidden" : "max-h-[220px]"
-          } bg-gradient-to-r from-rose-900/20 to-amber-900/10`}
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-lg md:text-2xl font-semibold">Take Shelter of Lord Ram</h2>
-              {!introCollapsed && (
-                <p className="mt-2 text-sm md:text-base text-white/80">
-                  Conquer Ravana and liberate yourself from the six anarthas — lust, envy, anger, pride,
-                  greed, and illusion. Click Begin Quiz to take the Divine Journey.
-                </p>
-              )}
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setIntroCollapsed((c) => !c)}
-                className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20"
-                aria-label="Collapse intro"
-              >
-                {introCollapsed ? "Expand" : "Collapse"}
-              </button>
-              <button
-                onClick={() => {
-                  if (!quizStarted) onBeginQuiz();
-                }}
-                className="px-4 py-2 rounded-full bg-gradient-to-r from-amber-300 to-rose-500 text-slate-900 font-semibold shadow-lg hover:scale-[1.02] transform transition"
-                aria-label="Begin Quiz"
-              >
-                {quizStarted ? "Resume Quiz" : "Begin Quiz"}
-              </button>
-            </div>
+        {/* Begin Quiz button at top (prominent) */}
+        {!quizStarted && (
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50">
+            <button
+              onClick={() => {
+                setQuizStarted(true);
+                setShowCard(true);
+              }}
+              className="px-6 py-3 rounded-xl bg-amber-400 text-black font-semibold shadow-lg hover:scale-[1.02] transform transition"
+            >
+              Begin Quiz
+            </button>
           </div>
-        </div>
+        )}
 
-        {/* Question Card */}
-        {quizStarted && showQuestionCard && currentQuestion && (
-          <div className="absolute left-1/2 -translate-x-1/2 top-28 w-11/12 md:w-2/3 bg-white/5 border border-white/10 rounded-2xl p-5 shadow-xl">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base md:text-xl font-semibold">Question {currentQuestion.id} of {QUESTIONS.length}</h3>
-              <div className="text-sm text-white/70">{/* progress */}</div>
-            </div>
+        {/* Quiz Card Overlay: centered card with dim background */}
+        {quizStarted && showCard && currentQuestion && !completed && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/60" style={{ zIndex: 1000 }}>
+            <div className="w-11/12 md:w-2/3 lg:w-1/2 bg-white text-black rounded-2xl shadow-2xl p-6 border border-orange-100">
+              <div className="flex items-start justify-between">
+                <h3 className="text-lg md:text-2xl font-semibold">{`Question ${currentQuestion.id} of ${QUESTIONS.length}`}</h3>
+                <div className="text-sm text-gray-600">{/* optional progress */}</div>
+              </div>
 
-            <p className="mt-3 text-sm md:text-base">{currentQuestion.text}</p>
+              <p className="mt-3 text-base md:text-lg font-medium">{currentQuestion.text}</p>
 
-            <div className="mt-4 space-y-2">
-              {currentQuestion.options.map((opt, i) => {
-                const letter = optionLetter(i);
-                if (currentQuestion.multiple) {
-                  return (
-                    <label key={letter} className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        checked={!!selected[letter]}
-                        onChange={() => handleOptionToggle(letter, true)}
-                        aria-label={`Option ${letter}`}
-                      />
-                      <span>{opt}</span>
-                    </label>
-                  );
-                } else {
-                  return (
-                    <label key={letter} className="flex items-center gap-3">
-                      <input
-                        type="radio"
-                        name={`q-${currentQuestion.id}`}
-                        checked={selected[letter] === "selected"}
-                        onChange={() => handleOptionToggle(letter, false)}
-                        aria-label={`Option ${letter}`}
-                      />
-                      <span>{opt}</span>
-                    </label>
-                  );
-                }
-              })}
-            </div>
+              <div className="mt-4 space-y-3">
+                {currentQuestion.options.map((opt, i) => {
+                  const letter = optionLetter(i);
+                  if (currentQuestion.multiple) {
+                    return (
+                      <label
+                        key={letter}
+                        className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer ${
+                          selectedLetters.includes(letter) ? "bg-amber-100 border-amber-400" : "bg-white/90 border-gray-200"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedLetters.includes(letter)}
+                          onChange={() => toggleOption(letter, true)}
+                          className="accent-amber-500"
+                          aria-label={`Option ${letter}`}
+                        />
+                        <span className="text-sm">{opt}</span>
+                      </label>
+                    );
+                  } else {
+                    return (
+                      <label
+                        key={letter}
+                        className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer ${
+                          selectedLetters.includes(letter) ? "bg-amber-100 border-amber-400" : "bg-white/90 border-gray-200"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name={`q-${currentQuestion.id}`}
+                          checked={selectedLetters.includes(letter)}
+                          onChange={() => toggleOption(letter, false)}
+                          className="accent-amber-500"
+                          aria-label={`Option ${letter}`}
+                        />
+                        <span className="text-sm">{opt}</span>
+                      </label>
+                    );
+                  }
+                })}
+              </div>
 
-            {currentQuestion.allowExplanation && (
-              <div className="mt-3">
+              {currentQuestion.allowExplanation && (
                 <textarea
-                  placeholder="Explain your reasoning (optional)"
+                  className="mt-4 w-full p-2 rounded-md border border-gray-200"
+                  placeholder="Explain your answer (optional)"
                   value={explanation}
                   onChange={(e) => setExplanation(e.target.value)}
-                  className="w-full p-2 rounded-md bg-black/20 border border-white/10"
                 />
+              )}
+
+              <div className="mt-4 flex items-center justify-end gap-3">
+                {/* <button
+                  onClick={() => {
+                    // cancel/hide
+                    setShowCard(false);
+                  }}
+                  className="px-4 py-2 rounded-lg bg-white/20 border border-gray-200"
+                >
+                  Cancel
+                </button> */}
+                <button
+                  onClick={handleSubmit}
+                  disabled={animating}
+                  className="px-5 py-2 rounded-lg bg-amber-400 text-black font-semibold hover:bg-amber-500 disabled:opacity-50"
+                >
+                  Submit
+                </button>
               </div>
-            )}
-
-            <div className="mt-4 flex items-center gap-3 justify-end">
-              <button
-                onClick={() => {
-                  // small validation: at least one selection
-                  const anySel = Object.values(selected).some((v) => v === true || v === "selected");
-                  if (!anySel) {
-                    // highlight — for quick UX just alert for now
-                    alert("Please select an answer before submitting.");
-                    return;
-                  }
-                  handleSubmitAnswer(currentQuestion);
-                }}
-                className="px-4 py-2 rounded-lg bg-amber-400 text-black font-semibold shadow"
-                aria-label="Submit answer"
-              >
-                Submit
-              </button>
             </div>
           </div>
         )}
 
-        {/* Interstitial popup shown after animation */}
-        {showInterstitial && (
-          <div className="absolute left-1/2 -translate-x-1/2 top-40 w-11/12 md:w-1/3 p-5 bg-white/6 rounded-2xl border border-white/10 shadow-xl">
-            <h4 className="text-lg font-semibold">{lastAnswerCorrect ? "Correct — You have weakened Ravana!" : "Incorrect — The Jiva is shaken."}</h4>
-            <p className="mt-2 text-sm text-white/80">
-              {lastAnswerCorrect
-                ? "By this choice you move closer to Rama. Reflect on surrender and continue."
-                : "Reflect and continue. Lord Rama's shelter is always available."}
-            </p>
-
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={handleTakeShelterContinue}
-                className="px-4 py-2 rounded-full bg-gradient-to-r from-rose-300 to-amber-400 text-slate-900 font-semibold"
-                aria-label="Take shelter and continue"
-              >
-                Take Shelter of Lord Ram
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* User Details Modal (shown after Q1 if missing) */}
-        {showUserModal && (
-          <div className="absolute left-1/2 -translate-x-1/2 top-40 w-11/12 md:w-1/2 p-5 bg-white/6 rounded-2xl border border-white/10 shadow-xl">
-            <h4 className="text-lg font-semibold">Please provide your details</h4>
-            <p className="text-sm text-white/80 mt-1">We need your details to save your attempt and contact you for gifts/counselling.</p>
-            <UserDetailsForm initial={{}} onSave={handleSaveUserDetails} />
-          </div>
-        )}
-
-        {/* Victory modal */}
-        {victory && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-50">
-            <div className="bg-white/6 rounded-3xl p-6 md:p-10 w-11/12 md:w-2/3 border border-white/10 shadow-2xl">
-              <h2 className="text-xl md:text-3xl font-bold">You have conquered Ravana!</h2>
-              <p className="mt-4 text-sm md:text-base">
-                By taking shelter of Lord Ram, you have conquered Ravana and the anarthas — lust, envy, anger, pride, greed, illusion.
-              </p>
-
-              <div className="mt-6 flex gap-4">
-                <Link href="/gift" className="px-4 py-3 rounded-full bg-amber-300 text-slate-900 font-semibold">
-                  Claim Your Gift
-                </Link>
-                <Link href="/counselling" className="px-4 py-3 rounded-full bg-white/10 border border-white/20">
-                  Free Counselling
+        {/* Completed modal after final */}
+        {completed && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+            <div className="bg-white text-black rounded-3xl p-6 md:p-10 max-w-xl w-11/12 shadow-2xl">
+              <h2 className="text-2xl font-bold">You have completed the Divine Journey</h2>
+              <p className="mt-3">By taking shelter of Lord Ram, you move closer to freedom from the anarthas.</p>
+              <div className="mt-6 flex gap-3 justify-end">
+                <button
+                  onClick={() => {
+                    // simple reset option
+                    resetQuiz();
+                  }}
+                  className="px-4 py-2 rounded-lg bg-gray-200 text-black"
+                >
+                  Retry
+                </button>
+                <Link href="/gift" className="px-4 py-2 rounded-lg bg-amber-400 text-black font-semibold">
+                  Claim Gift
                 </Link>
               </div>
             </div>
           </div>
         )}
 
-        {/* Petal Confetti overlay */}
-        {petalBurst && <PetalConfetti />}
-
-        {/* Custom CSS */}
+        {/* Custom CSS animations */}
         <style jsx>{`
           .arrow {
             width: 80px;
@@ -763,8 +605,9 @@ export default function DivineJourneyPage() {
             background: linear-gradient(to right, #fff7d6, #facc15, #f59e0b);
             border-radius: 4px;
             box-shadow: 0 0 15px 6px rgba(255, 215, 0, 0.8);
+            position: absolute;
           }
-          .arrow-anim {
+          .arrow {
             animation: arrowFly ${ANIMATION_DURATIONS.arrow}ms linear forwards;
           }
           @keyframes arrowFly {
@@ -838,101 +681,11 @@ export default function DivineJourneyPage() {
           }
         `}</style>
       </div>
+
+      {/* small persistent Take Shelter message at bottom */}
+      <div className="w-full text-center py-3 bg-black/70 text-sm fixed bottom-0">
+        <span className="text-amber-300">🌸 Take shelter of Lord Ram — liberate yourself from lust, envy, anger, pride, greed, illusion. 🌸</span>
+      </div>
     </div>
-  );
-}
-
-/* -------------------------
-   UserDetailsForm component
-   ------------------------- */
-function UserDetailsForm({ initial, onSave }: { initial: any; onSave: (d: any) => void }) {
-  const [name, setName] = useState(initial?.name || "");
-  const [mobile, setMobile] = useState(initial?.mobile || "");
-  const [address, setAddress] = useState(initial?.address || "");
-  const [gender, setGender] = useState(initial?.gender || "");
-  const [marital, setMarital] = useState(initial?.marital || "");
-
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!mobile || !name) {
-          alert("Please provide Name and Mobile number.");
-          return;
-        }
-        const details = { name, mobile, address, gender, marital };
-        onSave(details);
-      }}
-      className="mt-3 space-y-2"
-    >
-      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full Name" className="w-full p-2 rounded-md bg-black/20" />
-      <input value={mobile} onChange={(e) => setMobile(e.target.value)} placeholder="Mobile Number" className="w-full p-2 rounded-md bg-black/20" />
-      <input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Address" className="w-full p-2 rounded-md bg-black/20" />
-      <select value={gender} onChange={(e) => setGender(e.target.value)} className="w-full p-2 rounded-md bg-black/20">
-        <option value="">Select Gender</option>
-        <option>Male</option>
-        <option>Female</option>
-        <option>Other</option>
-      </select>
-      <select value={marital} onChange={(e) => setMarital(e.target.value)} className="w-full p-2 rounded-md bg-black/20">
-        <option value="">Marital Status</option>
-        <option>Single</option>
-        <option>Married</option>
-      </select>
-
-      <div className="flex justify-end gap-2">
-        <button type="submit" className="px-3 py-2 rounded-md bg-amber-400 text-black font-semibold">Save</button>
-      </div>
-    </form>
-  );
-}
-
-/* -------------------------
-   PetalConfetti component
-   ------------------------- */
-function PetalConfetti() {
-  // simple CSS-based petals floating down; can be improved with images
-  const petals = new Array(30).fill(0).map((_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    delay: Math.random() * 2,
-    size: 8 + Math.random() * 16,
-    rotate: Math.random() * 180,
-  }));
-
-  return (
-    <>
-      <div aria-hidden className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
-        {petals.map((p) => (
-          <div
-            key={p.id}
-            style={{
-              left: `${p.left}%`,
-              top: "-10%",
-              width: p.size,
-              height: p.size * 1.6,
-              transform: `rotate(${p.rotate}deg)`,
-              animationDelay: `${p.delay}s`,
-            }}
-            className="absolute rounded-full petal bg-rose-300/90"
-          />
-        ))}
-      </div>
-
-      <style jsx>{`
-        .petal {
-          transform-origin: center;
-          animation: petalFall 5s linear forwards;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-          border-radius: 50% 50% 40% 40%;
-        }
-        @keyframes petalFall {
-          0% { transform: translateY(0) rotate(0); opacity: 1; }
-          30% { opacity: 0.95; }
-          80% { opacity: 0.9; }
-          100% { transform: translateY(130vh) rotate(720deg); opacity: 0; }
-        }
-      `}</style>
-    </>
   );
 }
