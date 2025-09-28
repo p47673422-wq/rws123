@@ -588,7 +588,17 @@ export default function DivineJourneyPage() {
         {/* Quiz Card Overlay: centered card with dim background */}
         {quizStarted && showCard && currentQuestion && !completed && !showUserForm && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/60" style={{ zIndex: 1000 }}>
-            <div className="w-11/12 md:w-2/3 lg:w-1/2 bg-white text-black rounded-2xl shadow-2xl p-6 border border-orange-100">
+            <div
+              className="w-11/12 md:w-2/3 lg:w-1/2 bg-white text-black rounded-2xl shadow-2xl p-6 border border-orange-100"
+              style={{
+                maxHeight: '80vh', // leave 20% top/bottom
+                overflowY: 'auto',
+                marginBottom: '10vh', // leave 10% bottom space
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+              }}
+            >
               <div className="flex items-start justify-between">
                 <h3 className="text-lg md:text-2xl font-semibold">{`Question ${currentQuestion.id} of ${QUESTIONS.length}`}</h3>
                 <div className="text-sm text-gray-600">{/* optional progress */}</div>
@@ -596,7 +606,7 @@ export default function DivineJourneyPage() {
 
               <p className="mt-3 text-base md:text-lg font-medium">{currentQuestion.text}</p>
 
-              <div className="mt-4 space-y-3">
+              <div className="mt-4 space-y-3" style={{ overflowY: 'auto' }}>
                 {currentQuestion.options.map((opt, i) => {
                   const letter = optionLetter(i);
                   if (currentQuestion.multiple) {
@@ -692,9 +702,55 @@ export default function DivineJourneyPage() {
         {/* Completed modal after final */}
         {completed && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-            <div className="bg-white text-black rounded-3xl p-6 md:p-10 max-w-xl w-11/12 shadow-2xl">
+            {/* Confetti effect */}
+            <div className="absolute inset-0 pointer-events-none z-50">
+              {/* Simple confetti using colored divs */}
+              {[...Array(40)].map((_, i) => (
+                <div
+                  key={i}
+                  className="confetti"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 60 + 5}%`,
+                    background: `hsl(${Math.random() * 360},90%,70%)`,
+                    animationDelay: `${Math.random() * 2}s`,
+                  }}
+                />
+              ))}
+              {/* Lotus petals falling */}
+              {[...Array(12)].map((_, i) => (
+                <img
+                  key={i}
+                  src="/images/shloka.png"
+                  alt="Lotus petal"
+                  className="lotus-petal"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `-${Math.random() * 20 + 10}%`,
+                    width: `${Math.random() * 32 + 24}px`,
+                    animationDelay: `${Math.random() * 2}s`,
+                  }}
+                />
+              ))}
+            </div>
+            <div
+              className="bg-white text-black rounded-3xl p-6 md:p-10 max-w-xl w-11/12 shadow-2xl"
+              style={{ marginTop: '6vh', position: 'relative', zIndex: 51 }}
+            >
               <h2 className="text-2xl font-bold">You have completed the Divine Journey</h2>
               <p className="mt-3">By taking shelter of Lord Ram, you move closer to freedom from the anarthas.</p>
+              {/* Play sound reliably when completed modal is shown */}
+              {completed && (
+                <audio
+                  src="/sounds/conch.mp3"
+                  autoPlay
+                  style={{ display: 'none' }}
+                  onPlay={() => {
+                    // fallback: try to play via ref if needed
+                    try { conchRef.current?.play(); } catch {}
+                  }}
+                />
+              )}
               <div className="mt-6 flex gap-3 justify-end">
                 <button
                   onClick={() => {
@@ -710,6 +766,32 @@ export default function DivineJourneyPage() {
                 </Link>
               </div>
             </div>
+            <style jsx>{`
+              .confetti {
+                position: absolute;
+                width: 12px;
+                height: 18px;
+                border-radius: 3px;
+                opacity: 0.8;
+                animation: confettiDrop 2.8s cubic-bezier(.4,0,.2,1) forwards;
+              }
+              @keyframes confettiDrop {
+                0% { transform: translateY(-40px) rotate(0deg); opacity: 0.8; }
+                80% { opacity: 0.8; }
+                100% { transform: translateY(80vh) rotate(360deg); opacity: 0.2; }
+              }
+              .lotus-petal {
+                position: absolute;
+                pointer-events: none;
+                opacity: 0.85;
+                animation: lotusFall 3.2s cubic-bezier(.4,0,.2,1) forwards;
+              }
+              @keyframes lotusFall {
+                0% { transform: translateY(0) rotate(-10deg); opacity: 0.85; }
+                80% { opacity: 0.85; }
+                100% { transform: translateY(80vh) rotate(30deg); opacity: 0.2; }
+              }
+            `}</style>
           </div>
         )}
 
