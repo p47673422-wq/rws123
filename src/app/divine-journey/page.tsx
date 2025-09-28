@@ -766,36 +766,10 @@ export default function DivineJourneyPage() {
                 </Link>
               </div>
             </div>
-            <style jsx>{`
-              .confetti {
-                position: absolute;
-                width: 12px;
-                height: 18px;
-                border-radius: 3px;
-                opacity: 0.8;
-                animation: confettiDrop 2.8s cubic-bezier(.4,0,.2,1) forwards;
-              }
-              @keyframes confettiDrop {
-                0% { transform: translateY(-40px) rotate(0deg); opacity: 0.8; }
-                80% { opacity: 0.8; }
-                100% { transform: translateY(80vh) rotate(360deg); opacity: 0.2; }
-              }
-              .lotus-petal {
-                position: absolute;
-                pointer-events: none;
-                opacity: 0.85;
-                animation: lotusFall 3.2s cubic-bezier(.4,0,.2,1) forwards;
-              }
-              @keyframes lotusFall {
-                0% { transform: translateY(0) rotate(-10deg); opacity: 0.85; }
-                80% { opacity: 0.85; }
-                100% { transform: translateY(80vh) rotate(30deg); opacity: 0.2; }
-              }
-            `}</style>
           </div>
         )}
 
-        {/* Custom CSS animations */}
+        {/* Custom CSS animations (merged confetti/lotus-petal here) */}
         <style jsx>{`
           .arrow {
             width: 80px;
@@ -876,6 +850,32 @@ export default function DivineJourneyPage() {
           }
           .jiva-shake {
             animation: jivaShake 0.6s ease;
+          }
+
+          /* Confetti and lotus petal styles (moved from modal) */
+          .confetti {
+            position: absolute;
+            width: 12px;
+            height: 18px;
+            border-radius: 3px;
+            opacity: 0.8;
+            animation: confettiDrop 2.8s cubic-bezier(.4,0,.2,1) forwards;
+          }
+          @keyframes confettiDrop {
+            0% { transform: translateY(-40px) rotate(0deg); opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(80vh) rotate(360deg); opacity: 0.2; }
+          }
+          .lotus-petal {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.85;
+            animation: lotusFall 3.2s cubic-bezier(.4,0,.2,1) forwards;
+          }
+          @keyframes lotusFall {
+            0% { transform: translateY(0) rotate(-10deg); opacity: 0.85; }
+            80% { opacity: 0.85; }
+            100% { transform: translateY(80vh) rotate(30deg); opacity: 0.2; }
           }
         `}</style>
       </div>
