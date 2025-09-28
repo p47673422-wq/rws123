@@ -20,10 +20,10 @@ export default function GiftPage() {
           <div>
             <h2 className="text-2xl font-semibold">Krishna Basket — Special Dusshera Offer</h2>
             <p className="mt-2 text-sm text-slate-700">
-              Explore devotional kitscarefully assembled to support your practice. Exclusive discounts for Divine Journey participants.
+              Explore devotional kits carefully assembled to support your practice. Exclusive discounts for Divine Journey participants.
             </p>
             <div className="mt-4 flex gap-3">
-              <a href="/#krishna-basket" className="px-4 py-2 rounded-lg bg-amber-400 text-slate-900 font-semibold">Go to Krishna Basket</a>
+              <a href="/home/krishnabasket/items" className="px-4 py-2 rounded-lg bg-amber-400 text-slate-900 font-semibold">Go to Krishna Basket</a>
               <a href="/donate" className="px-4 py-2 rounded-lg bg-rose-500 text-white font-semibold">Donate</a>
             </div>
           </div>

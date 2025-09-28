@@ -93,11 +93,12 @@ useEffect(() => {
           </div>
           {/* Center: Menu Links (Desktop) */}
           <div className="hidden md:flex gap-4 items-center flex-1 justify-center">
-            <Link href="/" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Home</Link>
+            {/* <Link href="/" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Home</Link> */}
             <Link href="/home/whatsapp" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Join WhatsApp</Link>
             <Link href="/home/bhagavad-gita" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Courses</Link>
             <Link href="#events" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Events</Link>
             <Link href="/home/krishnabasket/items" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Krishna Basket</Link>
+            <Link href="/counselling" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Free Counselling</Link>
             <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
           </div>
           {/* Right: Auth Buttons (Desktop) */}
@@ -137,6 +138,7 @@ useEffect(() => {
                 <Link href="/home/bhagavad-gita" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Courses</Link>
                 <Link href="#events" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Events</Link>
                 <Link href="/home/krishnabasket/items" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Krishna Basket</Link>
+                <Link href="/counselling" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Free Counselling</Link>
                 <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
               </div>
               <div className="flex flex-col gap-2 mt-auto mb-8">
@@ -273,6 +275,29 @@ useEffect(() => {
         .delay-200 { animation-delay: 0.2s; }
       `}</style>
     </section>
+
+    <section className="w-full py-12 px-4 flex flex-col items-center bg-gradient-to-r from-green-50 via-yellow-50 to-pink-50" id="events">
+      <div className="relative w-full max-w-xl flex flex-col items-center justify-center rounded-2xl shadow-2xl border border-green-100 bg-white/90 p-8 animate-fadein">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-green-700 mb-3 flex items-center gap-2 drop-shadow-lg">
+          <span>🌿</span> Free Spiritual Counselling
+        </h2>
+        <p className="text-lg md:text-xl text-gray-700 mb-4 text-center font-medium">Feeling stuck, stressed, or seeking guidance? Our experienced spiritual mentors are here to help you for free. Confidential, compassionate, and personalized support for your journey.</p>
+        <Link href="/counselling" className="px-8 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-xl hover:scale-105 transition-all flex items-center gap-3 text-lg md:text-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 animate-bounce-on-hover">
+          <span className="text-2xl">🌿</span> <span>Talk to a Counsellor Now</span>
+        </Link>
+        <div className="mt-4 text-sm text-green-700 font-semibold flex items-center gap-2"><span>✨</span> 100% Free & Confidential</div>
+      </div>
+      <style jsx>{`
+        .animate-fadein {
+          animation: fadein 1.2s cubic-bezier(0.4,0,0.2,1) both;
+        }
+        @keyframes fadein {
+          0% { opacity: 0; transform: translateY(40px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </section>
+
       {/* QUIZZES SECTION */}
       <section className="max-w-5xl mx-auto w-full py-10 px-4" id="quizzes">
         <h2 className="text-2xl md:text-3xl font-bold text-yellow-700 mb-6 flex items-center gap-2"><span>📘</span> Explore Multiple Quizzes</h2>
