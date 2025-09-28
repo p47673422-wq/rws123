@@ -64,6 +64,17 @@ model JapaProgress_x {
   @@unique([userId, day])
 }
 
+model CounsellingRequest {
+  id             String   @id @default(uuid())
+  name           String
+  mobile         String
+  maritalStatus  String
+  gender         String
+  preferredDate  DateTime
+  preferredTime  String
+  createdAt      DateTime @default(now())
+}
+
 enum GiftType_x {
   QUIZ
   JAPA

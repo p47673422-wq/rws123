@@ -436,7 +436,14 @@ export default function DivineJourneyPage() {
       const res = await fetch("/api/quiz/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...userInfo, quizType: "divineJourneyUser" })
+        body: JSON.stringify({
+          ...userInfo,
+          quizType: "divineJourneyUser",
+          quizTitle: "Divine Journey User Info",
+          maxScore: 11,
+          answers: [],
+          score: 0
+        })
       });
       if (res.ok) {
         const data = await res.json();
@@ -579,7 +586,7 @@ export default function DivineJourneyPage() {
         )}
 
         {/* Quiz Card Overlay: centered card with dim background */}
-  {quizStarted && showCard && currentQuestion && !completed && !showUserForm && (
+        {quizStarted && showCard && currentQuestion && !completed && !showUserForm && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/60" style={{ zIndex: 1000 }}>
             <div className="w-11/12 md:w-2/3 lg:w-1/2 bg-white text-black rounded-2xl shadow-2xl p-6 border border-orange-100">
               <div className="flex items-start justify-between">
@@ -651,9 +658,12 @@ export default function DivineJourneyPage() {
                   Submit
                 </button>
               </div>
-        {/* User Info Form Modal */}
+            </div>
+          </div>
+        )}
+        {/* User Info Form Modal - always top-level overlay */}
         {showUserForm && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/60" style={{ zIndex: 1000 }}>
+          <div className="fixed inset-0 flex items-center justify-center bg-black/60" style={{ zIndex: 2000 }}>
             <form className="w-11/12 md:w-2/3 lg:w-1/2 bg-white text-black rounded-2xl shadow-2xl p-6 border border-orange-100" onSubmit={handleUserFormSubmit}>
               <h3 className="text-lg md:text-2xl font-semibold mb-2">Please enter your details to continue</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -676,9 +686,6 @@ export default function DivineJourneyPage() {
                 <button type="submit" className="px-5 py-2 rounded-lg bg-amber-400 text-black font-semibold hover:bg-amber-500">Save & Continue</button>
               </div>
             </form>
-          </div>
-        )}
-            </div>
           </div>
         )}
 
