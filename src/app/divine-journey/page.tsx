@@ -742,7 +742,7 @@ export default function DivineJourneyPage() {
               {/* Play sound reliably when completed modal is shown */}
               {completed && (
                 <audio
-                  src="/sounds/conch.mp3"
+                  src="/audio/conch.mp3"
                   autoPlay
                   style={{ display: 'none' }}
                   onPlay={() => {
