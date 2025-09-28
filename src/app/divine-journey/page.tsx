@@ -226,7 +226,7 @@ export default function DivineJourneyPage() {
 
   // Put placeholder audio element
   useEffect(() => {
-    conchRef.current = new Audio("/audio/con.mp3");
+    conchRef.current = new Audio("/audio/conch.mp3");
     conchRef.current.load();
   }, []);
 
