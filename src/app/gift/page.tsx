@@ -16,9 +16,7 @@ export default function GiftPage() {
 
         {/* Krishna Basket promotion - styled similar to homepage */}
         <section className="mt-8 grid md:grid-cols-2 gap-6 items-center">
-          <div>
-            <img src="/images/krishna-basket-hero.jpg" alt="Krishna Basket" className="rounded-xl w-full object-cover h-64" />
-          </div>
+          
           <div>
             <h2 className="text-2xl font-semibold">Krishna Basket — Special Dusshera Offer</h2>
             <p className="mt-2 text-sm text-slate-700">

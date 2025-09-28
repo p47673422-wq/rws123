@@ -151,6 +151,34 @@ const QUESTIONS: Question[] = [
 ];
 
 export default function DivineJourneyPage() {
+  // User info state
+  const [userInfo, setUserInfo] = useState({ name: "", mobile: "", gender: "", address: "", maritalStatus: "" });
+  const [userId, setUserId] = useState<string | null>(null);
+  const [showUserForm, setShowUserForm] = useState(false);
+  const [userError, setUserError] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedId = localStorage.getItem("userId1");
+      const storedInfo = localStorage.getItem("userInfo1");
+      if (storedId) setUserId(storedId);
+      if (storedInfo) {
+        try {
+          setUserInfo(JSON.parse(storedInfo));
+        } catch {}
+      }
+    }
+  }, []);
+
+  const handleUserInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
+  };
+
+  function isValidIndianMobile(mobile: string) {
+    const cleaned = mobile.replace(/\D/g, "");
+    if (!/^([6-9][0-9]{9})$/.test(cleaned)) return false;
+    return cleaned.length === 10;
+  }
   // Ravana heads state
   const initialHeads = Array.from({ length: TOTAL_HEADS }, (_, i) => i);
   const [heads, setHeads] = useState<number[]>(initialHeads);
@@ -326,53 +354,106 @@ export default function DivineJourneyPage() {
       return;
     }
 
-    // hide card immediately so background animations visible
+    // If first question and no userId, show user form
+    if (currentIndex === 0 && !userId) {
+      setShowUserForm(true);
+      return;
+    }
+
     setShowCard(false);
     setAnimating(true);
 
     const correct = isCorrectForQuestion(q);
 
     if (correct) {
-      // if this was question 10 (index 9), after removing head restore all heads then move to final
+      // Final question: save quiz response
       if (currentIndex === 10) {
-        // final question answered correctly
         await finalHit();
-        // play conch if available
         try {
           conchRef.current?.play();
+        } catch {}
+        // Save quiz response to API
+        try {
+          await fetch("/api/quiz/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId,
+              ...userInfo,
+              answers: [], // You can collect all answers in an array if needed
+              score: 11,
+              quizType: "divineJourney",
+              quizTitle: "Divine Journey Quiz",
+              maxScore: 11
+            })
+          });
         } catch {}
         setAnimating(false);
         setCompleted(true);
         return;
       }
 
-      // normal correct: shoot one head
       await shootArrow(false);
-
-      // if just answered question index 9 (10th question), restore heads then go to final (index 10)
       if (currentIndex === 9) {
-        // restore heads
         setHeads(initialHeads.slice());
-        // small pause for user to see restored heads
         await new Promise((res) => setTimeout(res, 600));
-        setCurrentIndex((ci) => ci + 1); // move to question 11 (index 10)
+        setCurrentIndex((ci) => ci + 1);
       } else {
         setCurrentIndex((ci) => ci + 1);
       }
-
-      // prepare for next question
       setSelectedLetters([]);
       setExplanation("");
       setAnimating(false);
-      // show next question card
       setTimeout(() => setShowCard(true), 200);
     } else {
-      // incorrect: play fireball, then re-show same question
       await launchFireball();
       setAnimating(false);
       setSelectedLetters([]);
       setExplanation("");
       setTimeout(() => setShowCard(true), 200);
+    }
+  };
+
+  // Handle user info form submit
+  const handleUserFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userInfo.name || !userInfo.mobile || !userInfo.gender || !userInfo.address || !userInfo.maritalStatus) {
+      setUserError("Please fill all user details.");
+      return;
+    }
+    if (!isValidIndianMobile(userInfo.mobile)) {
+      setUserError("Please enter a valid mobile number.");
+      return;
+    }
+    setUserError("");
+    // Only create user if userId1 does not exist
+    if (typeof window !== "undefined" && localStorage.getItem("userId1")) {
+      setShowUserForm(false);
+      setShowCard(true);
+      return;
+    }
+    try {
+      const res = await fetch("/api/quiz/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...userInfo, quizType: "divineJourneyUser" })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (typeof window !== "undefined") {
+          localStorage.setItem("userInfo1", JSON.stringify(userInfo));
+          if (data.userId) {
+            localStorage.setItem("userId1", data.userId);
+            setUserId(data.userId);
+          }
+        }
+        setShowUserForm(false);
+        setShowCard(true);
+      } else {
+        setUserError("Could not save. Try again.");
+      }
+    } catch {
+      setUserError("Could not save. Try again.");
     }
   };
 
@@ -464,11 +545,21 @@ export default function DivineJourneyPage() {
                 heads.length >= 7 ? "fill-black" : heads.length <= 4 ? "fill-yellow-600" : "fill-yellow-400"
               }`}
             />
-            <line x1="50" y1="32" x2="50" y2="110" strokeWidth="6" className="stroke-yellow-400" />
-            <line x1="50" y1="50" x2="20" y2="80" strokeWidth="5" className="stroke-yellow-400" />
-            <line x1="50" y1="50" x2="80" y2="80" strokeWidth="5" className="stroke-yellow-400" />
-            <line x1="50" y1="110" x2="25" y2="160" strokeWidth="5" className="stroke-yellow-400" />
-            <line x1="50" y1="110" x2="75" y2="160" strokeWidth="5" className="stroke-yellow-400" />
+            <line x1="50" y1="32" x2="50" y2="110" strokeWidth="6" className={`transition-colors duration-1000 ${
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
+              }`} />
+            <line x1="50" y1="50" x2="20" y2="80" strokeWidth="5" className={`transition-colors duration-1000 ${
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
+              }`} />
+            <line x1="50" y1="50" x2="80" y2="80" strokeWidth="5" className={`transition-colors duration-1000 ${
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
+              }`} />
+            <line x1="50" y1="110" x2="25" y2="160" strokeWidth="5" className={`transition-colors duration-1000 ${
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
+              }`} />
+            <line x1="50" y1="110" x2="75" y2="160" strokeWidth="5" className={`transition-colors duration-1000 ${
+                heads.length >= 7 ? "stroke-black" : heads.length <= 4 ? "stroke-yellow-600" : "stroke-yellow-400"
+              }`} />
           </svg>
         </div>
 
@@ -488,7 +579,7 @@ export default function DivineJourneyPage() {
         )}
 
         {/* Quiz Card Overlay: centered card with dim background */}
-        {quizStarted && showCard && currentQuestion && !completed && (
+  {quizStarted && showCard && currentQuestion && !completed && !showUserForm && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/60" style={{ zIndex: 1000 }}>
             <div className="w-11/12 md:w-2/3 lg:w-1/2 bg-white text-black rounded-2xl shadow-2xl p-6 border border-orange-100">
               <div className="flex items-start justify-between">
@@ -552,15 +643,6 @@ export default function DivineJourneyPage() {
               )}
 
               <div className="mt-4 flex items-center justify-end gap-3">
-                {/* <button
-                  onClick={() => {
-                    // cancel/hide
-                    setShowCard(false);
-                  }}
-                  className="px-4 py-2 rounded-lg bg-white/20 border border-gray-200"
-                >
-                  Cancel
-                </button> */}
                 <button
                   onClick={handleSubmit}
                   disabled={animating}
@@ -569,6 +651,33 @@ export default function DivineJourneyPage() {
                   Submit
                 </button>
               </div>
+        {/* User Info Form Modal */}
+        {showUserForm && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/60" style={{ zIndex: 1000 }}>
+            <form className="w-11/12 md:w-2/3 lg:w-1/2 bg-white text-black rounded-2xl shadow-2xl p-6 border border-orange-100" onSubmit={handleUserFormSubmit}>
+              <h3 className="text-lg md:text-2xl font-semibold mb-2">Please enter your details to continue</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input className="p-2 rounded border border-gray-200" name="name" type="text" placeholder="Your Name" value={userInfo.name} onChange={handleUserInfoChange} />
+                <input className="p-2 rounded border border-gray-200" name="mobile" type="tel" placeholder="Mobile Number" value={userInfo.mobile} onChange={handleUserInfoChange} maxLength={10} pattern="[6-9]{1}[0-9]{9}" inputMode="numeric" />
+                <select className="p-2 rounded border border-gray-200" name="gender" value={userInfo.gender} onChange={handleUserInfoChange}>
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+                <select className="p-2 rounded border border-gray-200" name="maritalStatus" value={userInfo.maritalStatus} onChange={handleUserInfoChange}>
+                  <option value="">Select Marital Status</option>
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                </select>
+                <input className="p-2 rounded border border-gray-200 md:col-span-2" name="address" type="text" placeholder="Address" value={userInfo.address} onChange={handleUserInfoChange} />
+              </div>
+              {userError && <div className="text-red-600 mt-2">{userError}</div>}
+              <div className="mt-4 flex items-center justify-end gap-3">
+                <button type="submit" className="px-5 py-2 rounded-lg bg-amber-400 text-black font-semibold hover:bg-amber-500">Save & Continue</button>
+              </div>
+            </form>
+          </div>
+        )}
             </div>
           </div>
         )}
@@ -616,7 +725,7 @@ export default function DivineJourneyPage() {
               opacity: 1;
             }
             100% {
-              transform: translateX(80vw) rotate(-10deg);
+              transform: translateX(80vw);
               opacity: 0;
             }
           }
@@ -635,7 +744,7 @@ export default function DivineJourneyPage() {
               opacity: 1;
             }
             100% {
-              transform: translate(-40vw, 145vh) scale(1.2);
+              transform: translate(-30vw, 50vh) rotate(-180deg) scale(0.8);
               opacity: 0;
             }
           }
