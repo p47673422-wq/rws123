@@ -9,11 +9,12 @@ export default function CounsellingPage() {
   const [gender, setGender] = useState("");
   const [preferredDate, setPreferredDate] = useState("");
   const [preferredTime, setPreferredTime] = useState("");
+  const [ampm, setAmpm] = useState("AM");
   const [status, setStatus] = useState<string | null>(null);
 
   async function saveCounsellingSlot(slot: any) {
     try {
-      const res = await fetch("/api/counselling/submit", {
+      const res = await fetch("/api/counselling", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(slot)
@@ -30,8 +31,14 @@ export default function CounsellingPage() {
       setStatus("Please fill all fields.");
       return;
     }
+    // Convert preferredTime + ampm to 24-hour string for backend
+    let [hour, minute] = preferredTime.split(":");
+    let h = parseInt(hour, 10);
+    if (ampm === "PM" && h < 12) h += 12;
+    if (ampm === "AM" && h === 12) h = 0;
+    const time24 = `${h.toString().padStart(2, "0")}:${minute}`;
     setStatus("Saving...");
-    const result = await saveCounsellingSlot({ name, mobile, maritalStatus, gender, preferredDate, preferredTime });
+    const result = await saveCounsellingSlot({ name, mobile, maritalStatus, gender, preferredDate, preferredTime: time24 });
     if (result.success) {
       setStatus("Saved! We'll contact you to confirm the slot.");
       setName("");
@@ -40,6 +47,7 @@ export default function CounsellingPage() {
       setGender("");
       setPreferredDate("");
       setPreferredTime("");
+      setAmpm("AM");
     } else {
       setStatus(result.error || "Error saving. Try again.");
     }
@@ -64,8 +72,35 @@ export default function CounsellingPage() {
                 <option value="Single">Single</option>
                 <option value="Married">Married</option>
               </select>
-              <input className="p-2 rounded border border-gray-200" name="preferredDate" type="date" value={preferredDate} onChange={(e) => setPreferredDate(e.target.value)} />
-              <input className="p-2 rounded border border-gray-200" name="preferredTime" type="time" value={preferredTime} onChange={(e) => setPreferredTime(e.target.value)} />
+              <input
+                className="p-2 rounded border border-gray-200"
+                name="preferredDate"
+                type="date"
+                value={preferredDate}
+                onChange={(e) => setPreferredDate(e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+                placeholder="Select a date"
+              />
+              <div className="flex gap-2">
+                <input
+                  className="p-2 rounded border border-gray-200 flex-1"
+                  name="preferredTime"
+                  type="time"
+                  value={preferredTime}
+                  onChange={(e) => setPreferredTime(e.target.value)}
+                  placeholder="Select time"
+                  step="900"
+                />
+                <select
+                  className="p-2 rounded border border-gray-200"
+                  value={ampm}
+                  onChange={e => setAmpm(e.target.value)}
+                  style={{ minWidth: 60 }}
+                >
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+              </div>
             </div>
             <div className="mt-4 flex items-center justify-end gap-3">
               <button type="submit" className="px-5 py-2 rounded-lg bg-amber-400 text-black font-semibold hover:bg-amber-500">Request Slot</button>

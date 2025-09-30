@@ -383,8 +383,8 @@ useEffect(() => {
         <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><FaDonate className="text-2xl" /> Donate</a>
       </section>
 
-      {/* FOOTER */}
-      <footer className="w-full bg-gradient-to-r from-saffron-100 via-pink-50 to-white py-8 mt-8 border-t border-yellow-200 relative">
+  {/* FOOTER */}
+  <footer className="w-full bg-gradient-to-r from-saffron-100 via-pink-50 to-white py-8 mt-8 border-t border-yellow-200 relative">
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none">
           <Image src="/images/shloka.png" alt="Lotus Mandala" width={180} height={180} className="opacity-10" />
         </div>
@@ -406,6 +406,17 @@ useEffect(() => {
           <div className="text-sm text-gray-500">© {new Date().getFullYear()} MyKrishnaTouch.in</div>
         </div>
       </footer>
+
+      {/* Mobile fixed Divine Journey Quiz strip */}
+      <div className="fixed bottom-0 left-0 w-full z-50 block md:hidden">
+        <button
+          onClick={() => { window.location.href = '/divine-journey'; }}
+          className="w-full py-4 bg-gradient-to-r from-yellow-400 via-amber-300 to-orange-400 text-black font-bold text-lg flex items-center justify-center gap-2 shadow-xl animate-bounce-on-hover border-t border-yellow-300"
+          style={{ borderTopLeftRadius: 16, borderTopRightRadius: 16 }}
+        >
+          <span className="text-2xl">🪔</span> Click here to attend Divine Journey Quiz
+        </button>
+      </div>
     </div>
   );
 }

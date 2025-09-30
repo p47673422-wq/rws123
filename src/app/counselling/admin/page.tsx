@@ -51,7 +51,7 @@ export default function CounsellingAdminPage() {
                   <div><b>Gender:</b> {item.gender}</div>
                   <div><b>Marital Status:</b> {item.maritalStatus}</div>
                   <div><b>Date:</b> {item.preferredDate?.slice(0,10)}</div>
-                  <div><b>Time:</b> {item.preferredTime}</div>
+                  <div><b>Time:</b> {item.preferredTime} <i>(24 hr time format)</i></div>
                   <div><b>Created At:</b> {item.createdAt?.slice(0,19).replace('T',' ')}</div>
                 </div>
               </details>
