@@ -12,7 +12,7 @@ export default function DamodaraMalaPage() {
         <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg">🌼 Kartik Month Vrata 🌼</h1>
         <p className="text-lg md:text-xl text-blue-700 mb-4 font-semibold">From Oct 8 to Nov 5</p>
         <p className="text-lg md:text-xl text-blue-700 mb-4 font-semibold">Registration closes Oct 8</p>
-        <a href="https://rzp.io/rzp/c11BnYk" target="_blank">
+        <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank">
           <GlowingButton className="mb-4 text-lg">Register Now</GlowingButton>
         </a>
       </section>
@@ -23,7 +23,7 @@ export default function DamodaraMalaPage() {
           <span className="text-3xl mb-2">🟨</span>
           <h2 className="font-bold text-xl text-yellow-700 mb-1">Śraddhāvān</h2>
           <p className="text-gray-700 text-center mb-4">Beginners – Simple daily practices and easy entry.</p>
-          <a href="https://rzp.io/rzp/c11BnYk" target="_blank">
+          <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank">
           <GlowingButton className="w-full">Register at this Level</GlowingButton></a>
         </div>
         {/* Card 2 */}
@@ -31,7 +31,7 @@ export default function DamodaraMalaPage() {
           <span className="text-3xl mb-2">🟦</span>
           <h2 className="font-bold text-xl text-blue-700 mb-1">Vardhamān</h2>
           <p className="text-gray-700 text-center mb-4">Practitioners – Intermediate standards, more sadhana.</p>
-          <a href="https://rzp.io/rzp/c11BnYk" target="_blank">
+          <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank">
           <GlowingButton className="w-full">Register at this Level</GlowingButton></a>
         </div>
         {/* Card 3 */}
@@ -39,7 +39,7 @@ export default function DamodaraMalaPage() {
           <span className="text-3xl mb-2">🟩</span>
           <h2 className="font-bold text-xl text-green-700 mb-1">Niṣṭhāvān</h2>
           <p className="text-gray-700 text-center mb-4">Regulars – Advanced standards and full sadhana.</p>
-          <a href="https://rzp.io/rzp/c11BnYk" target="_blank">
+          <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank">
             <GlowingButton className="w-full">Register at this Level</GlowingButton>
           </a>
         </div>
@@ -183,7 +183,7 @@ export default function DamodaraMalaPage() {
       {/* Sticky Bottom Bar */}
       <div className="fixed bottom-0 left-0 w-full bg-gradient-to-r from-pink-200 via-yellow-100 to-blue-100 shadow-lg py-4 px-4 flex flex-col md:flex-row items-center justify-between z-50">
         <span className="font-bold text-pink-700 text-lg flex items-center gap-2">🌺 Registration Closes Oct 8 — Don’t Miss Out!</span>
-        <a href="https://rzp.io/rzp/c11BnYk" target="_blank" rel="noopener noreferrer">
+        <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer">
           <GlowingButton className="mt-2 md:mt-0">Register Now</GlowingButton>
         </a>
       </div>

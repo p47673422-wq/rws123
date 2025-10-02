@@ -179,7 +179,7 @@ useEffect(() => {
             <CountdownTimer />
           </div>
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full mb-2">
-            <a href="https://rzp.io/rzp/c11BnYk" target="_blank" rel="noopener noreferrer">
+            <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer">
               <GlowingButton className="text-lg">Register Now</GlowingButton>
             </a>
             <Link href="/damodara-mala">
