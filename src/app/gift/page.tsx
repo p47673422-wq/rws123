@@ -24,7 +24,7 @@ export default function GiftPage() {
             </p>
             <div className="mt-4 flex gap-3">
               <a href="/home/krishnabasket/items" className="px-4 py-2 rounded-lg bg-amber-400 text-slate-900 font-semibold">Go to Krishna Basket</a>
-              <a href="/donate" className="px-4 py-2 rounded-lg bg-rose-500 text-white font-semibold">Donate</a>
+              <a href="https://rzp.io/rzp/D5Q6s9m" className="px-4 py-2 rounded-lg bg-rose-500 text-white font-semibold" target="_blank">Donate</a>
             </div>
           </div>
         </section>

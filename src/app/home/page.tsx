@@ -99,7 +99,7 @@ useEffect(() => {
             <Link href="#events" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Events</Link>
             <Link href="/home/krishnabasket/items" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Krishna Basket</Link>
             <Link href="/counselling" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Free Counselling</Link>
-            <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
+            <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
           </div>
           {/* Right: Auth Buttons (Desktop) */}
           <div className="hidden md:flex gap-2 items-center">
@@ -139,7 +139,7 @@ useEffect(() => {
                 <Link href="#events" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Events</Link>
                 <Link href="/home/krishnabasket/items" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Krishna Basket</Link>
                 <Link href="/counselling" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Free Counselling</Link>
-                <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
+                <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
               </div>
               <div className="flex flex-col gap-2 mt-auto mb-8">
                 {isLoggedIn ? (
@@ -179,7 +179,7 @@ useEffect(() => {
             <CountdownTimer />
           </div>
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full mb-2">
-            <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer">
+            <a href="https://rzp.io/rzp/c11BnYk" target="_blank" rel="noopener noreferrer">
               <GlowingButton className="text-lg">Register Now</GlowingButton>
             </a>
             <Link href="/damodara-mala">
@@ -380,7 +380,7 @@ useEffect(() => {
       {/* DONATE / SUPPORT SECTION */}
       <section className="w-full py-6 flex flex-col items-center justify-center bg-gradient-to-r from-pink-50 via-yellow-50 to-white">
         <div className="text-lg font-bold text-pink-700 mb-2 flex items-center gap-2"><span>💖</span> Support Krishna Seva</div>
-        <a href="https://janmashtami.iskconhyderabad.com/?ref=bram12" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><FaDonate className="text-2xl" /> Donate</a>
+        <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><FaDonate className="text-2xl" /> Donate</a>
       </section>
 
   {/* FOOTER */}
