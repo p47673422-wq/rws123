@@ -133,7 +133,7 @@ useEffect(() => {
               className={`fixed top-0 right-0 h-full w-72 bg-gradient-to-br from-saffron-100 via-pink-50 to-white shadow-2xl z-50 flex flex-col pt-8 px-6 gap-6 ${showSummary ? '' : 'pointer-events-none'}`}
             >
               <div className="flex flex-col gap-4 mt-4">
-                <Link href="/" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Home</Link>
+                {/* <Link href="/" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Home</Link> */}
                 <Link href="/home/whatsapp" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Join WhatsApp</Link>
                 <Link href="/home/bhagavad-gita" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Courses</Link>
                 <Link href="#events" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Events</Link>
@@ -141,7 +141,7 @@ useEffect(() => {
                 <Link href="/counselling" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Free Counselling</Link>
                 <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
               </div>
-              <div className="flex flex-col gap-2 mt-auto mb-8">
+              <div className="flex flex-col gap-2 mt-auto mb-16">
                 {isLoggedIn ? (
                   <Link href="/booking-home" className="rounded-full px-5 py-2 font-semibold bg-green-600 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Home</Link>
                 ) : (
@@ -377,10 +377,24 @@ useEffect(() => {
         <a href="tel:9985181358" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>📩</span> Contact Us: 9985181358</a>
       </section>
 
+
       {/* DONATE / SUPPORT SECTION */}
       <section className="w-full py-6 flex flex-col items-center justify-center bg-gradient-to-r from-pink-50 via-yellow-50 to-white">
         <div className="text-lg font-bold text-pink-700 mb-2 flex items-center gap-2"><span>💖</span> Support Krishna Seva</div>
         <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><FaDonate className="text-2xl" /> Donate</a>
+      </section>
+
+      {/* MAHAVATAR MOVIE QUIZ SECTION */}
+      <section id="movie-quiz" className="w-full py-10 flex flex-col items-center justify-center bg-gradient-to-r from-yellow-50 via-pink-50 to-white">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-yellow-700 mb-2 flex items-center gap-2 drop-shadow-lg"><span>🎬</span> Mahavatar Movie Quiz</h2>
+        <p className="text-lg md:text-xl text-pink-700 mb-6 text-center font-medium max-w-2xl">Test your knowledge and dive into divine insights from the Mahavatar movie!</p>
+        <button
+          onClick={() => window.location.href = '/movie-quiz'}
+          className="px-10 py-5 rounded-2xl font-bold text-white bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-400 shadow-xl hover:scale-105 hover:shadow-amber-300/60 transition-all flex items-center gap-3 text-xl md:text-2xl focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 animate-bounce-on-hover"
+          style={{ boxShadow: '0 4px 32px 0 rgba(255, 193, 7, 0.10)' }}
+        >
+          <span className="text-3xl">🌸</span> Start Quiz
+        </button>
       </section>
 
   {/* FOOTER */}
@@ -414,7 +428,7 @@ useEffect(() => {
           className="w-full py-4 bg-gradient-to-r from-yellow-400 via-amber-300 to-orange-400 text-black font-bold text-lg flex items-center justify-center gap-2 shadow-xl animate-bounce-on-hover border-t border-yellow-300"
           style={{ borderTopLeftRadius: 16, borderTopRightRadius: 16 }}
         >
-          <span className="text-2xl">🪔</span> Click here to attend Divine Journey Quiz
+          <span className="text-2xl">🪔</span> Tap to attend Divine Journey Quiz
         </button>
       </div>
     </div>
