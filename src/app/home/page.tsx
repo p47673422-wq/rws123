@@ -175,9 +175,9 @@ useEffect(() => {
           <div className="mb-4">
             <span className="text-lg font-bold text-pink-600 animate-pulse">Registration closes Oct 8!</span>
           </div>
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <CountdownTimer />
-          </div>
+          </div> */}
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full mb-2">
             <a href="https://rzp.io/rzp/c11BnYk" target="_blank" rel="noopener noreferrer">
               <GlowingButton className="text-lg">Register Now</GlowingButton>
@@ -424,11 +424,11 @@ useEffect(() => {
       {/* Mobile fixed Divine Journey Quiz strip */}
       <div className="fixed bottom-0 left-0 w-full z-50 block md:hidden">
         <button
-          onClick={() => { window.location.href = '/divine-journey'; }}
+          onClick={() => { window.location.href = '/movie-quiz'; }}
           className="w-full py-4 bg-gradient-to-r from-yellow-400 via-amber-300 to-orange-400 text-black font-bold text-lg flex items-center justify-center gap-2 shadow-xl animate-bounce-on-hover border-t border-yellow-300"
           style={{ borderTopLeftRadius: 16, borderTopRightRadius: 16 }}
         >
-          <span className="text-2xl">🪔</span> Tap to attend Divine Journey Quiz
+          <span className="text-2xl">🪔</span> Tap to attend Mahavatar Narsimha Quiz
         </button>
       </div>
     </div>
