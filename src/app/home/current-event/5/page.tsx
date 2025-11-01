@@ -23,7 +23,7 @@ export default function GaneshVideoPage() {
         }
       `}</style>
       <div className="comeCustomBox1 current-event-shell responsive-event-shell event-detail-fadein">
-        {/* <button className="back-btn" onClick={() => window.history.back()}>← Back</button> */}
+        <button className="back-btn" onClick={() => window.history.back()}>← Back</button>
         <div className="ganesha-attract-text">Great Personality – Lord Gaṇeśa...<br/>The Remover of Obstacles</div>
         <h2 className="fancyTitle event-title" style={{textAlign: 'center', marginBottom: '1.5rem'}}>Illustrated Story of Lord Gaṇeśa</h2>
         <div className="event-detail-img-wrap" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '2rem'}}>

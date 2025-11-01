@@ -183,7 +183,7 @@ export default function GaneshSymbolismPage() {
   return (
     <div className="content-overlay">
       <div className="comeCustomBox1 current-event-shell responsive-event-shell event-detail-fadein">
-        {/* <button className="back-btn" onClick={() => window.history.back()}>← Back</button> */}
+        <button className="back-btn" onClick={() => window.history.back()}>← Back</button>
         <h2 className="fancyTitle event-title" style={{textAlign: 'center', marginBottom: '1.5rem'}}>Simple Symbolism of Lord Gaṇeśa</h2>
         <div className="event-detail-img-wrap" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '2rem'}}>
           <Image src="/images/sym.png" alt="Lord Ganesh" width={650} height={1000} style={{objectFit: 'contain', borderRadius: '1.2rem', boxShadow: '0 4px 32px rgba(0,0,0,0.10)'}} />
@@ -208,11 +208,11 @@ export default function GaneshSymbolismPage() {
         </div>
         {/* Quiz Section */}
         <div className="fancy-quiz-box mt-8 p-6 rounded-2xl shadow-xl bg-gradient-to-br from-yellow-50 to-yellow-100 max-w-xl mx-auto">
-          {/* {step === "start" && (
+          {step === "start" && (
             <button className="fancy-btn px-6 py-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-bold shadow-lg hover:scale-105 transition" onClick={handleProceed}>
               Proceed to Quiz
             </button>
-          )} */}
+          )}
           {step === "userinfo" && (
             <form className="flex flex-col gap-4 items-center" onSubmit={handleUserInfoSubmit}>
               <input className="input-fancy" name="name" type="text" placeholder="Your Name" value={userInfo.name} onChange={handleUserInfoChange} />

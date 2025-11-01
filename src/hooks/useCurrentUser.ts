@@ -14,7 +14,7 @@ export function useCurrentUser() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    apiFetch<{ user: User }>('/api/ram/auth/me')
+    apiFetch<{ user: User }>('/api/auth/me')
       .then(data => setUser(data.user))
       .catch(e => setError(e.message))
       .finally(() => setLoading(false));

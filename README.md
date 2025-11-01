@@ -1,55 +1,40 @@
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
 
-# Krishna Touch Dashboard
+## Getting Started
 
-## Overview
-Krishna Touch is a spiritual dashboard for ISKCON book distribution, order management, payments, inventory, team management, and notifications. It is a Next.js PWA with role-based dashboards, push notifications, WhatsApp reminders, and beautiful micro-interactions.
+First, run the development server:
 
-## User Roles & Flow
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-### 1. Store Owner
-- **Dashboard:** View metrics, recent orders, pending payments, top distributors, charts.
-- **Orders:** Manage orders, edit, mark as packed/collected, OTP workflow, export, search/sort, pagination.
-- **Returns:** Accept/reject return requests, edit items, update inventories, notify distributors.
-- **Payments:** Verify payments, view receipts, link to orders, reject with reason, filter/search.
-- **Inventory:** Update stock, view history, low stock alerts, export report.
-- **Dues:** Track pending/overdue/collected dues, send WhatsApp reminders, bulk actions, view details.
-- **Team:** View team, export contacts, see member stats, send reminders.
-- **Assisted Order:** Place orders for distributors without phones, collect payment, print receipt.
-- **Notifications:** Bell icon for all/unread notifications, mark read, sound toggle, auto-refresh.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### 2. Distributor
-- **Dashboard:** View personal orders, inventory, payments, leaderboard, notebook, progress.
-- **Order Management:** Place new orders, view status, receive OTP for collection.
-- **Returns:** Request returns, track status.
-- **Leaderboard:** See top performers, scores.
-- **Notebook:** Track follow-ups, free flows.
+You can start editing the page by modifying `app/route.ts`. The page auto-updates as you edit the file.
 
-### 3. Captain
-- **Dashboard:** Team overview cards, performance charts, top/underperformers, act as distributor toggle.
-- **Team Table:** View distributor stats, orders, dues, inventory, last active.
-- **Notifications:** Receive and manage team notifications.
+## Learn More
 
-## Features
-- **PWA:** Installable, offline support, manifest, icons, meta tags, service worker.
-- **Push Notifications:** Subscribe/send, permission request, NotificationProvider, notification center.
-- **WhatsApp Reminders:** Send payment reminders via WhatsApp Web, bulk send, logs reminders.
-- **Loading States:** Chakra spinner, lotus animation, skeleton loaders for cards/tables/avatars.
-- **Micro-Interactions:** Button/card/input effects, confetti on success, animated empty states, page transitions, notification slide-in, score count-up.
+To learn more about Next.js, take a look at the following resources:
 
-## Setup
-1. `npm install` (ensure all dependencies are installed)
-2. Add Krishna-themed icons to `public/icons/krishna-192.png` and `public/icons/krishna-512.png`
-3. `npm run dev` to start development
-4. For PWA: build and serve with `npm run build` and `npm start`
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Customization
-- Update manifest and icons for branding
-- Configure push notification endpoints and VAPID keys in `/api/notifications/send`
-- Extend APIs for real database integration
-- Add more micro-interactions or spiritual illustrations as desired
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Contribution
-Open to ISKCON volunteers and contributors. Please follow spiritual guidelines and best coding practices.
+## Deploy on Vercel
 
-## License
-MIT
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## API Routes
+
+This directory contains example API routes for the headless API app.
+
+For more details, see [route.js file convention](https://nextjs.org/docs/app/api-reference/file-conventions/route).
