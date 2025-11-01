@@ -7,6 +7,8 @@ interface ProgressBarFloatingProps {
   progress: number;
   completedPs: string[];
   psList: string[];
+  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  style?: React.CSSProperties;
 }
 
 const psColors: Record<string, string> = {

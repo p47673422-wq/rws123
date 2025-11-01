@@ -275,3 +275,222 @@ model SelfieSubmission {
 //   score     Int
 //   createdAt DateTime @default(now())
 // }
+
+// --- Krishna-conscious Book Distribution models (suffix _Z) ---
+
+enum UserType_ZEnum {
+  VEC_STORE_OWNER
+  STORE_OWNER
+  CAPTAIN
+  DISTRIBUTOR
+}
+
+enum StoreType_ZEnum {
+  VEC
+  NORMAL
+}
+
+enum PreOrderStatus_Z {
+  PENDING
+  PACKED
+  COLLECTED
+}
+
+enum PaymentStatus_Z {
+  PENDING
+  VERIFIED
+  REJECTED
+  COMPLETED
+}
+
+model User_Z {
+  id                 String           @id @default(cuid())
+  email              String           @unique
+  password_hash      String
+  name               String
+  phone              String
+  userType           UserType_ZEnum
+  storeType          StoreType_ZEnum? 
+  captainId          String?          
+  captain            Captain_Z?       @relation(fields: [captainId], references: [id])
+  isFirstLogin       Boolean          @default(true)
+  securityQuestion1  Int?
+  securityAnswer1    String?
+  securityQuestion2  Int?
+  securityAnswer2    String?
+  rememberMeToken    String?
+  rememberMeExpiry   DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  // relations
+  inventories        Inventory_Z[]    @relation("inventory_by_user")
+  preOrdersAsDistributor PreOrder_Z[] @relation("preorder_by_distributor")
+  preOrdersAsStoreOwner  PreOrder_Z[] @relation("preorder_by_storeowner")
+  payments           Payment_Z[]      @relation("payments_by_distributor")
+  notifications      Notification_Z[]
+
+  // Opposite relation fields for all _Z models
+  notebooks          Notebook_Z[]     @relation("notebook_by_distributor")
+  venueBookings      VenueBooking_Z[] @relation("venue_by_distributor")
+  returnRequestsAsDistributor ReturnRequest_Z[] @relation("return_by_distributor")
+  returnRequestsAsStoreOwner  ReturnRequest_Z[] @relation("return_by_storeowner")
+  sales              Sale_Z[]         @relation("sales_by_distributor")
+
+  @@index([phone])
+}
+
+model Captain_Z {
+  id        String   @id @default(cuid())
+  name      String
+  users     User_Z[]
+  createdAt DateTime @default(now())
+}
+
+model Book_Z {
+  id         String   @id @default(cuid())
+  name       String
+  category   String
+  languages  String[]
+  price      Decimal
+  createdAt  DateTime @default(now())
+  inventories Inventory_Z[]
+}
+
+model PreOrder_Z {
+  id            String         @id @default(cuid())
+  distributorId String
+  distributor   User_Z         @relation("preorder_by_distributor", fields: [distributorId], references: [id])
+  storeOwnerId  String
+  storeOwner    User_Z         @relation("preorder_by_storeowner", fields: [storeOwnerId], references: [id])
+  items         Json
+  status        PreOrderStatus_Z @default(PENDING)
+  otp           String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([distributorId])
+  @@index([storeOwnerId])
+  @@index([status])
+}
+
+model Payment_Z {
+  id             String        @id @default(cuid())
+  distributorId  String
+  distributor    User_Z        @relation("payments_by_distributor", fields: [distributorId], references: [id])
+  amount         Decimal
+  receiptImageUrl String?
+  items          Json
+  status         PaymentStatus_Z @default(PENDING)
+  verifiedById   String?
+  verifiedAt     DateTime?
+  createdAt      DateTime      @default(now())
+
+  @@index([distributorId])
+  @@index([verifiedById])
+  @@index([status])
+}
+
+model Inventory_Z {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User_Z   @relation("inventory_by_user", fields: [userId], references: [id])
+  bookId    String
+  book      Book_Z   @relation(fields: [bookId], references: [id])
+  quantity  Int
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([bookId])
+}
+
+model Notification_Z {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User_Z   @relation(fields: [userId], references: [id])
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// --- Additional operational models (suffix _Z) ---
+
+enum NoteType_ZEnum {
+  FOLLOWUP
+  FREEFLOW
+}
+
+enum ReturnStatus_Z {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Notebook_Z {
+  id             String    @id @default(cuid())
+  distributorId  String
+  distributor    User_Z    @relation("notebook_by_distributor", fields: [distributorId], references: [id])
+  noteType       NoteType_ZEnum
+  content        String    @db.Text
+  followUpPerson String?
+  followUpDate   DateTime?
+  dueDate        DateTime?
+  reminderSet    Boolean   @default(false)
+  reminderSent   Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+
+  @@index([distributorId])
+  @@index([followUpDate])
+  @@index([dueDate])
+}
+
+model VenueBooking_Z {
+  id           String   @id @default(cuid())
+  distributorId String
+  distributor  User_Z   @relation("venue_by_distributor", fields: [distributorId], references: [id])
+  place        String
+  date         DateTime
+  startTime    DateTime
+  durationMins Int
+  createdAt    DateTime @default(now())
+
+  @@index([distributorId])
+  @@index([date])
+}
+
+model ReturnRequest_Z {
+  id             String        @id @default(cuid())
+  distributorId  String
+  distributor    User_Z        @relation("return_by_distributor", fields: [distributorId], references: [id])
+  storeOwnerId   String
+  storeOwner     User_Z        @relation("return_by_storeowner", fields: [storeOwnerId], references: [id])
+  items          Json
+  status         ReturnStatus_Z @default(PENDING)
+  reason         String?       @db.Text
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([distributorId])
+  @@index([storeOwnerId])
+  @@index([status])
+  @@index([updatedAt])
+}
+
+model Sale_Z {
+  id            String   @id @default(cuid())
+  distributorId String
+  distributor   User_Z   @relation("sales_by_distributor", fields: [distributorId], references: [id])
+  customerName  String
+  customerPhone String?
+  items         Json
+  recordedAt    DateTime @default(now())
+
+  @@index([distributorId])
+  @@index([recordedAt])
+}
+

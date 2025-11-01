@@ -1,3 +1,42 @@
+/* Micro-interactions */
+button, .btn {
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+button:hover, .btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(255,153,51,0.15);
+}
+card, .card {
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.card:hover {
+  box-shadow: 0 8px 32px rgba(255,153,51,0.18);
+  transform: translateY(-4px);
+}
+input:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #FF9933;
+  border-color: #FF9933;
+  transition: box-shadow 0.2s;
+}
+.fade-slide-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.fade-slide-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.fade-slide-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-slide-exit-active {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.3s, transform 0.3s;
+}
 /* Global styles for ISKCON Radha Madan Mohan app */
 body {
   margin: 0;

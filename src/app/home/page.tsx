@@ -25,9 +25,8 @@ export default function HomePage() {
 useEffect(() => {
   async function checkAuth() {
     try {
-      const res = await fetch("/api/auth/me");
+      const res = await fetch("/api/ram/auth/me");
       if (res.ok) {
-   
         const data = await res.json();
         setIsLoggedIn(!data?.email);
       } else {
@@ -103,12 +102,12 @@ useEffect(() => {
           </div>
           {/* Right: Auth Buttons (Desktop) */}
           <div className="hidden md:flex gap-2 items-center">
-            {isLoggedIn ? (
+                {isLoggedIn ? (
               <Link href="/booking-home" className="rounded-full px-5 py-2 font-semibold bg-green-600 text-white shadow hover:scale-105 transition">Home</Link>
             ) : (
               <>
-                <Link href="/login" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-yellow-500 via-pink-400 to-orange-400 text-white shadow hover:scale-105 transition">Login</Link>
-                <Link href="/signup" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-300 text-white shadow hover:scale-105 transition">Sign Up</Link>
+                <Link href="/auth/ram/login" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-yellow-500 via-pink-400 to-orange-400 text-white shadow hover:scale-105 transition">Login</Link>
+                <Link href="/auth/ram/signup" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-300 text-white shadow hover:scale-105 transition">Sign Up</Link>
               </>
             )}
           </div>
@@ -146,8 +145,8 @@ useEffect(() => {
                   <Link href="/booking-home" className="rounded-full px-5 py-2 font-semibold bg-green-600 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Home</Link>
                 ) : (
                   <>
-                    <Link href="/login" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-yellow-500 via-pink-400 to-orange-400 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Login</Link>
-                    <Link href="/signup" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-300 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Sign Up</Link>
+                    <Link href="/auth/ram/login" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-yellow-500 via-pink-400 to-orange-400 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Login</Link>
+                    <Link href="/auth/ram/signup" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-300 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Sign Up</Link>
                   </>
                 )}
                 <button className="mt-2 text-xs text-gray-500" onClick={() => setShowSummary(false)}>Close</button>

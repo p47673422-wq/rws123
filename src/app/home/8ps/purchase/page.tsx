@@ -40,11 +40,13 @@ function PurchasePage() {
       return (
         <>
           <PsMenuBar />
-          <ProgressBarFloating
-            progress={Math.round((Object.values(progress).filter(v => v >= 12.5).length / psList.length) * 100)}
-            completedPs={psList.filter(p => (progress[p] || 0) >= 12.5)}
-            psList={psList}
-          />
+          <div onClick={(e) => e.stopPropagation()}>
+            <ProgressBarFloating
+              progress={Math.round((Object.values(progress).filter(v => v >= 12.5).length / psList.length) * 100)}
+              completedPs={psList.filter(p => (progress[p] || 0) >= 12.5)}
+              psList={psList}
+            />
+          </div>
           <div className="content-overlay">
             <div className="homeCustomBox flex flex-col items-center mx-auto">
               <button className="back-btn" onClick={() => router.push("/home/8ps")}>← Back to 8Ps</button>
