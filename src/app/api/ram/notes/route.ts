@@ -12,13 +12,13 @@ export async function GET(req: NextRequest) {
     }
 
     const decoded = await verifyToken(token);
-    if (!decoded || !decoded.userId) {
+    if (!decoded || !decoded.id) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     const notes = await prisma.notebook_Z.findMany({
       where: {
-        distributorId: decoded.userId
+        distributorId: decoded.id
       },
       orderBy: {
         createdAt: 'desc'
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     const decoded = await verifyToken(token);
-    if (!decoded || !decoded.userId) {
+    if (!decoded || !decoded.id) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
 
     const note = await prisma.notebook_Z.create({
       data: {
-        distributorId: decoded.userId,
+        distributorId: decoded.id,
         noteType,
         content,
         followUpPerson: followUpPerson || null,

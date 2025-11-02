@@ -12,13 +12,13 @@ export async function GET(req: NextRequest) {
     }
 
     const decoded = await verifyToken(token);
-    if (!decoded || !decoded.userId) {
+    if (!decoded || !decoded.id) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     // Get the current user to check their type and store type
     const currentUser = await prisma.user_Z.findUnique({
-      where: { id: decoded.userId }
+      where: { id: decoded.id }
     });
 
     if (!currentUser || (currentUser.userType !== 'STORE_OWNER' && currentUser.userType !== 'VEC_STORE_OWNER')) {
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
     const teamMembers = await prisma.user_Z.findMany({
       where: {
         storeType: currentUser.storeType,
-        userType: 'DISTRIBUTOR'
+        userType: currentUser.userType
       },
       select: {
         id: true,

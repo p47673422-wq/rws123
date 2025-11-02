@@ -80,7 +80,7 @@ if (Array.isArray(notesArray)) {
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   ));
 } else {
-  console.error("Could not find array under 'notes' key:", responseBody);
+
   setNotes(notesArray); // Fallback to whatever was returned
 }
     } catch (error) {
@@ -249,32 +249,43 @@ if (Array.isArray(notesArray)) {
                   
                   {/* Notes List */}
                   <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                    {notes.map((note: any) => (
-                      <div key={note.id} className="bg-yellow-50 rounded-lg p-3 space-y-2">
-                        <div className="flex justify-between items-start">
-                          <span className="text-xs font-medium px-2 py-1 rounded bg-pink-100 text-pink-700">
-                            {note.noteType}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {new Date(note.createdAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <p className="text-sm text-gray-700">{note.content}</p>
-                        {note.noteType === 'FOLLOWUP' && (
-                          <div className="text-xs text-gray-600">
-                            <p>Follow up with: {note.followUpPerson}</p>
-                            <p>Due: {new Date(note.followUpDate).toLocaleDateString()}</p>
-                          </div>
-                        )}
-                        {note.reminderSet && !note.reminderSent && (
-                          <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                            Reminder set for: {new Date(note.dueDate).toLocaleDateString()}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
+    {/* 💡 Conditional Check for Empty Array */}
+    {notes?.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full text-center p-6 bg-gray-50 rounded-lg shadow-inner">
+            <svg className="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-3-3v6m-4 5h8a2 2 0 002-2V7a2 2 0 00-2-2H9a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            <p className="text-lg font-semibold text-gray-600 mb-2">You don't have any notes.</p>
+            <p className="text-sm text-gray-500">To add a note, click on the **Add Note** button.</p>
+        </div>
+    ) : (
+        /* Original mapping of notes */
+        notes.map((note: any) => (
+            <div key={note.id} className="bg-yellow-50 rounded-lg p-3 space-y-2">
+                <div className="flex justify-between items-start">
+                    <span className="text-xs font-medium px-2 py-1 rounded bg-pink-100 text-pink-700">
+                        {note.noteType}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                        {new Date(note.createdAt).toLocaleDateString()}
+                    </span>
+                </div>
+                <p className="text-sm text-gray-700">{note.content}</p>
+                {note.noteType === 'FOLLOWUP' && (
+                    <div className="text-xs text-gray-600">
+                        <p>Follow up with: {note.followUpPerson}</p>
+                        <p>Due: {new Date(note.followUpDate).toLocaleDateString()}</p>
+                    </div>
+                )}
+                {note.reminderSet && !note.reminderSent && (
+                    <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
+                        Reminder set for: {new Date(note.dueDate).toLocaleDateString()}
+                    </div>
+                )}
+            </div>
+        ))
+    )}
+</div>
                   {/* Add Note Button - Sticky */}
                   <div className="p-4 border-t border-yellow-100 sticky bottom-0 bg-white">
                     <button
