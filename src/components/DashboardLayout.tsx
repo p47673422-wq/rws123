@@ -59,6 +59,47 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
   const [showTeam, setShowTeam] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
+  const [notes, setNotes] = useState<any[]>([]);
+  const [showAddNote, setShowAddNote] = useState(false);
+  const [noteType, setNoteType] = useState<'FOLLOWUP' | 'FREEFLOW'>('FREEFLOW');
+  const [showProfile, setShowProfile] = useState(false);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+
+  // Fetch notes
+  const fetchNotes = async () => {
+    try {
+      const res = await fetch('/api/ram/notes');
+const responseBody = await res.json();
+
+// 💡 Assume the array is under the 'notes' key
+const notesArray = responseBody.notes;
+
+
+if (Array.isArray(notesArray)) {
+  setNotes(notesArray.sort((a: any, b: any) =>
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  ));
+} else {
+  console.error("Could not find array under 'notes' key:", responseBody);
+  setNotes(notesArray); // Fallback to whatever was returned
+}
+    } catch (error) {
+      console.error('Error fetching notes:', error);
+    }
+  };
+
+  // Fetch team members for store owners
+  const fetchTeamMembers = async () => {
+    if (user.userType === 'STORE_OWNER' || user.userType === 'VEC_STORE_OWNER') {
+      try {
+        const res = await fetch('/api/ram/team-members');
+        const data = await res.json();
+        setTeamMembers(data);
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+      }
+    }
+  };
 
   useEffect(() => {
     // Set home tab as active by default
@@ -74,6 +115,10 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
 
     // Set initial view for captain
     if (user.userType === 'CAPTAIN') setViewAs('CAPTAIN');
+
+    // Fetch initial data
+    fetchNotes();
+    fetchTeamMembers();
   }, []);
 
   const activeMenu = viewAs || user.userType;
@@ -120,13 +165,42 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
           <div className="flex items-center gap-4">
             {/* Store Owner Team Button */}
             {(user.userType === 'STORE_OWNER' || user.userType === 'VEC_STORE_OWNER') && (
-              <button
-                onClick={() => setShowTeam(!showTeam)}
-                className="px-3 py-1.5 rounded-lg bg-yellow-50 text-sm font-medium text-pink-700 hover:bg-yellow-100 flex items-center gap-2"
-              >
-                <FaUserFriends />
-                My Team
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setShowTeam(!showTeam)}
+                  className="px-3 py-1.5 rounded-lg bg-yellow-50 text-sm font-medium text-pink-700 hover:bg-yellow-100 flex items-center gap-2"
+                >
+                  <FaUserFriends />
+                  My Team
+                </button>
+
+                {/* Team Members Dropdown */}
+                {showTeam && (
+                  <div className="absolute left-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-yellow-100 z-50 max-h-[60vh]">
+                    <div className="p-4 border-b border-yellow-100">
+                      <h3 className="text-lg font-bold text-pink-700">Team Members</h3>
+                    </div>
+                    
+                    <div className="overflow-y-auto p-4 space-y-4">
+                      {teamMembers.map((member: any) => (
+                        <div key={member.id} className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
+                          <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
+                            <span className="text-pink-700 font-medium">{member.name[0]}</span>
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-gray-900">{member.name}</h4>
+                            <p className="text-sm text-gray-600">{member.phone}</p>
+                            <p className="text-sm text-gray-600">{member.email}</p>
+                            <span className="text-xs font-medium px-2 py-1 rounded bg-pink-100 text-pink-700 mt-2 inline-block">
+                              {member.userType}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
             
             {/* Captain View Switcher */}
@@ -168,18 +242,222 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
                 <FaBook className="text-xl text-pink-700" />
               </button>
               {showNotes && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-yellow-100 z-50">
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-pink-700 mb-2">Notes</h3>
-                    {/* Notes content will go here */}
+                <div className="absolute right-0 mt-2 w-96 bg-white rounded-xl shadow-lg border border-yellow-100 z-50 max-h-[80vh] flex flex-col">
+                  <div className="p-4 border-b border-yellow-100">
+                    <h3 className="text-lg font-bold text-pink-700">Notes</h3>
+                  </div>
+                  
+                  {/* Notes List */}
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                    {notes.map((note: any) => (
+                      <div key={note.id} className="bg-yellow-50 rounded-lg p-3 space-y-2">
+                        <div className="flex justify-between items-start">
+                          <span className="text-xs font-medium px-2 py-1 rounded bg-pink-100 text-pink-700">
+                            {note.noteType}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {new Date(note.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700">{note.content}</p>
+                        {note.noteType === 'FOLLOWUP' && (
+                          <div className="text-xs text-gray-600">
+                            <p>Follow up with: {note.followUpPerson}</p>
+                            <p>Due: {new Date(note.followUpDate).toLocaleDateString()}</p>
+                          </div>
+                        )}
+                        {note.reminderSet && !note.reminderSent && (
+                          <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
+                            Reminder set for: {new Date(note.dueDate).toLocaleDateString()}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Add Note Button - Sticky */}
+                  <div className="p-4 border-t border-yellow-100 sticky bottom-0 bg-white">
+                    <button
+                      onClick={() => setShowAddNote(true)}
+                      className="w-full py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors"
+                    >
+                      Add New Note
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {/* Add Note Modal */}
+              {showAddNote && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-xl p-6 w-full max-w-md">
+                    <h3 className="text-xl font-bold text-pink-700 mb-4">Add New Note</h3>
+                    <form onSubmit={async (e) => {
+                      e.preventDefault();
+                      const formData = new FormData(e.currentTarget);
+                      const data = {
+                        noteType,
+                        content: formData.get('content'),
+                        followUpPerson: formData.get('followUpPerson'),
+                        followUpDate: formData.get('followUpDate'),
+                        reminderSet: formData.get('reminderSet') === 'true',
+                        dueDate: formData.get('dueDate'),
+                      };
+                      
+                      try {
+                        await fetch('/api/ram/notes', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify(data),
+                        });
+                        await fetchNotes();
+                        setShowAddNote(false);
+                      } catch (error) {
+                        console.error('Error saving note:', error);
+                      }
+                    }}>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Note Type
+                          </label>
+                          <select
+                            className="w-full rounded-lg border-gray-300"
+                            value={noteType}
+                            onChange={(e) => setNoteType(e.target.value as 'FOLLOWUP' | 'FREEFLOW')}
+                          >
+                            <option value="FREEFLOW">Free Flow</option>
+                            <option value="FOLLOWUP">Follow Up</option>
+                          </select>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Content
+                          </label>
+                          <textarea
+                            name="content"
+                            required
+                            className="w-full rounded-lg border-gray-300"
+                            rows={4}
+                          />
+                        </div>
+
+                        {noteType === 'FOLLOWUP' && (
+                          <>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Follow Up Person
+                              </label>
+                              <input
+                                type="text"
+                                name="followUpPerson"
+                                required
+                                className="w-full rounded-lg border-gray-300"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Follow Up Date
+                              </label>
+                              <input
+                                type="date"
+                                name="followUpDate"
+                                required
+                                className="w-full rounded-lg border-gray-300"
+                              />
+                            </div>
+                          </>
+                        )}
+
+                        <div>
+                          <label className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              name="reminderSet"
+                              value="true"
+                              className="rounded border-gray-300 text-pink-600"
+                            />
+                            <span className="text-sm text-gray-700">Set Reminder</span>
+                          </label>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Due Date
+                          </label>
+                          <input
+                            type="date"
+                            name="dueDate"
+                            className="w-full rounded-lg border-gray-300"
+                          />
+                        </div>
+
+                        <div className="flex space-x-3">
+                          <button
+                            type="submit"
+                            className="flex-1 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                          >
+                            Save Note
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setShowAddNote(false)}
+                            className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </form>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* User Avatar */}
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-yellow-400 flex items-center justify-center text-white font-bold">
-              {user.name?.[0]?.toUpperCase()}
+            {/* User Avatar and Profile */}
+            <div className="relative">
+              <button 
+                onClick={() => setShowProfile(!showProfile)}
+                className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-yellow-400 flex items-center justify-center text-white font-bold"
+              >
+                {user.name?.[0]?.toUpperCase()}
+              </button>
+
+              {/* Profile Dropdown */}
+              {showProfile && (
+                <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-yellow-100 z-50">
+                  <div className="p-4 space-y-4">
+                    <div className="space-y-2">
+                      <h3 className="font-bold text-lg text-pink-700">{user.name}</h3>
+                      <p className="text-sm text-gray-600">{user.phone}</p>
+                      <p className="text-sm text-gray-600">{user.email}</p>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Link
+                        href="/auth/ram/change-password"
+                        className="block w-full py-2 px-4 text-center bg-yellow-50 text-pink-700 rounded-lg hover:bg-yellow-100"
+                      >
+                        Change Password
+                      </Link>
+                      <button
+                        onClick={async () => {
+                          try {
+                            await fetch('/api/ram/logout', { method: 'POST' });
+                            window.location.href = '/auth/ram/login';
+                          } catch (error) {
+                            console.error('Error logging out:', error);
+                          }
+                        }}
+                        className="w-full py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </header>
