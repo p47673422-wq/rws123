@@ -49,11 +49,14 @@ const QUOTES = [
 interface DashboardLayoutProps {
   children: React.ReactNode;
   user: any;
+  // optional controlled view props so parent pages can control captain/distributor view
+  viewAs?: 'CAPTAIN' | 'DISTRIBUTOR' | null;
+  onViewAsChange?: (v: 'CAPTAIN' | 'DISTRIBUTOR' | null) => void;
 }
 
-export default function DashboardLayout({ children, user }: DashboardLayoutProps) {
+export default function DashboardLayout({ children, user, viewAs: viewAsProp, onViewAsChange }: DashboardLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [viewAs, setViewAs] = useState<'CAPTAIN' | 'DISTRIBUTOR' | null>(null);
+  const [internalViewAs, setInternalViewAs] = useState<'CAPTAIN' | 'DISTRIBUTOR' | null>(null);
   const [quote, setQuote] = useState('');
   const pathname = usePathname();
   const [showTeam, setShowTeam] = useState(false);
@@ -71,8 +74,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
       const res = await fetch('/api/ram/notes');
 const responseBody = await res.json();
 
-// 💡 Assume the array is under the 'notes' key
-const notesArray = responseBody.notes;
+const notesArray = responseBody;
 
 
 if (Array.isArray(notesArray)) {
@@ -113,15 +115,24 @@ if (Array.isArray(notesArray)) {
     // Random quote
     setQuote(QUOTES[Math.floor(Math.random() * QUOTES.length)]);
 
-    // Set initial view for captain
-    if (user.userType === 'CAPTAIN') setViewAs('CAPTAIN');
+    // Set initial view for captain (use controlled prop if provided)
+    if (user.userType === 'CAPTAIN') {
+      if (onViewAsChange) onViewAsChange('CAPTAIN');
+      else setInternalViewAs('CAPTAIN');
+    }
 
     // Fetch initial data
     fetchNotes();
     fetchTeamMembers();
   }, []);
 
-  const activeMenu = viewAs || user.userType;
+  const effectiveView = viewAsProp !== undefined ? viewAsProp : internalViewAs;
+  const setViewAs = (v: 'CAPTAIN' | 'DISTRIBUTOR' | null) => {
+    if (onViewAsChange) onViewAsChange(v);
+    else setInternalViewAs(v);
+  };
+
+  const activeMenu = effectiveView || user.userType;
   const menuItems = MENU_CONFIG[activeMenu as keyof typeof MENU_CONFIG] || [];
 
   return (
@@ -206,11 +217,11 @@ if (Array.isArray(notesArray)) {
             {/* Captain View Switcher */}
             {user.userType === 'CAPTAIN' && (
               <button
-                onClick={() => setViewAs(viewAs === 'CAPTAIN' ? 'DISTRIBUTOR' : 'CAPTAIN')}
+                onClick={() => setViewAs(effectiveView === 'CAPTAIN' ? 'DISTRIBUTOR' : 'CAPTAIN')}
                 className="px-3 py-1.5 rounded-lg bg-yellow-50 text-sm font-medium text-pink-700 hover:bg-yellow-100 flex items-center gap-2"
               >
                 <FaExchangeAlt />
-                Switch to {viewAs === 'CAPTAIN' ? 'Distributor' : 'Captain'} View
+                Switch to {effectiveView === 'CAPTAIN' ? 'Distributor' : 'Captain'} View
               </button>
             )}
 
