@@ -8,6 +8,8 @@ export default function Orders() {
   const [user, setUser] = useState<any>(null);
   const [editingOrder, setEditingOrder] = useState<string | null>(null);
   const [editedItems, setEditedItems] = useState<any[]>([]);
+  const [returns, setReturns] = useState<any[]>([]);
+  const [loadingReturns, setLoadingReturns] = useState(true);
 
   const handleUpdateOrder = async (orderId: string, updatedItems: any[]) => {
     try {
@@ -42,6 +44,13 @@ export default function Orders() {
         }
       })
       .finally(() => setLoading(false));
+    // fetch store return requests
+    fetch('/api/ram/returns/store-returns')
+      .then(r => r.json())
+      .then(d => {
+        if (!d?.error) setReturns(d);
+      })
+      .finally(() => setLoadingReturns(false));
   }, []);
 
    const handleStatusUpdate = async (orderId: string, status: string, otp?: string) => {
@@ -219,6 +228,87 @@ export default function Orders() {
             )}
           </div>
         )}
+
+        {/* Return requests for this store owner */}
+        <div className="pt-6">
+          <h2 className="text-xl font-semibold text-pink-700">Return Requests</h2>
+          {loadingReturns ? (
+            <div className="text-center py-6">Loading return requests...</div>
+          ) : (
+            <div className="grid gap-4">
+              {returns.map((ret: any) => (
+                <div key={ret.id} className="bg-white rounded-xl shadow p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold">Return #{ret.id}</h3>
+                    <span className={`px-2 py-1 rounded-full text-sm ${
+                      ret.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                      ret.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                      ret.status === 'ACCEPTED' ? 'bg-blue-100 text-blue-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>{ret.status}</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {ret.items.map((item: any, i: number) => (
+                      <div key={i} className="flex justify-between text-sm">
+                        <span>{item.title || item.bookId} ({item.language || ''})</span>
+                        <span className="text-gray-600">Qty: {item.quantity}</span>
+                      </div>
+                    ))}
+
+                    <div className="flex justify-end gap-2">
+                      {ret.status === 'PENDING' && (
+                        <>
+                          <button onClick={async () => {
+                            try {
+                              const res = await fetch('/api/ram/returns/update-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ returnId: ret.id, status: 'ACCEPTED' }) });
+                              const d = await res.json();
+                              if (d.error) throw new Error(d.error);
+                              // update local list
+                              setReturns(returns.map(r => r.id === ret.id ? d : r));
+                              alert('Return accepted');
+                            } catch (err: any) { alert(err.message || 'Failed to accept'); }
+                          }} className="px-3 py-1 bg-green-500 text-white rounded-lg">Accept</button>
+
+                          <button onClick={async () => {
+                            try {
+                              const res = await fetch('/api/ram/returns/update-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ returnId: ret.id, status: 'REJECTED' }) });
+                              const d = await res.json();
+                              if (d.error) throw new Error(d.error);
+                              setReturns(returns.map(r => r.id === ret.id ? d : r));
+                              alert('Return rejected');
+                            } catch (err: any) { alert(err.message || 'Failed to reject'); }
+                          }} className="px-3 py-1 bg-red-500 text-white rounded-lg">Reject</button>
+                        </>
+                      )}
+
+                      {ret.status === 'ACCEPTED' && (
+                        <button onClick={async () => {
+                          const inputOtp = prompt('Enter OTP provided to distributor to complete return:');
+                          if (!inputOtp) return;
+                          try {
+                            const res = await fetch('/api/ram/returns/update-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ returnId: ret.id, status: 'COMPLETED', otp: inputOtp }) });
+                            const d = await res.json();
+                            if (d.error) throw new Error(d.error);
+                            // remove or update
+                            setReturns(returns.map(r => r.id === ret.id ? { ...r, status: 'COMPLETED' } : r));
+                            alert('Return marked completed');
+                          } catch (err: any) { alert(err.message || 'Failed to complete return'); }
+                        }} className="px-3 py-1 bg-purple-500 text-white rounded-lg">Complete Return</button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {returns.length === 0 && (
+                <div className="text-center py-8 bg-gray-50 rounded-xl">
+                  <p className="text-gray-600">No return requests</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </DashboardLayout>
   );

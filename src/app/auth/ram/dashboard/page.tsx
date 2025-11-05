@@ -6,6 +6,31 @@ import BookSelect from '@/components/BookSelect';
 
 type ViewMode = 'CAPTAIN' | 'DISTRIBUTOR' | 'STORE_OWNER' | 'VEC_STORE_OWNER' | 'DEFAULT';
 
+interface Book {
+  id: string;
+  name: string;
+  language: string;
+}
+
+interface InventoryItem {
+  id: string;
+  bookId: string;
+  book: Book;
+  quantity: number;
+}
+
+interface ReturnItem {
+  bookId: string;
+  title: string;
+  language: string;
+  quantity: number;
+}
+
+interface ReturnRequestForm {
+  items: ReturnItem[];
+  reason?: string;
+}
+
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
@@ -132,8 +157,20 @@ export default function Dashboard() {
 }
 
 function ActionForm({ action, onCancel, onSuccess }: { action: string; onCancel: () => void; onSuccess: () => void }) {
-  const [formState, setFormState] = useState<any>({});
+  const [formState, setFormState] = useState<ReturnRequestForm & Record<string, any>>({ items: [] });
   const [loading, setLoading] = useState(false);
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
+  
+  useEffect(() => {
+    // Fetch distributor inventory when return request form is shown
+    if (action === 'return_request') {
+      fetch('/api/ram/inventory?inventoryType=DISTRIBUTOR')
+        .then(r => r.json())
+        .then(d => {
+          if (!d.error) setInventoryItems(d);
+        });
+    }
+  }, [action]);
 
   const handleChange = (k: string, v: any) => setFormState((s: any) => ({ ...s, [k]: v }));
 
@@ -143,7 +180,7 @@ function ActionForm({ action, onCancel, onSuccess }: { action: string; onCancel:
     try {
       let res;
       
-      // For create_order, use the dedicated orders API endpoint
+      // Handle different action types
       if (action === 'create_order') {
         if (!formState.items?.length) {
           alert('Please select at least one book');
@@ -153,6 +190,24 @@ function ActionForm({ action, onCancel, onSuccess }: { action: string; onCancel:
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: formState.items })
+        });
+      } else if (action === 'return_request') {
+        if (!formState.items?.length) {
+          alert('Please select at least one book to return');
+          return;
+        }
+        // Validate quantities against inventory
+        for (const item of formState.items) {
+          const inv = inventoryItems.find(i => i.bookId === item.bookId);
+          if (!inv || inv.quantity < item.quantity) {
+            alert(`Insufficient inventory for ${item.title}`);
+            return;
+          }
+        }
+        res = await fetch('/api/ram/returns/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: formState.items, reason: formState.reason })
         });
       } else {
         // For other actions, use the general actions API
@@ -225,18 +280,104 @@ function ActionForm({ action, onCancel, onSuccess }: { action: string; onCancel:
       )}
 
       {action === 'return_request' && (
-        <>
+        <div className="space-y-6">
           <div>
-            <label className="block text-sm text-gray-700">Store Owner ID</label>
-            <input required onChange={e => handleChange('storeOwnerId', e.target.value)} className="w-full rounded border p-2" />
+            <h4 className="font-medium text-gray-700 mb-2">Select Books to Return</h4>
+            <select 
+              className="w-full p-2 border rounded" 
+              id="inventory-select"
+              onChange={(e) => {
+                const selected = inventoryItems.find(i => i.id === e.target.value);
+                if (!selected) return;
+                
+                const item = {
+                  bookId: selected.bookId,
+                  title: selected.book.name,
+                  language: selected.book.language,
+                  quantity: 1
+                };
+
+                setFormState(prev => ({
+                  ...prev,
+                  items: [...(prev.items || []), item]
+                }));
+              }}
+            >
+              <option value="">Select a book from your inventory...</option>
+              {inventoryItems.map(inv => (
+                <option key={inv.id} value={inv.id}>
+                  {inv.book.name} ({inv.book.language}) - Available: {inv.quantity}
+                </option>
+              ))}
+            </select>
           </div>
+
+          {/* Selected Books List */}
+          <div className="space-y-2">
+            <h4 className="font-medium text-gray-700">Selected Books for Return</h4>
+            {(formState.items || []).map((item: any, idx: number) => (
+              <div key={idx} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
+                <div>
+                  <h5 className="font-medium">{item.title}</h5>
+                  <p className="text-sm text-gray-600">
+                    {item.language} - Qty: {item.quantity}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="number"
+                    min="1"
+                    value={item.quantity}
+                    onChange={(e) => {
+                      const newQty = parseInt(e.target.value);
+                      if (isNaN(newQty)) return;
+                      const inv = inventoryItems.find(i => i.bookId === item.bookId);
+                      if (!inv || newQty > inv.quantity) {
+                        alert('Quantity cannot exceed your inventory');
+                        return;
+                      }
+                      setFormState(prev => ({
+                        ...prev,
+                        items: prev.items.map((it: any, i: number) => 
+                          i === idx ? { ...it, quantity: newQty } : it
+                        )
+                      }));
+                    }}
+                    className="w-20 p-1 border rounded"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormState(prev => ({
+                        ...prev,
+                        items: prev.items.filter((_: any, i: number) => i !== idx)
+                      }));
+                    }}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+            {!(formState.items || []).length && (
+              <p className="text-sm text-gray-500 text-center p-4 bg-gray-50 rounded-lg">
+                No books selected. Select books from your inventory to return.
+              </p>
+            )}
+          </div>
+
+          {/* Optional reason for return */}
           <div>
-            <label className="block text-sm text-gray-700">Items (JSON)</label>
-            <textarea required onChange={e => {
-              try { handleChange('items', JSON.parse(e.target.value || '[]')); } catch { handleChange('items', []); }
-            }} className="w-full rounded border p-2" rows={4} />
+            <label className="block text-sm text-gray-700">Reason for Return (Optional)</label>
+            <textarea
+              onChange={e => handleChange('reason', e.target.value)}
+              className="w-full rounded border p-2"
+              rows={2}
+              placeholder="Enter reason for return request..."
+            />
           </div>
-        </>
+        </div>
       )}
 
       {action === 'payment_verification' && (

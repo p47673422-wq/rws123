@@ -497,6 +497,7 @@ model ReturnRequest_Z {
   distributor    User_Z        @relation("return_by_distributor", fields: [distributorId], references: [id])
   storeOwnerId   String
   storeOwner     User_Z        @relation("return_by_storeowner", fields: [storeOwnerId], references: [id])
+  otp            String?
   items          Json
   status         ReturnStatus_Z @default(PENDING)
   reason         String?       @db.Text
