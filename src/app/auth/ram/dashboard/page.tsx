@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
+import BookSelect from '@/components/BookSelect';
 
 type ViewMode = 'CAPTAIN' | 'DISTRIBUTOR' | 'STORE_OWNER' | 'VEC_STORE_OWNER' | 'DEFAULT';
 
@@ -66,21 +67,6 @@ export default function Dashboard() {
               <h1 className="text-2xl font-bold text-pink-700 mb-1">Hare Krishna, {user.name}!</h1>
               <p className="text-gray-600">Select an option from the menu to get started.</p>
             </div>
-
-            {/* Captain: switch view locally between Captain and Distributor */}
-            {user.userType === 'CAPTAIN' && (
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-500">View as</span>
-                <select
-                  value={viewMode}
-                  onChange={(e) => setViewMode(e.target.value as ViewMode)}
-                  className="rounded border-gray-200 p-2"
-                >
-                  <option value="CAPTAIN">Captain</option>
-                  <option value="DISTRIBUTOR">Distributor</option>
-                </select>
-              </div>
-            )}
           </div>
         </div>
 
@@ -155,7 +141,28 @@ function ActionForm({ action, onCancel, onSuccess }: { action: string; onCancel:
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('/api/ram/actions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, payload: formState }) });
+      let res;
+      
+      // For create_order, use the dedicated orders API endpoint
+      if (action === 'create_order') {
+        if (!formState.items?.length) {
+          alert('Please select at least one book');
+          return;
+        }
+        res = await fetch('/api/ram/orders/my-orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: formState.items })
+        });
+      } else {
+        // For other actions, use the general actions API
+        res = await fetch('/api/ram/actions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action, payload: formState })
+        });
+      }
+
       const data = await res.json();
       if (data?.error) {
         alert(data.error || 'Failed');
@@ -173,18 +180,48 @@ function ActionForm({ action, onCancel, onSuccess }: { action: string; onCancel:
   return (
     <form onSubmit={submit} className="space-y-4">
       {action === 'create_order' && (
-        <>
-          <div>
-            <label className="block text-sm text-gray-700">Store Owner ID</label>
-            <input required onChange={e => handleChange('storeOwnerId', e.target.value)} className="w-full rounded border p-2" />
+        <div className="space-y-6">
+          <BookSelect
+            onChange={(selection) => {
+              setFormState((prev: any) => ({
+                ...prev,
+                items: [...(prev.items || []), selection]
+              }));
+            }}
+          />
+          
+          {/* Selected Books List */}
+          <div className="space-y-2">
+            <h4 className="font-medium text-gray-700">Selected Books</h4>
+            {(formState.items || []).map((item: any, idx: number) => (
+              <div key={idx} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
+                <div>
+                  <h5 className="font-medium">{item.title}</h5>
+                  <p className="text-sm text-gray-600">
+                    {item.language.toUpperCase()} - Qty: {item.quantity}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormState((prev: any) => ({
+                      ...prev,
+                      items: prev.items.filter((_: any, i: number) => i !== idx)
+                    }));
+                  }}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            {!(formState.items || []).length && (
+              <p className="text-sm text-gray-500 text-center p-4 bg-gray-50 rounded-lg">
+                No books selected. Use the form above to add books to your order.
+              </p>
+            )}
           </div>
-          <div>
-            <label className="block text-sm text-gray-700">Items (JSON)</label>
-            <textarea required onChange={e => {
-              try { handleChange('items', JSON.parse(e.target.value || '[]')); } catch { handleChange('items', []); }
-            }} className="w-full rounded border p-2" rows={4} placeholder='[ { "title": "Book A", "qty": 2 } ]' />
-          </div>
-        </>
+        </div>
       )}
 
       {action === 'return_request' && (

@@ -25,11 +25,11 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized access' }, { status: 403 });
     }
 
-    // Fetch team members based on store type — we want distributors belonging to the same store
+    // Fetch team members based on store type
     const teamMembers = await prisma.user_Z.findMany({
       where: {
         storeType: currentUser.storeType,
-        userType: 'DISTRIBUTOR'
+        userType: currentUser.userType
       },
       select: {
         id: true,

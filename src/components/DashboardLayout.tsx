@@ -5,13 +5,14 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FaHome, FaBox, FaUsers, FaTrophy, FaChartLine, FaClipboardCheck, 
          FaExchangeAlt, FaWarehouse, FaHandshake, FaBars, FaBell, FaBook, 
-         FaUserFriends } from 'react-icons/fa';
+         FaUserFriends, 
+         FaMapMarker} from 'react-icons/fa';
 
 // Menu configurations for different user types
 const MENU_CONFIG = {
   STORE_OWNER: [
     { icon: FaHome, label: 'Home', href: '/auth/ram/dashboard' },
-    { icon: FaBox, label: 'Orders & Returns', href: '/auth/ram/dashboard/orders' },
+    { icon: FaBox, label: 'Orders & Returns', href: '/auth/ram/orders' },
     { icon: FaClipboardCheck, label: 'Payment Verification', href: '/auth/ram/dashboard/payments' },
     { icon: FaWarehouse, label: 'Book & Inventory', href: '/auth/ram/dashboard/inventory' },
     { icon: FaUsers, label: 'Distributor Management', href: '/auth/ram/dashboard/distributors' },
@@ -19,7 +20,7 @@ const MENU_CONFIG = {
   ],
   VEC_STORE_OWNER: [
     { icon: FaHome, label: 'Home', href: '/auth/ram/dashboard' },
-    { icon: FaBox, label: 'Orders & Returns', href: '/auth/ram/dashboard/orders' },
+    { icon: FaBox, label: 'Orders & Returns', href: '/auth/ram/orders' },
     { icon: FaClipboardCheck, label: 'Payment Verification', href: '/auth/ram/dashboard/payments' },
     { icon: FaWarehouse, label: 'Book & Inventory', href: '/auth/ram/dashboard/inventory' },
     { icon: FaUsers, label: 'Distributor Management', href: '/auth/ram/dashboard/distributors' },
@@ -27,7 +28,9 @@ const MENU_CONFIG = {
   ],
   DISTRIBUTOR: [
     { icon: FaHome, label: 'Home', href: '/auth/ram/dashboard' },
+    { icon: FaBox, label: 'My Orders & Payments', href: '/auth/ram/my-orders' },
     { icon: FaWarehouse, label: 'My Inventory', href: '/auth/ram/dashboard/my-inventory' },
+    { icon: FaMapMarker, label: 'Venues', href: '/auth/ram/dashboard/location' },
     { icon: FaHandshake, label: 'Customer & Sales', href: '/auth/ram/dashboard/sales' },
     { icon: FaTrophy, label: 'Leaderboard', href: '/auth/ram/dashboard/leaderboard' }
   ],

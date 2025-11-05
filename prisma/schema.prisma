@@ -337,6 +337,8 @@ model Captain_Z {
 enum PreOrderStatus_Z {
   PENDING
   PACKED
+  ACCEPTED
+  REJECTED
   COLLECTED
 }
 
@@ -454,6 +456,7 @@ enum ReturnStatus_Z {
   PENDING
   ACCEPTED
   REJECTED
+  COMPLETED
 }
 
 model Notebook_Z {
