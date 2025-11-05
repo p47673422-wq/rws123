@@ -322,6 +322,7 @@ model User_Z {
   returnRequestsAsDistributor ReturnRequest_Z[] @relation("return_by_distributor")
   returnRequestsAsStoreOwner  ReturnRequest_Z[] @relation("return_by_storeowner")
   sales              Sale_Z[]         @relation("sales_by_distributor")
+  dailySales  DailySales_Z[] @relation("daily_sales_by_distributor")
 
   @@index([phone])
 }
@@ -369,6 +370,7 @@ model Book_Z {
   warehouseType WarehouseType
   createdAt   DateTime     @default(now())
   inventories Inventory_Z[]
+  dailySales  DailySales_Z[] @relation("book_daily_sales")
 
   @@unique([name, language, warehouseType])
   @@index([category])
@@ -521,5 +523,19 @@ model Sale_Z {
 
   @@index([distributorId])
   @@index([recordedAt])
+}
+
+model DailySales_Z {
+  id            String   @id @default(cuid())
+  distributorId String
+  distributor   User_Z   @relation("daily_sales_by_distributor", fields: [distributorId], references: [id])
+  bookId        String
+  book          Book_Z   @relation("book_daily_sales", fields: [bookId], references: [id])
+  quantity      Int
+  date          DateTime @default(now())
+
+  @@index([distributorId])
+  @@index([bookId])
+  @@index([date])
 }
 
