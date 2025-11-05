@@ -156,8 +156,42 @@ export default function Dashboard() {
   );
 }
 
+const fetchSalesData = async (date: string) => {
+  try {
+    const res = await fetch(`/api/ram/sales/daily?date=${date}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data.map((sale: any) => ({
+      date,
+      items: [{
+        bookId: sale.book.id,
+        title: sale.book.name,
+        language: sale.book.language,
+        quantity: sale.quantity,
+        price: Number(sale.book.price)
+      }]
+    }));
+  } catch (err) {
+    console.error('Error fetching sales:', err);
+    return [];
+  }
+};
+
+const calculateTotalAmount = (salesData: any[]) => {
+  return salesData.reduce((total, sale) => {
+    return total + sale.items.reduce((itemTotal: number, item: any) => {
+      return itemTotal + (item.price * item.quantity);
+    }, 0);
+  }, 0);
+};
+
 function ActionForm({ action, onCancel, onSuccess }: { action: string; onCancel: () => void; onSuccess: () => void }) {
-  const [formState, setFormState] = useState<ReturnRequestForm & Record<string, any>>({ items: [] });
+  const [formState, setFormState] = useState<ReturnRequestForm & Record<string, any>>({ 
+    items: [],
+    dates: [],
+    salesData: [],
+    totalAmount: 0
+  });
   const [loading, setLoading] = useState(false);
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
   
@@ -208,6 +242,31 @@ function ActionForm({ action, onCancel, onSuccess }: { action: string; onCancel:
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: formState.items, reason: formState.reason })
+        });
+      } else if (action === 'payment_verification') {
+        if (!formState.dates?.length) {
+          alert('Please select at least one date');
+          return;
+        }
+        if (!formState.salesData?.length) {
+          alert('No sales data found for selected dates');
+          return;
+        }
+        if (!formState.paymentImage) {
+          alert('Please upload payment screenshot');
+          return;
+        }
+
+        res = await fetch('/api/ram/payments/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            dates: formState.dates,
+            items: formState.salesData.flatMap((sale: any) => sale.items),
+            totalAmount: formState.totalAmount,
+            paymentImage: formState.paymentImage,
+            notes: formState.notes
+          })
         });
       } else {
         // For other actions, use the general actions API
@@ -383,14 +442,141 @@ function ActionForm({ action, onCancel, onSuccess }: { action: string; onCancel:
       {action === 'payment_verification' && (
         <>
           <div>
-            <label className="block text-sm text-gray-700">Amount</label>
-            <input required type="number" onChange={e => handleChange('amount', Number(e.target.value))} className="w-full rounded border p-2" />
+            <label className="block text-sm text-gray-700">Select Sales Dates</label>
+            <div className="flex flex-wrap gap-2">
+              <input 
+                type="date" 
+                multiple
+                onChange={async (e) => {
+                  const date = e.target.value;
+                  const salesData = await fetchSalesData(date);
+                  if (salesData.length === 0) {
+                    alert('No sales found for selected date');
+                    return;
+                  }
+                  setFormState(prev => {
+                    const newSalesData = [...(prev.salesData || []), ...salesData];
+                    const newDates = [...(prev.dates || []), date].sort();
+                    return {
+                      ...prev,
+                      dates: newDates,
+                      salesData: newSalesData,
+                      totalAmount: calculateTotalAmount(newSalesData)
+                    };
+                  });
+                }}
+                className="w-full rounded border p-2"
+              />
+              {/* Selected dates */}
+              <div className="w-full flex flex-wrap gap-2 mt-2">
+                {(formState.dates || []).map((date: string, idx: number) => (
+                  <div key={idx} className="flex items-center gap-2 bg-pink-50 px-3 py-1 rounded">
+                    <span>{new Date(date).toLocaleDateString()}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormState(prev => {
+                          const newDates = prev.dates.filter((_: string, i: number) => i !== idx);
+                          const dateToRemove = prev.dates[idx];
+                          const newSalesData = prev.salesData.filter((sale: { date: string }) => sale.date !== dateToRemove);
+                          return {
+                            ...prev,
+                            dates: newDates,
+                            salesData: newSalesData,
+                            totalAmount: calculateTotalAmount(newSalesData)
+                          };
+                        });
+                      }}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
+          {/* Books from selected dates */}
+          {formState.dates?.length > 0 && (
+            <div className="space-y-4">
+              <h4 className="font-medium text-gray-700">Books from Selected Dates</h4>
+              <div className="max-h-60 overflow-y-auto space-y-2">
+                {formState.salesData?.map((sale: any) => (
+                  sale.items.map((item: any, idx: number) => (
+                    <div key={`${sale.date}-${idx}`} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
+                      <div>
+                        <h5 className="font-medium">{item.title}</h5>
+                        <p className="text-sm text-gray-600">
+                          {item.language} - Price: ₹{item.price} × {item.quantity} = ₹{item.price * item.quantity}
+                        </p>
+                        <p className="text-xs text-gray-500">Date: {new Date(sale.date).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  ))
+                ))}
+              </div>
+
+              <div className="bg-pink-50 p-4 rounded-lg">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">Total Amount:</span>
+                  <span className="font-bold text-lg">₹{formState.totalAmount || 0}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Payment Screenshot Upload */}
           <div>
-            <label className="block text-sm text-gray-700">Items (JSON)</label>
-            <textarea onChange={e => {
-              try { handleChange('items', JSON.parse(e.target.value || '[]')); } catch { handleChange('items', []); }
-            }} className="w-full rounded border p-2" rows={3} />
+            <label className="block text-sm text-gray-700 mb-2">Payment Screenshot</label>
+              <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                // Convert to base64
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                  const base64 = reader.result as string;
+                  setFormState(prev => ({
+                    ...prev,
+                    paymentImage: base64
+                  }));
+                };
+              }}
+              className="w-full"
+              required
+            />
+            {formState.paymentImageUrl && (
+              <div className="mt-2">
+                <img src={formState.paymentImageUrl} alt="Payment Screenshot" className="max-h-40 rounded" />
+              </div>
+            )}
+          </div>
+
+          {/* Additional Notes */}
+          <div>
+            <label className="block text-sm text-gray-700">Additional Notes</label>
+            <textarea
+              onChange={e => handleChange('notes', e.target.value)}
+              className="w-full rounded border p-2"
+              rows={2}
+              placeholder="Any additional notes..."
+            />
+          </div>
+
+          {/* Warning Message */}
+          <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg text-sm text-yellow-800">
+            <p className="font-medium">Important Notes:</p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li>This request will be sent for verification. Please be patient.</li>
+              <li>Do not submit multiple requests for the same payment.</li>
+              <li>Multiple submissions may result in rejection of all requests.</li>
+              <li>Make sure the payment screenshot is clear and shows all details.</li>
+            </ul>
           </div>
         </>
       )}

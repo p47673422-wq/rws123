@@ -1,6 +1,19 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import { PaymentStatus_Z } from '@prisma/client';
+
+interface IPaymentRequest {
+  id: string;
+  dates: Date[];
+  items: any[];
+  totalAmount: number;
+  paymentImageUrl?: string;
+  status: PaymentStatus_Z;
+  notes?: string;
+  createdAt: Date;
+  rejectionReason?: string;
+}
 
 export default function MyOrders() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -15,6 +28,12 @@ export default function MyOrders() {
   const [inventories, setInventories] = useState<any[]>([]);
   const [returnCart, setReturnCart] = useState<any[]>([]);
   const [creatingReturn, setCreatingReturn] = useState(false);
+  // New states for payment requests
+  const [paymentRequests, setPaymentRequests] = useState<IPaymentRequest[]>([]);
+  const [loadingPayments, setLoadingPayments] = useState(true);
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const handleUpdateOrder = async (orderId: string, updatedItems: any[]) => {
     try {
@@ -49,7 +68,43 @@ export default function MyOrders() {
         }
       })
       .finally(() => setLoading(false));
+
+    // Fetch payment requests
+    fetch('/api/ram/payments/my-requests')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) {
+          setPaymentRequests(data);
+        }
+      })
+      .finally(() => setLoadingPayments(false));
   }, []);
+
+  // Filter and sort payment requests
+  const filteredAndSortedPayments = React.useMemo(() => {
+    let filtered = [...paymentRequests];
+    
+    // Apply status filter
+    if (filterStatus !== 'all') {
+      filtered = filtered.filter(p => p.status === filterStatus);
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      let aValue = sortBy === 'date' ? new Date(a.createdAt).getTime() :
+                   sortBy === 'amount' ? Number(a.totalAmount) :
+                   a.status;
+      let bValue = sortBy === 'date' ? new Date(b.createdAt).getTime() :
+                   sortBy === 'amount' ? Number(b.totalAmount) :
+                   b.status;
+
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    return filtered;
+  }, [paymentRequests, filterStatus, sortBy, sortOrder]);
 
   // Fetch returns and inventory once we have user
   useEffect(() => {
@@ -344,6 +399,128 @@ export default function MyOrders() {
               {returns.length === 0 && (
                 <div className="text-center py-8 bg-gray-50 rounded-xl">
                   <p className="text-gray-600">No return requests</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Payment Requests Section */}
+        <div className="pt-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-pink-700">Payment Requests</h2>
+            <div className="flex gap-4">
+              <select 
+                value={filterStatus}
+                onChange={e => setFilterStatus(e.target.value)}
+                className="border rounded px-2 py-1"
+              >
+                <option value="all">All Status</option>
+                <option value="PENDING">Pending</option>
+                <option value="VERIFIED">Verified</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="COMPLETED">Completed</option>
+              </select>
+              <select 
+                value={sortBy}
+                onChange={e => setSortBy(e.target.value)}
+                className="border rounded px-2 py-1"
+              >
+                <option value="date">Sort by Date</option>
+                <option value="amount">Sort by Amount</option>
+                <option value="status">Sort by Status</option>
+              </select>
+              <button 
+                onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+                className="border rounded px-3 py-1 flex items-center gap-1"
+              >
+                {sortOrder === 'asc' ? '↑' : '↓'}
+              </button>
+            </div>
+          </div>
+
+          {loadingPayments ? (
+            <div className="text-center py-6">Loading payment requests...</div>
+          ) : (
+            <div className="grid gap-4">
+              {filteredAndSortedPayments.map((req) => (
+                <div key={req.id} className="bg-white rounded-xl shadow p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold">Payment Request #{req.id}</h3>
+                    <span className={`px-2 py-1 rounded-full text-sm ${
+                      req.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                      req.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                      req.status === 'VERIFIED' ? 'bg-blue-100 text-blue-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>{req.status}</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Total Amount:</span>
+                        <span className="text-lg">₹{req.totalAmount}</span>
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        Submitted on: {new Date(req.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+
+                    {/* <div className="space-y-2">
+                      <h4 className="font-medium text-gray-700">Dates Included:</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {req.dates.map((date: string, idx: number) => (
+                          <span key={idx} className="bg-pink-50 px-2 py-1 rounded text-sm">
+                            {new Date(date).toLocaleDateString()}
+                          </span>
+                        ))}
+                      </div>
+                    </div> */}
+
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-gray-700">Books:</h4>
+                      <div className="max-h-40 overflow-y-auto space-y-2">
+                        {req.items.map((item: any, idx: number) => (
+                          <div key={idx} className="flex justify-between text-sm bg-gray-50 p-2 rounded">
+                            <span>{item.title} ({item.language})</span>
+                            <span>Qty: {item.quantity} × ₹{item.price} = ₹{item.quantity * item.price}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {req.paymentImageUrl && (
+                      <div>
+                        <h4 className="font-medium text-gray-700">Payment Screenshot:</h4>
+                        <img 
+                          src={req.paymentImageUrl} 
+                          alt="Payment Screenshot" 
+                          className="mt-2 max-h-40 rounded border cursor-pointer hover:opacity-90"
+                          onClick={() => window.open(req.paymentImageUrl, '_blank')}
+                        />
+                      </div>
+                    )}
+
+                    {req.notes && (
+                      <div className="bg-gray-50 p-3 rounded-lg text-sm">
+                        <h4 className="font-medium text-gray-700">Notes:</h4>
+                        <p className="mt-1 text-gray-600">{req.notes}</p>
+                      </div>
+                    )}
+
+                    {req.status === 'REJECTED' && req.rejectionReason && (
+                      <div className="bg-red-50 p-3 rounded-lg text-sm">
+                        <h4 className="font-medium text-red-800">Rejection Reason:</h4>
+                        <p className="mt-1 text-red-600">{req.rejectionReason}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {paymentRequests.length === 0 && (
+                <div className="text-center py-8 bg-gray-50 rounded-xl">
+                  <p className="text-gray-600">No payment requests found</p>
                 </div>
               )}
             </div>

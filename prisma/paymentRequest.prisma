@@ -1,0 +1,26 @@
+model PaymentRequest_Z {
+  id             String        @id @default(cuid())
+  distributorId  String
+  distributor    User_Z        @relation("payment_requests_by_distributor", fields: [distributorId], references: [id])
+  dates          DateTime[]    // Array of selected dates
+  items          Json          // Book items with quantities
+  totalAmount    Decimal       // Total amount calculated from items
+  paymentImageUrl String?      // URL of payment screenshot from ImageKit
+  status         PaymentStatus_Z @default(PENDING)
+  verifiedById   String?       
+  verifiedAt     DateTime?
+  notes          String?       @db.Text  // Any additional notes
+  createdAt      DateTime      @default(now())
+  payment        Payment_Z?    @relation("request_to_payment", fields: [paymentId], references: [id])
+  paymentId      String?       @unique   // One-to-one relation with Payment_Z
+
+  @@index([distributorId])
+  @@index([verifiedById])
+  @@index([status])
+}
+
+// Need to add this to Payment_Z model
+model Payment_Z {
+  // ... existing fields ...
+  paymentRequest PaymentRequest_Z? @relation("request_to_payment")
+}
