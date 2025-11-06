@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
 
     // Get all users of the same store type
     const usersOfSameType = await prisma.user_Z.findMany({
-      where: { userType: user.userType },
+      where: { storeType: user.storeType },
       select: { id: true },
     });
 

@@ -159,7 +159,7 @@ export default function PaymentsPage() {
     if (groupBy !== 'none') {
       const groups: Record<string, IPaymentRequest[]> = {};
       filtered.forEach(payment => {
-        const key = groupBy === 'status' ? payment.status : payment.user.email;
+        const key = groupBy === 'status' ? payment.status : payment.distributor.email;
         if (!groups[key]) groups[key] = [];
         groups[key].push(payment);
       });
@@ -336,7 +336,7 @@ function PaymentCard({
           </button>
           <div>
             <h3 className="font-semibold">Payment Request #{payment.id}</h3>
-            <p className="text-sm text-gray-600">{payment.user.name} ({payment.user.email})</p>
+            <p className="text-sm text-gray-600">{payment.distributor.name} ({payment.distributor.email})</p>
           </div>
         </div>
         <div className="flex items-center gap-3">

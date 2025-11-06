@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
         data: {
           status: status as PaymentStatus_Z,
           ...(rejectionReason && { rejectionReason }),
-          verifiedBy: user.id,
+          verifiedById: user.id,
           verifiedAt: new Date(),
         },
       });
