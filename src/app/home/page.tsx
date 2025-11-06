@@ -168,24 +168,24 @@ useEffect(() => {
           className="relative z-10 text-center w-full px-4"
         >
           <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg flex items-center justify-center gap-2">
-            🌸 Dāmodara Mālā 🌸
+            🌸 Special Offer on Books 🌸
           </h1>
-          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Kartik Month Special Vrata</p>
-          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Oct 8 – Nov 5</p>
+          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Explore more</p>
+          
           <div className="mb-4">
-            <span className="text-lg font-bold text-pink-600 animate-pulse">Registration closes Oct 8!</span>
+            <span className="text-lg font-bold text-pink-600 animate-pulse">Limited time offer!</span>
           </div>
           {/* <div className="mb-6">
             <CountdownTimer />
           </div> */}
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full mb-2">
-            <a href="https://rzp.io/rzp/c11BnYk" target="_blank" rel="noopener noreferrer">
-              <GlowingButton className="text-lg">Register Now</GlowingButton>
+            <a href="/home/krishnabasket/items">
+              <GlowingButton className="text-lg">Krishna Basket</GlowingButton>
             </a>
-            <Link href="/damodara-mala">
-              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">View Details</button>
-            </Link>
-            <a href="tel:9985181358" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>📩</span> Contact Us: 9985181358</a>
+            <a href="#movie-quiz">
+              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">Narshima Movie Quiz</button>
+            </a>
+            <a href="#quizzes" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>🎯</span> Quiz Corner</a>
           </div>
         </motion.div>
       </section>
@@ -410,6 +410,7 @@ useEffect(() => {
               <Link href="/home/whatsapp">Join WhatsApp</Link>
               <Link href="/home/bhagavad-gita">Courses</Link>
               <Link href="/home/krishnabasket/items">Krishna Basket</Link>
+              <Link href="/auth/ram/dashboard/">Book Marathon</Link>
             </div>
           </div>
           <div className="flex gap-4 items-center mb-4 md:mb-0">
@@ -422,7 +423,7 @@ useEffect(() => {
       </footer>
 
       {/* Mobile fixed Divine Journey Quiz strip */}
-      <div className="fixed bottom-0 left-0 w-full z-50 block md:hidden">
+      {/* <div className="fixed bottom-0 left-0 w-full z-50 block md:hidden">
         <button
           onClick={() => { window.location.href = '/movie-quiz'; }}
           className="w-full py-4 bg-gradient-to-r from-yellow-400 via-amber-300 to-orange-400 text-black font-bold text-lg flex items-center justify-center gap-2 shadow-xl animate-bounce-on-hover border-t border-yellow-300"
@@ -430,7 +431,7 @@ useEffect(() => {
         >
           <span className="text-2xl">🪔</span> Tap to attend Mahavatar Narsimha Quiz
         </button>
-      </div>
-    </div>
+      </div> */}
+    </div> 
   );
 }
