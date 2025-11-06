@@ -13,7 +13,7 @@ interface IPaymentRequest {
   notes?: string;
   createdAt: Date;
   rejectionReason?: string;
-  user: {
+  distributor: {
     id: string;
     email: string;
     name: string;
@@ -134,8 +134,8 @@ export default function PaymentsPage() {
     if (filterEmail) {
       const searchTerm = filterEmail.toLowerCase();
       filtered = filtered.filter(p => 
-        p.user.email.toLowerCase().includes(searchTerm) ||
-        p.user.name.toLowerCase().includes(searchTerm)
+        p.distributor.email.toLowerCase().includes(searchTerm) ||
+        p.distributor.name.toLowerCase().includes(searchTerm)
       );
     }
 
@@ -143,11 +143,11 @@ export default function PaymentsPage() {
     filtered.sort((a, b) => {
       let aValue = sortBy === 'date' ? new Date(a.createdAt).getTime() :
                    sortBy === 'amount' ? Number(a.totalAmount) :
-                   sortBy === 'email' ? a.user.email :
+                   sortBy === 'email' ? a.distributor.email :
                    a.status;
       let bValue = sortBy === 'date' ? new Date(b.createdAt).getTime() :
                    sortBy === 'amount' ? Number(b.totalAmount) :
-                   sortBy === 'email' ? b.user.email :
+                   sortBy === 'email' ? b.distributor.email :
                    b.status;
 
       if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
