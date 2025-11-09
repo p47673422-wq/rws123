@@ -18,6 +18,7 @@ const bgImages = [
 
 import { FaGlobe } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import PWARegister from '../components/PWARegister';
 
 
 function GoogleTranslate() {
@@ -153,6 +154,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, []);
   return (
     <>
+      <PWARegister />
       <GoogleTranslate />
       <div className="w-full min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
         {/* Sliding background image */}

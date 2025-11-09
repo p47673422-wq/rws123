@@ -470,6 +470,16 @@ model Notification_Z {
   @@index([userId])
 }
 
+model PushSubscription {
+  id         String   @id @default(cuid())
+  userId     String?  // optional, associate when known
+  endpoint   String   @unique
+  keys       Json
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+}
+
 // --- Additional operational models (suffix _Z) ---
 
 enum NoteType_ZEnum {

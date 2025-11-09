@@ -32,11 +32,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#f472b6" />
+        <link rel="apple-touch-icon" href="/icon4.png" />
+      </head>
       <body className={inter.className} style={{ margin: 0, padding: 0 }}>
         <AppShell>{children}</AppShell>
         <Analytics />
-<SpeedInsights />
-
+        <SpeedInsights />
       </body>
     </html>
   );
