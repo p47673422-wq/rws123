@@ -47,6 +47,17 @@ Build-time SW versioning:
 Broadcast sending:
 - `POST /api/push/send` without a `subscription` will broadcast to all saved subscriptions in the DB.
 
+Send a "Thanks for installing" broadcast (local):
+
+1. Ensure your app is running locally (or set BASE_URL to your deployed URL).
+2. Run the helper script:
+
+```powershell
+BASE_URL=http://localhost:3000 node ./scripts/send-thanks.js
+```
+
+This will POST to `/api/push/send` with a small payload and the server will broadcast to all saved subscriptions. The route removes invalid subscriptions automatically.
+
 Notes:
 - For production-grade caching and automatic update-on-deploy, consider using `next-pwa` or Workbox.
 - Browser push requires HTTPS in production.

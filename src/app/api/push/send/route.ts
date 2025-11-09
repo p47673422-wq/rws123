@@ -11,7 +11,12 @@ export async function POST(req: NextRequest) {
 
     const publicKey = process.env.VAPID_PUBLIC_KEY;
     const privateKey = process.env.VAPID_PRIVATE_KEY;
-    const subject = process.env.VAPID_CONTACT || 'mailto:admin@example.com';
+    // Normalize VAPID contact/subject. It must be a mailto: or a URL.
+    let subject = process.env.VAPID_CONTACT || 'mailto:admin@example.com';
+    if (subject && !subject.includes(':')) {
+      // if user provided just an email like `me@domain.com`, convert to mailto:
+      subject = `mailto:${subject}`;
+    }
 
     if (!publicKey || !privateKey) {
       return NextResponse.json({ error: 'VAPID keys not configured' }, { status: 500 });
@@ -36,6 +41,17 @@ export async function POST(req: NextRequest) {
         results.push({ endpoint: s.endpoint, ok: true });
       } catch (e: any) {
         console.warn('Failed to send to', s.endpoint, e?.message || e);
+        // Remove subscription if it's gone or invalid
+        const statusCode = e?.statusCode || e?.status || null;
+        if (statusCode === 410 || statusCode === 404) {
+          try {
+            await (prisma as any).pushSubscription.delete({ where: { endpoint: s.endpoint } });
+            results.push({ endpoint: s.endpoint, ok: false, removed: true });
+            continue;
+          } catch (removeErr) {
+            console.warn('Failed to remove subscription', s.endpoint, removeErr);
+          }
+        }
         results.push({ endpoint: s.endpoint, ok: false, error: e?.message || String(e) });
       }
     }
