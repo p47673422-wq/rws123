@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mykrishna-cache-1762660465781';
+const CACHE_NAME = 'mykrishna-cache-1763078286950';
 const PRECACHE_URLS = [
   '/',
   '/favicon.ico',

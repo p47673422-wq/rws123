@@ -34,9 +34,9 @@ export async function POST(req: NextRequest) {
     if (!cap[0]) return NextResponse.json({ error: 'invalid_captain' }, { status: 400 });
   }
 
-    // check existing
-    const exists: any[] = await prisma.$queryRaw`SELECT id FROM "User_Z" WHERE email = ${email} LIMIT 1`;
-    if (exists[0]) return NextResponse.json({ error: 'already_registered' }, { status: 409 });
+    // check if email already exists
+    const existsByEmail: any[] = await prisma.$queryRaw`SELECT id FROM "User_Z" WHERE email = ${email} LIMIT 1`;
+    if (existsByEmail[0]) return NextResponse.json({ error: 'already_registered' }, { status: 409 });
 
     // if distributor ensure captain exists
     if (userType === 'DISTRIBUTOR' && !captainId) return NextResponse.json({ error: 'captain_required' }, { status: 400 });
@@ -44,7 +44,38 @@ export async function POST(req: NextRequest) {
     // hash password
     const hash = await bcrypt.hash(password, 10);
 
-    // Create user. If registering a CAPTAIN, also create a Captain_Z entry
+    // check if phone already exists (partial user created by store owner)
+    let existingPartialUser: any = null;
+    if (phone) {
+      const normalizedPhone = phone.replace(/\D/g, '');
+      const partialUsers: any[] = await prisma.$queryRaw`SELECT * FROM "User_Z" WHERE phone = ${normalizedPhone} LIMIT 1`;
+      existingPartialUser = partialUsers[0];
+    }
+
+    // If partial user exists, update their record (complete registration)
+    if (existingPartialUser) {
+      // Update partial user with email, password, and security questions
+      // BUT preserve their storeType (set by store owner when creating partial user)
+      await prisma.user_Z.update({
+        where: { id: existingPartialUser.id },
+        data: {
+          email: email,
+          password_hash: hash,
+          name: name || existingPartialUser.name, // use provided name or keep existing
+          userType: userType || existingPartialUser.userType, // use provided userType or keep existing
+          // DO NOT change storeType - keep the one set by store owner
+          securityQuestion1: securityQuestion1 || null,
+          securityAnswer1: securityAnswer1 || null,
+          securityQuestion2: securityQuestion2 || null,
+          securityAnswer2: securityAnswer2 || null,
+          isFirstLogin: false, // mark as no longer first login
+        },
+      });
+
+      return NextResponse.json({ success: true, message: 'Partial user completed successfully' });
+    }
+
+    // Create new user. If registering a CAPTAIN, also create a Captain_Z entry
     // and set the user's captainId to the captain record id (we use the same id
     // so the captain record maps to the user). Do this in a transaction.
     if (userType === 'CAPTAIN') {

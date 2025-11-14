@@ -15,7 +15,7 @@ const MENU_CONFIG = {
     { icon: FaBox, label: 'Orders & Returns', href: '/auth/ram/orders' },
     { icon: FaClipboardCheck, label: 'Payment Verification', href: '/auth/ram/dashboard/payments' },
     { icon: FaWarehouse, label: 'Book & Inventory', href: '/auth/ram/dashboard/inventory' },
-    { icon: FaUsers, label: 'Distributor Management', href: '/auth/ram/dashboard/distributors' },
+    { icon: FaUsers, label: 'Distributor Management', href: '/dashboard/store/team' },
     { icon: FaTrophy, label: 'Leaderboard', href: '/auth/ram/dashboard/leaderboard' }
   ],
   VEC_STORE_OWNER: [
@@ -23,7 +23,7 @@ const MENU_CONFIG = {
     { icon: FaBox, label: 'Orders & Returns', href: '/auth/ram/orders' },
     { icon: FaClipboardCheck, label: 'Payment Verification', href: '/auth/ram/dashboard/payments' },
     { icon: FaWarehouse, label: 'Book & Inventory', href: '/auth/ram/dashboard/inventory' },
-    { icon: FaUsers, label: 'Distributor Management', href: '/auth/ram/dashboard/distributors' },
+    { icon: FaUsers, label: 'Distributor Management', href: '/dashboard/store/team' },
     { icon: FaTrophy, label: 'Leaderboard', href: '/auth/ram/dashboard/leaderboard' }
   ],
   DISTRIBUTOR: [

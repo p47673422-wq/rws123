@@ -33,6 +33,9 @@ export async function POST(req: NextRequest) {
   }
 
   // normal password check
+  // If password_hash is null (partial user), treat as invalid credentials
+  if (!user.password_hash) return NextResponse.json({ error: 'invalid_credentials' }, { status: 401 });
+  
   const ok = await bcrypt.compare(password, user.password_hash);
   if (!ok) return NextResponse.json({ error: 'invalid_credentials' }, { status: 401 });
 

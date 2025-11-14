@@ -291,10 +291,10 @@ enum StoreType_ZEnum {
 
 model User_Z {
   id                 String           @id @default(cuid())
-  email              String           @unique
-  password_hash      String
+  email              String?          // Made nullable for partial users created by store owners
+  password_hash      String?          // Made nullable for partial users - will be set during registration
   name               String
-  phone              String
+  phone              String           @unique // Phone is now the primary lookup identifier
   userType           UserType_ZEnum
   storeType          StoreType_ZEnum? 
   captainId          String?          
@@ -325,7 +325,7 @@ model User_Z {
   sales              Sale_Z[]         @relation("sales_by_distributor")
   dailySales  DailySales_Z[] @relation("daily_sales_by_distributor")
 
-  @@index([phone])
+  @@index([email])
 }
 
 model Captain_Z {
