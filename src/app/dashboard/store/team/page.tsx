@@ -661,8 +661,8 @@ export default function TeamPage() {
                               <button
                                 onClick={() => {
                                   // prepare print bill from server order
-                                  const items = (o.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: it.price || 0 }));
-                                  const total = items.reduce((s: number, it: any) => s + (it.price * it.quantity), 0);
+                                  const items = (o.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: Number(it.price) || 0 }));
+                                  const total = items.reduce((s: number, it: any) => s + (Number(it.price) * Number(it.quantity)), 0);
                                   setCreatedBill({ id: o.id, items, totalAmount: total, timestamp: o.createdAt });
                                   setBillType('order');
                                 }}
@@ -699,11 +699,12 @@ export default function TeamPage() {
                               </div>
                             </div>
                             <div className="flex flex-col items-end gap-2">
-                              <div className="font-medium">₹{p.totalAmount?.toFixed?.(2) ?? p.totalAmount}</div>
+                              <div className="font-medium">₹{(Number(p.totalAmount) || 0).toFixed(2)}</div>
                               <button
                                 onClick={() => {
-                                  const items = (p.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: it.price || 0 }));
-                                  setCreatedBill({ id: p.id, items, totalAmount: p.totalAmount || items.reduce((s: number, it: any) => s + (it.price * it.quantity), 0), timestamp: p.createdAt });
+                                  const items = (p.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: Number(it.price) || 0 }));
+                                  const computedTotal = items.reduce((s: number, it: any) => s + (Number(it.price) * Number(it.quantity)), 0);
+                                  setCreatedBill({ id: p.id, items, totalAmount: Number(p.totalAmount) || computedTotal, timestamp: p.createdAt });
                                   setBillType('payment');
                                 }}
                                 className="px-3 py-1 bg-blue-600 text-white rounded text-sm"
@@ -742,8 +743,8 @@ export default function TeamPage() {
                             <div className="flex flex-col items-end gap-2">
                               <button
                                 onClick={() => {
-                                  const items = (r.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: it.price || 0 }));
-                                  const total = items.reduce((s: number, it: any) => s + (it.price * it.quantity), 0);
+                                  const items = (r.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: Number(it.price) || 0 }));
+                                  const total = items.reduce((s: number, it: any) => s + (Number(it.price) * Number(it.quantity)), 0);
                                   setCreatedBill({ id: r.id, items, totalAmount: total, timestamp: r.createdAt });
                                   setBillType('return');
                                 }}
@@ -1005,9 +1006,9 @@ export default function TeamPage() {
                             <div className="font-medium text-gray-900">{item.bookName}</div>
                             <div className="text-xs text-gray-600">{item.language}</div>
                           </td>
-                          <td className="py-2 text-center">{item.quantity}</td>
-                          <td className="py-2 text-right">₹{item.price.toFixed(2)}</td>
-                          <td className="py-2 text-right font-medium">₹{(item.price * item.quantity).toFixed(2)}</td>
+                              <td className="py-2 text-center">{item.quantity}</td>
+                              <td className="py-2 text-right">₹{(Number(item.price) || 0).toFixed(2)}</td>
+                              <td className="py-2 text-right font-medium">₹{(Number(item.price) * Number(item.quantity)).toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1018,7 +1019,7 @@ export default function TeamPage() {
                 <div className="border-t pt-4 flex justify-end">
                   <div className="text-right">
                     <div className="text-gray-600 text-sm mb-2">Grand Total</div>
-                    <div className="text-2xl font-bold text-pink-600">₹{createdBill.totalAmount?.toFixed(2) || '0.00'}</div>
+                    <div className="text-2xl font-bold text-pink-600">₹{(Number(createdBill.totalAmount) || 0).toFixed(2)}</div>
                   </div>
                 </div>
 

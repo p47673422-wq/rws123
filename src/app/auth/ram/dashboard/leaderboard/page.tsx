@@ -155,14 +155,14 @@ export default function LeaderboardPage() {
         {/* Leaderboard Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[640px]">
               <thead className="bg-pink-100 sticky top-0">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-pink-900 w-12">Rank</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-pink-900">Distributor Name</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-pink-900">Phone</th>
-                  <th className="px-6 py-4 text-right text-sm font-semibold text-pink-900">Points (Total Amount)</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-pink-900 w-12">Details</th>
+                  <th className="px-3 py-3 md:px-6 md:py-4 text-left text-sm font-semibold text-pink-900 w-12">Rank</th>
+                  <th className="px-3 py-3 md:px-6 md:py-4 text-left text-sm font-semibold text-pink-900">Distributor Name</th>
+                  <th className="px-3 py-3 md:px-6 md:py-4 text-left text-sm font-semibold text-pink-900">Phone</th>
+                  <th className="px-3 py-3 md:px-6 md:py-4 text-right text-sm font-semibold text-pink-900">Points (Total Amount)</th>
+                  <th className="px-3 py-3 md:px-6 md:py-4 text-center text-sm font-semibold text-pink-900 w-12">Details</th>
                 </tr>
               </thead>
               <tbody>
@@ -174,13 +174,13 @@ export default function LeaderboardPage() {
                     transition={{ delay: index * 0.05 }}
                     className="border-b hover:bg-yellow-50 transition-colors"
                   >
-                    <td className="px-6 py-4 text-sm font-semibold text-pink-700">#{index + 1}</td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{item.distributor.name}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{item.distributor.phone}</td>
-                    <td className="px-6 py-4 text-sm font-bold text-pink-700 text-right">
+                    <td className="px-3 py-3 md:px-6 md:py-4 text-sm font-semibold text-pink-700">#{index + 1}</td>
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-sm font-medium text-gray-900">{item.distributor.name}</td>
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-sm text-gray-600">{item.distributor.phone}</td>
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-sm font-bold text-pink-700 text-right">
                       {formatAmount(item.totalScore)}
                     </td>
-                    <td className="px-6 py-4 text-center">
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-center">
                       <button
                         onClick={() => setExpandedId(expandedId === item.distributor.id ? null : item.distributor.id)}
                         className="p-1 hover:bg-yellow-100 rounded transition-colors"
@@ -208,7 +208,7 @@ export default function LeaderboardPage() {
                   if (!expanded) return null;
                   
                   return (
-                    <div className="px-6 py-4 max-w-4xl">
+                    <div className="px-3 py-4 md:px-6 max-w-4xl">
                       <h3 className="text-lg font-semibold text-pink-700 mb-4">
                         {expanded.distributor.name} - Category Breakdown
                       </h3>
@@ -222,7 +222,7 @@ export default function LeaderboardPage() {
                               </span>
                             </div>
                             <div className="overflow-x-auto">
-                              <table className="w-full text-xs">
+                              <table className="w-full text-xs min-w-[520px]">
                                 <thead className="bg-gray-50">
                                   <tr>
                                     <th className="px-3 py-2 text-left text-gray-600">Book Title</th>

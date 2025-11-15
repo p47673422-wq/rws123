@@ -16,7 +16,7 @@ export default function GitaJayanti2025() {
         {/* Hero */}
         <section className="relative w-full h-[420px] flex items-center justify-center">
           <Image
-            src="/hero-krishna.jpg"
+            src="/images/arjuna-krishna-chariot.jpg"
             alt="Gita Jayanti Banner"
             fill
             className="object-cover brightness-75"
@@ -26,8 +26,8 @@ export default function GitaJayanti2025() {
             <h1 className="text-4xl font-bold text-yellow-300 drop-shadow-md">
               Gita Jayanti Meditations – 2025
             </h1>
-            <p className="text-lg mt-2 text-white">Dec 1 – Dec 31</p>
-            <p className="text-white mt-3 italic">
+            <p className="text-lg mt-2 text-red-600">Dec 1 – Dec 31</p>
+            <p className="text-red-600 mt-3 italic">
               A sacred month of Gita wisdom, Krishna stories & daily meditation.
             </p>
 
@@ -39,7 +39,7 @@ export default function GitaJayanti2025() {
               Register Now ✨
             </Link>
 
-            <p className="text-white text-sm mt-2 animate-bounce">
+            <p className="text-red-600 text-sm mt-2 animate-bounce">
               Only ₹300 • Limited seats ⏳
             </p>
           </div>
@@ -107,7 +107,7 @@ export default function GitaJayanti2025() {
           <Link
             target="_blank"
             href="https://pages.razorpay.com/pl_RerUM7s5oEyv5V/view"
-            className="mt-4 inline-block bg-blue-600 text-white px-8 py-3 rounded-full shadow-lg hover:scale-105 transition"
+            className="mt-4 inline-block bg-blue-600 text-red-600 px-8 py-3 rounded-full shadow-lg hover:scale-105 transition"
           >
             Register & Participate 🏆
           </Link>
@@ -126,35 +126,6 @@ export default function GitaJayanti2025() {
               One FREE book (Bhagavad Gita or Krishna Book) + Surprise Gifts 🎁
             </p>
           </div>
-
-          <p className="text-xs mt-2 italic">This small fee supports spiritual education 🙏</p>
-        </section>
-
-        {/* Resources PDF */}
-        <section className="py-14 text-center bg-[#FEF3CD]">
-          <h2 className="text-xl font-bold mb-6">📄 Guide & Schedule PDF</h2>
-
-          <div className="flex flex-col items-center gap-4">
-            <Link
-              href="/MASUCHA_20251114_224227_0000.pdf"
-              download
-              className="bg-white px-6 py-3 rounded-lg font-semibold shadow hover:scale-105 transition"
-            >
-              Download PDF 📥
-            </Link>
-
-            <Image
-              src="/pdf-preview.jpg"
-              width={230}
-              height={300}
-              alt="PDF Preview"
-              className="rounded-xl shadow-lg border"
-            />
-          </div>
-
-          <p className="text-sm mt-4 font-semibold text-red-700">
-            Register today to receive your welcome kit! 🌼
-          </p>
         </section>
 
         {/* Footer */}
