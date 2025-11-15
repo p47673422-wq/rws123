@@ -406,7 +406,10 @@ export default function TeamPage() {
       let endpoint = '';
       let payload: any = {
         distributorId: searchedUser.id,
-        items: formItems.map(it => ({ bookId: it.bookId, quantity: it.quantity, price: it.price }))
+        items: formItems.map(it => {
+          const fallbackPrice = Number(books.find(b => b.id === it.bookId)?.price) || 0;
+          return { bookId: it.bookId, quantity: it.quantity, price: (it.price !== undefined && it.price !== null) ? Number(it.price) : fallbackPrice };
+        })
       };
 
       if (activeForm === 'order') {
@@ -433,13 +436,31 @@ export default function TeamPage() {
         alert(data.error);
       } else {
         // Show print bill modal
+        // Ensure createdBill items include numeric price fallback
+        const billItems = formItems.map(it => ({
+          ...it,
+          price: (it.price !== undefined && it.price !== null) ? Number(it.price) : (Number(books.find(b => b.id === it.bookId)?.price) || 0),
+          quantity: it.quantity ?? 0
+        }));
+
         setCreatedBill({
           id: data.id,
-          items: formItems,
-          totalAmount: calculateTotal(),
+          items: billItems,
+          totalAmount: billItems.reduce((s: number, it: any) => s + (Number(it.price) * (Number(it.quantity) || 0)), 0),
           timestamp: new Date()
         });
         setBillType(activeForm);
+        // refresh distributor data so UI reflects new order/payment/return
+        try {
+          const phone = String(searchedUser.phone || '').replace(/\D/g, '');
+          if (phone) {
+            const refreshed = await fetch(`/api/ram/team-members/details?phone=${phone}`);
+            const refreshedData = await refreshed.json();
+            if (!refreshedData?.error) setSearchedUser(refreshedData);
+          }
+        } catch (err) {
+          console.warn('Failed to refresh distributor after submit', err);
+        }
       }
     } catch (err) {
       console.error('Form submission failed:', err);
@@ -451,6 +472,20 @@ export default function TeamPage() {
 
   // Close modal and reset
   const closeModal = () => {
+    // refresh distributor data when closing modal to reflect possible changes
+    (async () => {
+      try {
+        const phone = String(searchedUser?.phone || '').replace(/\D/g, '');
+        if (phone) {
+          const refreshed = await fetch(`/api/ram/team-members/details?phone=${phone}`);
+          const refreshedData = await refreshed.json();
+          if (!refreshedData?.error) setSearchedUser(refreshedData);
+        }
+      } catch (err) {
+        // ignore refresh errors on close
+      }
+    })();
+
     setActiveForm(null);
     setFormItems([]);
     setPaymentAmount('');
@@ -826,7 +861,7 @@ export default function TeamPage() {
                                 ))}
                               </div>
                             </div>
-                            <div className="flex flex-col items-end gap-2">
+                            {/* <div className="flex flex-col items-end gap-2">
                               <button
                                 onClick={() => {
                                   const items = (r.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: Number(it.price) || 0 }));
@@ -838,7 +873,7 @@ export default function TeamPage() {
                               >
                                 Print
                               </button>
-                            </div>
+                            </div> */}
                           </div>
                         ))}
                       </div>
@@ -929,7 +964,7 @@ export default function TeamPage() {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
                     />
                     {/* Visible list of available books for this form */}
-                    {(activeForm === 'payment' || activeForm === 'return' || activeForm === 'order') && books.length > 0 && (
+                    {(activeForm === 'payment' || activeForm === 'return') && books.length > 0 && (
                       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                         {books.map((b) => (
                           <div key={b.id} className="flex items-center justify-between p-2 border rounded bg-white">
