@@ -42,7 +42,7 @@ interface FormItem {
   bookId: string;
   bookName: string;
   language: string;
-  quantity: number;
+  quantity?: number;
   price: number;
 }
 
@@ -78,6 +78,7 @@ export default function TeamPage() {
   const [createdBill, setCreatedBill] = useState<any>(null);
   const [billType, setBillType] = useState<FormType>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [inlineErrors, setInlineErrors] = useState<Record<number, string>>({});
 
   // Auth check
   useEffect(() => {
@@ -148,8 +149,17 @@ export default function TeamPage() {
       (searchedUser.orders || []).forEach((o: any) => {
         (o.items || []).forEach((it: any) => {
           const key = `${it.bookId}`;
-          if (!orderMap[key]) orderMap[key] = { id: it.bookId, name: it.title || it.bookName || '', language: it.language || '', qty: 0, price: it.price ?? 0 };
+          if (!orderMap[key]) orderMap[key] = { id: it.bookId, name: it.title || it.bookName || '', language: it.language || '', qty: 0, price: Number(it.price) || 0 };
           orderMap[key].qty += Number(it.quantity) || 0;
+        });
+      });
+
+      // subtract already returned quantities
+      (searchedUser.returns || []).forEach((r: any) => {
+        (r.items || []).forEach((it: any) => {
+          const key = `${it.bookId}`;
+          if (!orderMap[key]) return;
+          orderMap[key].qty -= Number(it.quantity) || 0;
         });
       });
 
@@ -276,7 +286,7 @@ export default function TeamPage() {
     if (!book) return;
     const available = (book as any).available ?? Infinity;
     // if there is an available constraint, ensure we don't add more than available
-    const alreadySelected = formItems.reduce((s, it) => it.bookId === bookId ? s + it.quantity : s, 0);
+    const alreadySelected = formItems.reduce((s, it) => it.bookId === bookId ? s + (Number(it.quantity) || 0) : s, 0);
     if (alreadySelected >= available) {
       alert('No more available quantity for this book');
       return;
@@ -286,10 +296,27 @@ export default function TeamPage() {
       bookId: book.id,
       bookName: book.name,
       language: book.language,
-      quantity: 1,
-      price: book.price
+      // quantity left empty for user to enter
+      price: Number((book as any).price) || 0
     }]);
     setBookSearchTerm('');
+  };
+
+  // helper to get base available for a book id from `books`
+  const getBaseAvailable = (bookId: string) => {
+    const b = books.find(bb => bb.id === bookId) as any;
+    if (!b) return Infinity;
+    return Number(b.available) || 0;
+  };
+
+  // helper to compute remaining available considering items already in form (excluding current index)
+  const getAvailableRemaining = (bookId: string, excludeIndex?: number) => {
+    const base = getBaseAvailable(bookId);
+    const selected = formItems.reduce((s, it, i) => {
+      if (excludeIndex !== undefined && i === excludeIndex) return s;
+      return it.bookId === bookId ? s + (Number(it.quantity) || 0) : s;
+    }, 0);
+    return Math.max(0, base - selected);
   };
 
   // Remove item from form
@@ -299,7 +326,7 @@ export default function TeamPage() {
 
   // Calculate total
   const calculateTotal = () => {
-    return formItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return formItems.reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.quantity) || 0)), 0);
   };
 
   // Handle form submission (Create Order / Return / Payment)
@@ -312,6 +339,65 @@ export default function TeamPage() {
 
     if (activeForm === 'payment' && !paymentAmount) {
       alert('Please enter payment amount');
+      return;
+    }
+
+    // helper to compute available quantities (preorders - returns - payments) per book
+    const getAvailableMap = (): Map<string, number> => {
+      const map = new Map<string, number>();
+      if (!searchedUser) return map;
+      // sum preorders
+      (searchedUser.orders || []).forEach((o: any) => {
+        (o.items || []).forEach((it: any) => {
+          const id = String(it.bookId);
+          map.set(id, (map.get(id) || 0) + (Number(it.quantity) || 0));
+        });
+      });
+      // subtract returns
+      (searchedUser.returns || []).forEach((r: any) => {
+        (r.items || []).forEach((it: any) => {
+          const id = String(it.bookId);
+          map.set(id, (map.get(id) || 0) - (Number(it.quantity) || 0));
+        });
+      });
+      // subtract payments
+      (searchedUser.payments || []).forEach((p: any) => {
+        (p.items || []).forEach((it: any) => {
+          const id = String(it.bookId);
+          map.set(id, (map.get(id) || 0) - (Number(it.quantity) || 0));
+        });
+      });
+      return map;
+    };
+
+    // Validate quantities entered and availability
+    const availableMap = getAvailableMap();
+    for (const it of formItems) {
+      const qty = Number(it.quantity) || 0;
+      if (qty <= 0) {
+        alert('Please enter quantity for all items');
+        return;
+      }
+      const avail = availableMap.get(it.bookId) || 0;
+      if (qty > avail) {
+        alert(`Quantity for ${it.bookName} exceeds available (${avail}).`);
+        return;
+      }
+    }
+
+    // For payments, ensure paymentAmount matches computed total
+    const itemsTotal = calculateTotal();
+    if (activeForm === 'payment') {
+      const paid = Number(paymentAmount) || 0;
+      if (Math.abs(itemsTotal - paid) > 0.009) {
+        alert('Payment amount must match sum of item prices × quantities');
+        return;
+      }
+    }
+
+    // final guard: ensure no inline errors before submit
+    if (Object.values(inlineErrors).some(v => v)) {
+      alert('Please fix quantity errors before submitting');
       return;
     }
 
@@ -653,7 +739,7 @@ export default function TeamPage() {
                               <div className="font-medium text-gray-900">Order #{o.id} • {o.status}</div>
                               <div className="text-sm text-gray-700 mt-2">
                                 {o.items?.map((it: any, idx: number) => (
-                                  <div key={idx} className="text-sm text-gray-600">{it.title || it.bookName} ({it.language}) — x{it.quantity}</div>
+                                  <div key={idx} className="text-sm text-gray-600">{it.title || it.bookName} ({it.language}) — x{it.quantity ?? 0}</div>
                                 ))}
                               </div>
                             </div>
@@ -662,7 +748,7 @@ export default function TeamPage() {
                                 onClick={() => {
                                   // prepare print bill from server order
                                   const items = (o.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: Number(it.price) || 0 }));
-                                  const total = items.reduce((s: number, it: any) => s + (Number(it.price) * Number(it.quantity)), 0);
+                                  const total = items.reduce((s: number, it: any) => s + (Number(it.price) * (Number(it.quantity) || 0)), 0);
                                   setCreatedBill({ id: o.id, items, totalAmount: total, timestamp: o.createdAt });
                                   setBillType('order');
                                 }}
@@ -694,7 +780,7 @@ export default function TeamPage() {
                               <div className="font-medium text-gray-900">Payment #{p.id} • {p.status}</div>
                               <div className="text-sm text-gray-700 mt-2">
                                 {p.items?.map((it: any, idx: number) => (
-                                  <div key={idx} className="text-sm text-gray-600">{it.title || it.bookName} ({it.language}) — x{it.quantity}</div>
+                                  <div key={idx} className="text-sm text-gray-600">{it.title || it.bookName} ({it.language}) — x{it.quantity ?? 0}</div>
                                 ))}
                               </div>
                             </div>
@@ -703,7 +789,7 @@ export default function TeamPage() {
                               <button
                                 onClick={() => {
                                   const items = (p.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: Number(it.price) || 0 }));
-                                  const computedTotal = items.reduce((s: number, it: any) => s + (Number(it.price) * Number(it.quantity)), 0);
+                                  const computedTotal = items.reduce((s: number, it: any) => s + (Number(it.price) * (Number(it.quantity) || 0)), 0);
                                   setCreatedBill({ id: p.id, items, totalAmount: Number(p.totalAmount) || computedTotal, timestamp: p.createdAt });
                                   setBillType('payment');
                                 }}
@@ -736,7 +822,7 @@ export default function TeamPage() {
                               {r.reason && <div className="text-sm text-gray-600 mt-1">Reason: {r.reason}</div>}
                               <div className="text-sm text-gray-700 mt-2">
                                 {r.items?.map((it: any, idx: number) => (
-                                  <div key={idx} className="text-sm text-gray-600">{it.title || it.bookName} ({it.language}) — x{it.quantity}</div>
+                                  <div key={idx} className="text-sm text-gray-600">{it.title || it.bookName} ({it.language}) — x{it.quantity ?? 0}</div>
                                 ))}
                               </div>
                             </div>
@@ -744,7 +830,7 @@ export default function TeamPage() {
                               <button
                                 onClick={() => {
                                   const items = (r.items || []).map((it: any) => ({ bookId: it.bookId, bookName: it.title || it.bookName || '', language: it.language, quantity: it.quantity, price: Number(it.price) || 0 }));
-                                  const total = items.reduce((s: number, it: any) => s + (Number(it.price) * Number(it.quantity)), 0);
+                                  const total = items.reduce((s: number, it: any) => s + (Number(it.price) * (Number(it.quantity) || 0)), 0);
                                   setCreatedBill({ id: r.id, items, totalAmount: total, timestamp: r.createdAt });
                                   setBillType('return');
                                 }}
@@ -842,6 +928,29 @@ export default function TeamPage() {
                       onChange={(e) => setBookSearchTerm(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
                     />
+                    {/* Visible list of available books for this form */}
+                    {(activeForm === 'payment' || activeForm === 'return' || activeForm === 'order') && books.length > 0 && (
+                      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                        {books.map((b) => (
+                          <div key={b.id} className="flex items-center justify-between p-2 border rounded bg-white">
+                            <div>
+                              <div className="font-medium text-sm">{b.name}</div>
+                              <div className="text-xs text-gray-500">{b.language} • ₹{b.price}</div>
+                              <div className="text-xs text-gray-600">Available: {Number((b as any).available) || 0}</div>
+                            </div>
+                            <div className="flex flex-col items-end">
+                              <button
+                                type="button"
+                                onClick={() => handleAddItem(b.id)}
+                                className="px-3 py-1 bg-pink-600 text-white rounded text-sm"
+                              >
+                                Add
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     {bookSearchTerm && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto z-10">
                         {books
@@ -882,18 +991,32 @@ export default function TeamPage() {
                             <input
                               type="number"
                               min="1"
-                              value={item.quantity}
+                              value={item.quantity ?? ''}
                               onChange={(e) => {
-                                const newQty = Math.max(1, parseInt(e.target.value) || 1);
-                                setFormItems(prev =>
-                                  prev.map((p, i) => i === idx ? { ...p, quantity: newQty } : p)
-                                );
+                                const val = e.target.value;
+                                if (val === '') {
+                                  setFormItems(prev => prev.map((p, i) => i === idx ? { ...p, quantity: undefined } : p));
+                                  setInlineErrors(prev => ({ ...prev, [idx]: '' }));
+                                  return;
+                                }
+                                let newQty = Math.max(1, parseInt(val) || 1);
+                                const availableRem = getAvailableRemaining(item.bookId, idx);
+                                if (newQty > availableRem) {
+                                  newQty = availableRem;
+                                  setInlineErrors(prev => ({ ...prev, [idx]: `Max available ${availableRem}` }));
+                                } else {
+                                  setInlineErrors(prev => ({ ...prev, [idx]: '' }));
+                                }
+                                setFormItems(prev => prev.map((p, i) => i === idx ? { ...p, quantity: newQty } : p));
                               }}
-                              className="w-16 px-2 py-1 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-pink-500"
+                              className="w-20 px-2 py-1 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-pink-500"
                             />
                             <span className="text-sm font-medium min-w-[60px] text-right">
-                              ₹{(item.price * item.quantity).toFixed(2)}
+                              ₹{(Number(item.price) * (Number(item.quantity) || 0)).toFixed(2)}
                             </span>
+                            {inlineErrors[idx] && (
+                              <div className="text-xs text-red-600 mt-1">{inlineErrors[idx]}</div>
+                            )}
                             <button
                               type="button"
                               onClick={() => handleRemoveItem(idx)}
@@ -913,8 +1036,13 @@ export default function TeamPage() {
                   <div className="bg-pink-50 p-4 rounded-lg border border-pink-200">
                     <div className="flex justify-between items-center">
                       <span className="font-medium text-gray-700">Subtotal</span>
-                      <span className="text-lg font-bold text-pink-600">₹{calculateTotal().toFixed(2)}</span>
+                          <span className="text-lg font-bold text-pink-600">₹{calculateTotal().toFixed(2)}</span>
                     </div>
+                    {activeForm === 'payment' && (
+                      <div className="text-sm text-red-600 mt-2">
+                        {Math.abs((Number(paymentAmount) || 0) - calculateTotal()) > 0.009 ? 'Payment amount does not match items total' : ''}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -929,7 +1057,7 @@ export default function TeamPage() {
                 </button>
                 <button
                   onClick={handleFormSubmit}
-                  disabled={isSubmitting || !formItems.length}
+                  disabled={isSubmitting || !formItems.length || (activeForm === 'payment' && Math.abs((Number(paymentAmount) || 0) - calculateTotal()) > 0.009) || Object.values(inlineErrors).some(v => v)}
                   className="px-6 py-2 bg-pink-600 hover:bg-pink-700 disabled:opacity-50 text-white rounded-lg font-medium transition flex items-center gap-2"
                 >
                   {isSubmitting ? 'Processing...' : activeForm === 'payment' ? 'Record Payment' : activeForm === 'order' ? 'Create Order' : 'Create Return'}
@@ -1006,9 +1134,9 @@ export default function TeamPage() {
                             <div className="font-medium text-gray-900">{item.bookName}</div>
                             <div className="text-xs text-gray-600">{item.language}</div>
                           </td>
-                              <td className="py-2 text-center">{item.quantity}</td>
-                              <td className="py-2 text-right">₹{(Number(item.price) || 0).toFixed(2)}</td>
-                              <td className="py-2 text-right font-medium">₹{(Number(item.price) * Number(item.quantity)).toFixed(2)}</td>
+                                <td className="py-2 text-center">{item.quantity ?? 0}</td>
+                                  <td className="py-2 text-right">₹{(Number(item.price) || 0).toFixed(2)}</td>
+                                  <td className="py-2 text-right font-medium">₹{(Number(item.price) * (Number(item.quantity) || 0)).toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>

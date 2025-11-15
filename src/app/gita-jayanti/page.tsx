@@ -26,8 +26,8 @@ export default function GitaJayanti2025() {
             <h1 className="text-4xl font-bold text-yellow-300 drop-shadow-md">
               Gita Jayanti Meditations – 2025
             </h1>
-            <p className="text-lg mt-2 text-red-600">Dec 1 – Dec 31</p>
-            <p className="text-red-600 mt-3 italic">
+            <p className="text-lg mt-2 text-[#5A2727]">Dec 1 – Dec 31</p>
+            <p className="text-[#5A2727] mt-3 italic">
               A sacred month of Gita wisdom, Krishna stories & daily meditation.
             </p>
 
@@ -39,7 +39,7 @@ export default function GitaJayanti2025() {
               Register Now ✨
             </Link>
 
-            <p className="text-red-600 text-sm mt-2 animate-bounce">
+            <p className="text-[#5A2727] text-sm mt-2 animate-bounce">
               Only ₹300 • Limited seats ⏳
             </p>
           </div>
