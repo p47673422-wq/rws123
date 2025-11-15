@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { FaSearch, FaPhone, FaUser, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 
@@ -22,21 +22,47 @@ interface DistributorRow {
 export default function TeamListPage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState<DistributorRow[]>([]);
-  const [q, setQ] = useState('');
-  const [sortDesc, setSortDesc] = useState(true);
-  const [hoveredRow, setHoveredRow] = useState<string | null>(null);
-  const [hoveredCol, setHoveredCol] = useState<'name'|'pending'|'paid'|'returns'|null>(null);
-  const [selectedReminder, setSelectedReminder] = useState<DistributorRow | null>(null);
 
   useEffect(() => {
     const load = async () => {
       try {
         const me = await fetch('/api/ram/auth/me');
         const meData = await me.json();
-        if (!meData?.user) return;
-        setUser(meData.user);
+        setUser(meData?.user || null);
+      } catch (err) {
+        console.error(err);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
 
+  // Don't render until user is loaded
+  if (loading || !user) {
+    return (
+      <div className="p-6 text-center min-h-screen flex items-center justify-center">
+        <div>{loading ? 'Loading...' : 'Access denied'}</div>
+      </div>
+    );
+  }
+
+  return <TeamListContent user={user} />;
+}
+
+function TeamListContent({ user }: { user: any }) {
+  const [rows, setRows] = useState<DistributorRow[]>([]);
+  const [q, setQ] = useState('');
+  const [sortDesc, setSortDesc] = useState(true);
+  const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+  const [hoveredCol, setHoveredCol] = useState<'name'|'pending'|'paid'|'returns'|null>(null);
+  const [selectedReminder, setSelectedReminder] = useState<DistributorRow | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
         const res = await fetch('/api/ram/team-members/store-users');
         const data = await res.json();
         if (Array.isArray(data)) setRows(data);

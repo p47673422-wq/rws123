@@ -1,7 +1,7 @@
 "use client";
 
 import DashboardLayout from "@/components/DashboardLayout";
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -34,7 +34,6 @@ interface DistributorScore {
 export default function LeaderboardPage() {
     const [user, setUser] = useState<any>(null);
     const router = useRouter();
-    const searchParams = useSearchParams();
     const [leaderboardData, setLeaderboardData] = useState<DistributorScore[]>([]);
     const [expandedId, setExpandedId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
