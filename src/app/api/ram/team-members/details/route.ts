@@ -56,7 +56,13 @@ export async function GET(req: NextRequest) {
           price: book?.price ?? it.price ?? null
         };
       }));
-      return { id: o.id, status: o.status, createdAt: o.createdAt, items: enriched };
+      // include store owner (who created the order) if available
+      let storeOwner: any = null;
+      if ((o as any).storeOwnerId) {
+        const so = await prisma.user_Z.findUnique({ where: { id: (o as any).storeOwnerId }, select: { id: true, name: true, phone: true } });
+        if (so) storeOwner = so;
+      }
+      return { id: o.id, status: o.status, createdAt: o.createdAt, items: enriched, storeOwner };
     }));
 
     // Fetch returns for this distributor
@@ -72,7 +78,12 @@ export async function GET(req: NextRequest) {
           quantity: it.quantity
         };
       }));
-      return { id: r.id, status: r.status, createdAt: r.createdAt, reason: r.reason, items: enriched };
+      let storeOwner: any = null;
+      if ((r as any).storeOwnerId) {
+        const so = await prisma.user_Z.findUnique({ where: { id: (r as any).storeOwnerId }, select: { id: true, name: true, phone: true } });
+        if (so) storeOwner = so;
+      }
+      return { id: r.id, status: r.status, createdAt: r.createdAt, reason: r.reason, items: enriched, storeOwner };
     }));
 
     // Fetch payments for this distributor
@@ -89,7 +100,13 @@ export async function GET(req: NextRequest) {
           price: it.price ?? book?.price ?? null
         };
       }));
-      return { id: p.id, status: p.status, createdAt: p.createdAt, totalAmount: p.totalAmount, items: enriched };
+      // payment may have been verified by a store owner; include that user
+      let storeOwner: any = null;
+      if ((p as any).verifiedById) {
+        const so = await prisma.user_Z.findUnique({ where: { id: (p as any).verifiedById }, select: { id: true, name: true, phone: true } });
+        if (so) storeOwner = so;
+      }
+      return { id: p.id, status: p.status, createdAt: p.createdAt, totalAmount: p.totalAmount, items: enriched, storeOwner };
     }));
 
     // Calculate order summary

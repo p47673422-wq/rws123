@@ -21,36 +21,60 @@ export async function POST(req: NextRequest) {
     const { distributorId, dates, items, totalAmount, paymentImage, notes } = await req.json();
     if (!distributorId || !Array.isArray(items) || !items.length || !totalAmount) return NextResponse.json({ error: 'invalid_input' }, { status: 400 });
 
-    // upload image if provided (base64)
-    let imageUrl = null;
+    // upload image (if provided) outside transaction
+    let imageUrl: string | null = null;
     if (paymentImage) {
-      const uploadResponse = await imagekit.upload({ file: paymentImage, fileName: `payment_${distributorId}_${Date.now()}.jpg`, folder: '/payments' });
-      imageUrl = uploadResponse.url;
+      try {
+        const uploadResponse = await imagekit.upload({ file: paymentImage, fileName: `payment_${distributorId}_${Date.now()}.jpg`, folder: '/payments' });
+        imageUrl = uploadResponse.url;
+      } catch (uploadErr) {
+        console.error('Image upload failed:', uploadErr);
+        // continue without image
+      }
     }
 
-    const paymentRecord = await prisma.payment_Z.create({
-      data: {
-        distributorId,
-        amount: totalAmount,
-        receiptImageUrl: imageUrl,
-        items,
-        status: 'PENDING'
-      }
-    });
+    try {
+      const result = await prisma.$transaction(async (tx) => {
+        const storeOwner = await tx.user_Z.findUnique({ where: { id: decoded.id }, select: { id: true } });
+        if (!storeOwner) throw new Error('Store owner not found');
 
-    const paymentRequest = await prisma.paymentRequest_Z.create({
-      data: {
-        distributorId,
-        dates: (dates || []).map((d: string) => new Date(d)),
-        items,
-        totalAmount,
-        paymentImageUrl: imageUrl,
-        notes,
-        paymentId: paymentRecord.id
-      }
-    });
+        // create payment record VERIFIED (no inventory transfer per spec)
+        const paymentRecord = await tx.payment_Z.create({
+          data: {
+            distributorId,
+            amount: totalAmount,
+            receiptImageUrl: imageUrl,
+            items,
+            status: 'VERIFIED',
+            verifiedById: storeOwner.id,
+            verifiedAt: new Date()
+          }
+        });
 
-    return NextResponse.json({ success: true, id: paymentRequest.id });
+        // create payment request and mark VERIFIED
+        const paymentRequest = await tx.paymentRequest_Z.create({
+          data: {
+            distributorId,
+            dates: (dates || []).map((d: string) => new Date(d)),
+            items,
+            totalAmount,
+            paymentImageUrl: imageUrl,
+            notes,
+            status: 'VERIFIED',
+            verifiedById: storeOwner.id,
+            verifiedAt: new Date(),
+            paymentId: paymentRecord.id
+          }
+        });
+
+        return { paymentId: paymentRecord.id, requestId: paymentRequest.id };
+      });
+
+      return NextResponse.json({ success: true, id: result.requestId, paymentId: result.paymentId });
+    } catch (e: any) {
+      console.error('record payment (store) transaction error:', e);
+      return NextResponse.json({ error: e?.message || 'failed' }, { status: 500 });
+    }
   } catch (err) {
     console.error('record payment (store) error:', err);
     return NextResponse.json({ error: 'failed' }, { status: 500 });
