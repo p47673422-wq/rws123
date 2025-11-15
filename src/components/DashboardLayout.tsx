@@ -7,6 +7,7 @@ import { FaHome, FaBox, FaUsers, FaTrophy, FaChartLine, FaClipboardCheck,
          FaExchangeAlt, FaWarehouse, FaHandshake, FaBars, FaBell, FaBook, 
          FaUserFriends, 
          FaMapMarker} from 'react-icons/fa';
+import { FaLeaf } from 'react-icons/fa6';
 
 // Menu configurations for different user types
 const MENU_CONFIG = {
@@ -16,6 +17,7 @@ const MENU_CONFIG = {
     { icon: FaClipboardCheck, label: 'Payment Verification', href: '/auth/ram/dashboard/payments' },
     { icon: FaWarehouse, label: 'Book & Inventory', href: '/auth/ram/dashboard/inventory' },
     { icon: FaUsers, label: 'Distributor Management', href: '/dashboard/store/team' },
+    { icon: FaLeaf, label: 'All Distributors Ledger', href: '/dashboard/store/team/list' },
     { icon: FaTrophy, label: 'Leaderboard', href: '/auth/ram/dashboard/leaderboard' }
   ],
   VEC_STORE_OWNER: [
@@ -24,6 +26,7 @@ const MENU_CONFIG = {
     { icon: FaClipboardCheck, label: 'Payment Verification', href: '/auth/ram/dashboard/payments' },
     { icon: FaWarehouse, label: 'Book & Inventory', href: '/auth/ram/dashboard/inventory' },
     { icon: FaUsers, label: 'Distributor Management', href: '/dashboard/store/team' },
+    { icon: FaLeaf, label: 'All Distributors Ledger', href: '/dashboard/store/team/list' },
     { icon: FaTrophy, label: 'Leaderboard', href: '/auth/ram/dashboard/leaderboard' }
   ],
   DISTRIBUTOR: [

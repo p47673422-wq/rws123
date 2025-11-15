@@ -12,6 +12,31 @@ export async function GET(req: NextRequest) {
     const decoded = await verifyToken(token);
     if (!decoded?.id) return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
 
+    // Parse date range from query params
+    const { searchParams } = new URL(req.url);
+    const startDateParam = searchParams.get('startDate');
+    const endDateParam = searchParams.get('endDate');
+
+    let startDate = new Date();
+    let endDate = new Date();
+
+    if (startDateParam) {
+      startDate = new Date(startDateParam);
+      startDate.setHours(0, 0, 0, 0);
+    } else {
+      // default: last 30 days
+      startDate.setDate(startDate.getDate() - 30);
+      startDate.setHours(0, 0, 0, 0);
+    }
+
+    if (endDateParam) {
+      endDate = new Date(endDateParam);
+      endDate.setHours(23, 59, 59, 999);
+    } else {
+      // default: today
+      endDate.setHours(23, 59, 59, 999);
+    }
+
     // Get current user
     const user = await prisma.user_Z.findUnique({
       where: { id: decoded.id },
@@ -21,9 +46,16 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Get all distributors with their total payments
+    // Get all distributors with their total payments (VERIFIED only, within date range)
     const distributorScores = await prisma.paymentRequest_Z.groupBy({
       by: ['distributorId'],
+      where: {
+        status: 'VERIFIED',
+        createdAt: {
+          gte: startDate,
+          lte: endDate
+        }
+      },
       _sum: {
         totalAmount: true
       },
@@ -35,7 +67,7 @@ export async function GET(req: NextRequest) {
     });
 
     // Get distributor details and category-wise breakdown
-    const enrichedScores = await Promise.all(
+    const leaderboard = await Promise.all(
       distributorScores.map(async (score) => {
         const distributor = await prisma.user_Z.findUnique({
           where: { id: score.distributorId },
@@ -47,11 +79,15 @@ export async function GET(req: NextRequest) {
           }
         });
 
-        // Get all payment requests for this distributor
+        // Get all payment requests for this distributor (VERIFIED, within date range)
         const paymentRequests = await prisma.paymentRequest_Z.findMany({
           where: {
             distributorId: score.distributorId,
-            status: 'VERIFIED'
+            status: 'VERIFIED',
+            createdAt: {
+              gte: startDate,
+              lte: endDate
+            }
           },
           select: {
             items: true,
@@ -65,7 +101,7 @@ export async function GET(req: NextRequest) {
           items.forEach(item => bookIds.add(item.bookId));
         });
 
-        // Get books with their categories
+        // Get books with their categories, names, and languages
         const books = await prisma.book_Z.findMany({
           where: {
             id: {
@@ -74,98 +110,59 @@ export async function GET(req: NextRequest) {
           },
           select: {
             id: true,
-            category: true
+            category: true,
+            name: true,
+            language: true
           }
         });
 
-        // Create a map of bookId to category
-        const bookCategories = new Map(books.map(book => [book.id, book.category]));
+        // Create a map of bookId to book details
+        const bookMap = new Map(books.map(book => [book.id, book]));
 
-        // Calculate category-wise breakdown
-        const categoryAmounts = new Map<string, number>();
+        // Calculate category-wise breakdown with book details
+        const categoryMap = new Map<string, { items: any[], totalAmount: number }>();
         paymentRequests.forEach(request => {
           const items = request.items as any[];
           items.forEach(item => {
-            const category = bookCategories.get(item.bookId) || 'Unknown';
+            const book = bookMap.get(item.bookId);
+            const category = book?.category || 'Unknown';
             const amount = (item.price * item.quantity) || 0;
-            categoryAmounts.set(
-              category, 
-              (categoryAmounts.get(category) || 0) + amount
-            );
-          });
-        });
 
-        const categoryBreakdown = Array.from(categoryAmounts.entries()).map(([category, amount]) => ({
-          bookCategory: category,
-          _sum: { amount }
-        }));
-
-        // Get yesterday's payments
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        yesterday.setHours(0, 0, 0, 0);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const yesterdayRequests = await prisma.paymentRequest_Z.findMany({
-          where: {
-            distributorId: score.distributorId,
-            status: 'VERIFIED',
-            createdAt: {
-              gte: yesterday,
-              lt: today
+            if (!categoryMap.has(category)) {
+              categoryMap.set(category, { items: [], totalAmount: 0 });
             }
-          },
-          select: {
-            items: true,
-          }
-        });
-
-        // Calculate yesterday's category-wise breakdown
-        const yesterdayCategoryAmounts = new Map<string, number>();
-        yesterdayRequests.forEach(request => {
-          const items = request.items as any[];
-          items.forEach(item => {
-            const category = bookCategories.get(item.bookId) || 'Unknown';
-            const amount = (item.price * item.quantity) || 0;
-            yesterdayCategoryAmounts.set(
-              category,
-              (yesterdayCategoryAmounts.get(category) || 0) + amount
-            );
+            const cat = categoryMap.get(category)!;
+            cat.items.push({
+              bookId: item.bookId,
+              title: book?.name || 'Unknown',
+              language: book?.language || 'Unknown',
+              quantity: item.quantity,
+              price: item.price
+            });
+            cat.totalAmount += amount;
           });
         });
 
-        const yesterdayPayments = Array.from(yesterdayCategoryAmounts.entries()).map(([category, amount]) => ({
-          bookCategory: category,
-          _sum: { amount }
+        const categoryBreakdown = Array.from(categoryMap.entries()).map(([category, data]) => ({
+          category,
+          amount: data.totalAmount,
+          books: data.items
         }));
-
-        const totalYesterdayAmount = yesterdayPayments.reduce(
-          (acc, curr) => acc + (curr._sum.amount || 0),
-          0
-        );
 
         return {
           distributor,
-          totalScore: score._sum.totalAmount || 0,
-          categoryBreakdown: categoryBreakdown.map(cat => ({
-            category: cat.bookCategory,
-            amount: cat._sum.amount || 0
-          })),
-          yesterdayPayments: {
-            total: totalYesterdayAmount,
-            breakdown: yesterdayPayments.map(pay => ({
-              category: pay.bookCategory,
-              amount: pay._sum.amount || 0
-            }))
-          }
+          totalScore: Number(score._sum.totalAmount || 0),
+          categoryBreakdown
         };
       })
     );
 
-    return NextResponse.json(enrichedScores);
+    return NextResponse.json(leaderboard);
   } catch (error) {
-    console.error("Error in leaderboard API:", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.error('Leaderboard error:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch leaderboard' },
+      { status: 500 }
+    );
   }
 }

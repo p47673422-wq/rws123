@@ -1,10 +1,24 @@
 "use client";
 
 import DashboardLayout from "@/components/DashboardLayout";
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaChevronDown, FaChevronUp, FaTrophy } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+
+interface Book {
+  bookId: string;
+  title: string;
+  language: string;
+  quantity: number;
+  price: number;
+}
+
+interface CategoryBreakdown {
+  category: string;
+  amount: number;
+  books: Book[];
+}
 
 interface DistributorScore {
   distributor: {
@@ -14,58 +28,21 @@ interface DistributorScore {
     phone: string;
   };
   totalScore: number;
-  categoryBreakdown: {
-    category: string;
-    totalAmount: number;
-  }[];
-  yesterdayPayments: {
-    total: number;
-    breakdown: {
-      category: string;
-      totalAmount: number;
-    }[];
-  };
+  categoryBreakdown: CategoryBreakdown[];
 }
 
 export default function LeaderboardPage() {
     const [user, setUser] = useState<any>(null);
-      const router = useRouter();
-  const [leaderboardData, setLeaderboardData] = useState<DistributorScore[]>([]);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [rankView, setRankView] = useState<'overall' | 'yesterday'>('overall');
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [leaderboardData, setLeaderboardData] = useState<DistributorScore[]>([]);
+    const [expandedId, setExpandedId] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [startDate, setStartDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
 
-  useEffect(() => {
-    fetchLeaderboardData();
-  }, []);
-
-  const fetchLeaderboardData = async () => {
-    try {
-      const response = await fetch("/api/ram/leaderboard");
-      if (!response.ok) throw new Error("Failed to fetch leaderboard data");
-      const data = await response.json();
-      setLeaderboardData(data);
-      setIsLoading(false);
-    } catch (err) {
-      setError("Failed to load leaderboard data");
-      setIsLoading(false);
-    }
-  };
-
-  const getTrophyColor = (index: number) => {
-    switch (index) {
-      case 0:
-        return "text-yellow-500"; // Gold
-      case 1:
-        return "text-gray-400"; // Silver
-      case 2:
-        return "text-amber-600"; // Bronze
-      default:
-        return "text-gray-300"; // Other positions
-    }
-  };
-  useEffect(() => {
+    useEffect(() => {
       fetch('/api/ram/auth/me').then(r => r.json()).then(d => {
         if (!d?.user) router.push('/auth/ram/login');
         else {
@@ -73,6 +50,42 @@ export default function LeaderboardPage() {
         }
       });
     }, []);
+
+    // Set default date range (last 30 days)
+    useEffect(() => {
+      const end = new Date();
+      const start = new Date();
+      start.setDate(start.getDate() - 30);
+      
+      const formatDate = (date: Date) => date.toISOString().split('T')[0];
+      setStartDate(formatDate(start));
+      setEndDate(formatDate(end));
+    }, []);
+
+    useEffect(() => {
+      if (startDate && endDate) {
+        fetchLeaderboardData();
+      }
+    }, [startDate, endDate]);
+
+    const fetchLeaderboardData = async () => {
+      try {
+        setIsLoading(true);
+        const params = new URLSearchParams();
+        if (startDate) params.append('startDate', startDate);
+        if (endDate) params.append('endDate', endDate);
+        
+        const response = await fetch(`/api/ram/leaderboard?${params.toString()}`);
+        if (!response.ok) throw new Error("Failed to fetch leaderboard data");
+        const data = await response.json();
+        setLeaderboardData(data);
+        setError(null);
+      } catch (err) {
+        setError("Failed to load leaderboard data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
   
     if (!user) return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-100 via-pink-50 to-white">
@@ -80,7 +93,12 @@ export default function LeaderboardPage() {
       </div>
     );
 
-  
+    const formatAmount = (amount: number) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+    }).format(amount);
+  };
 
   if (isLoading) {
     return (
@@ -100,175 +118,150 @@ export default function LeaderboardPage() {
     );
   }
 
-  const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-    }).format(amount);
-  };
-
   return (
     <DashboardLayout user={user}>
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-pink-700">Distributor Leaderboard</h1>
-          <div className="flex items-center space-x-4 mt-4 md:mt-0">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-pink-700 mb-6">Distributor Leaderboard</h1>
+          
+          {/* Date Range Filter */}
+          <div className="bg-white rounded-lg shadow-md p-4 flex gap-4 items-end flex-wrap">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
             <button
-              onClick={() => setRankView('overall')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
-                rankView === 'overall'
-                  ? 'bg-pink-600 text-white'
-                  : 'bg-yellow-50 text-pink-700 hover:bg-yellow-100'
-              }`}
+              onClick={() => fetchLeaderboardData()}
+              className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors"
             >
-              Overall Ranking
-            </button>
-            <button
-              onClick={() => setRankView('yesterday')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
-                rankView === 'yesterday'
-                  ? 'bg-pink-600 text-white'
-                  : 'bg-yellow-50 text-pink-700 hover:bg-yellow-100'
-              }`}
-            >
-              Yesterday's Ranking
+              Update
             </button>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Main Rankings Panel */}
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              {rankView === 'overall' ? 'Overall Rankings' : 'Yesterday\'s Rankings'}
-            </h2>
-            <div className="space-y-4">
-              {(rankView === 'overall' 
-                ? leaderboardData
-                : [...leaderboardData].sort((a, b) => b.yesterdayPayments.total - a.yesterdayPayments.total)
-              ).map((item, index) => (
-                <div key={item.distributor.id} className="relative">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="bg-yellow-50 rounded-lg p-4 cursor-pointer hover:bg-yellow-100 transition-colors"
-                    onClick={() => setExpandedId(expandedId === item.distributor.id ? null : item.distributor.id)}
+        {/* Leaderboard Table */}
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-pink-100 sticky top-0">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-pink-900 w-12">Rank</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-pink-900">Distributor Name</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-pink-900">Phone</th>
+                  <th className="px-6 py-4 text-right text-sm font-semibold text-pink-900">Points (Total Amount)</th>
+                  <th className="px-6 py-4 text-center text-sm font-semibold text-pink-900 w-12">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboardData.map((item, index) => (
+                  <motion.tr
+                    key={item.distributor.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="border-b hover:bg-yellow-50 transition-colors"
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center justify-center w-8 h-8">
-                          <FaTrophy className={getTrophyColor(index)} size={24} />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-gray-900">{item.distributor.name}</h3>
-                          <p className="text-sm text-gray-600">{item.distributor.phone}</p>
-                        </div>
-                      </div>
-                        <div className="text-right">
-                          <p className="font-bold text-pink-700">
-                            {rankView === 'overall' 
-                              ? formatAmount(item.totalScore)
-                              : formatAmount(item.yesterdayPayments.total)
-                            }
-                          </p>
-                          {expandedId === item.distributor.id ? <FaChevronUp /> : <FaChevronDown />}
-                        </div>
-                    </div>
-
-                    <AnimatePresence>
-                      {expandedId === item.distributor.id && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="mt-4 space-y-3 overflow-hidden"
-                        >
-                            <div className="bg-white rounded-lg p-4 space-y-3">
-                              <h4 className="font-medium text-gray-800">Category Breakdown</h4>
-                              {(rankView === 'overall' ? item.categoryBreakdown : item.yesterdayPayments.breakdown).map((cat) => (
-                              <div key={cat.category} className="flex justify-between text-sm">
-                                <span className="text-gray-600">{cat.category}</span>
-                                <span className="font-medium text-gray-900">
-                                  {formatAmount(cat.totalAmount)}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Yesterday's Performance */}
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Yesterday's Performance</h2>
-            <div className="space-y-4">
-              {leaderboardData
-                .sort((a, b) => b.yesterdayPayments.total - a.yesterdayPayments.total)
-                .map((item, index) => (
-                  <div key={item.distributor.id} className="relative">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="bg-yellow-50 rounded-lg p-4 cursor-pointer hover:bg-yellow-100 transition-colors"
-                      onClick={() => setExpandedId(expandedId === `yesterday-${item.distributor.id}` ? null : `yesterday-${item.distributor.id}`)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="flex items-center justify-center w-8 h-8">
-                            <FaTrophy className={getTrophyColor(index)} size={24} />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-gray-900">{item.distributor.name}</h3>
-                            <p className="text-sm text-gray-600">{item.distributor.phone}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-pink-700">
-                            {formatAmount(item.yesterdayPayments.total)}
-                          </p>
-                          {expandedId === `yesterday-${item.distributor.id}` ? (
-                            <FaChevronUp />
-                          ) : (
-                            <FaChevronDown />
-                          )}
-                        </div>
-                      </div>
-
-                      <AnimatePresence>
-                        {expandedId === `yesterday-${item.distributor.id}` && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="mt-4 space-y-3 overflow-hidden"
-                          >
-                            <div className="bg-white rounded-lg p-4 space-y-3">
-                              <h4 className="font-medium text-gray-800">Category Breakdown</h4>
-                              {item.yesterdayPayments.breakdown.map((cat) => (
-                                <div key={cat.category} className="flex justify-between text-sm">
-                                  <span className="text-gray-600">{cat.category}</span>
-                                  <span className="font-medium text-gray-900">
-                                    {formatAmount(cat.totalAmount)}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  </div>
+                    <td className="px-6 py-4 text-sm font-semibold text-pink-700">#{index + 1}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{item.distributor.name}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{item.distributor.phone}</td>
+                    <td className="px-6 py-4 text-sm font-bold text-pink-700 text-right">
+                      {formatAmount(item.totalScore)}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <button
+                        onClick={() => setExpandedId(expandedId === item.distributor.id ? null : item.distributor.id)}
+                        className="p-1 hover:bg-yellow-100 rounded transition-colors"
+                      >
+                        {expandedId === item.distributor.id ? <FaChevronUp /> : <FaChevronDown />}
+                      </button>
+                    </td>
+                  </motion.tr>
                 ))}
-            </div>
+              </tbody>
+            </table>
           </div>
+
+          {/* Expandable Category Breakdown */}
+          <AnimatePresence>
+            {expandedId && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="bg-yellow-50 border-t border-yellow-200 overflow-hidden"
+              >
+                {(() => {
+                  const expanded = leaderboardData.find(item => item.distributor.id === expandedId);
+                  if (!expanded) return null;
+                  
+                  return (
+                    <div className="px-6 py-4 max-w-4xl">
+                      <h3 className="text-lg font-semibold text-pink-700 mb-4">
+                        {expanded.distributor.name} - Category Breakdown
+                      </h3>
+                      <div className="space-y-4">
+                        {expanded.categoryBreakdown.map((cat) => (
+                          <div key={cat.category} className="bg-white rounded-lg p-4 shadow-sm">
+                            <div className="flex justify-between items-center mb-3">
+                              <h4 className="text-sm font-semibold text-gray-800">{cat.category}</h4>
+                              <span className="text-sm font-bold text-pink-700">
+                                {formatAmount(cat.amount)}
+                              </span>
+                            </div>
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-xs">
+                                <thead className="bg-gray-50">
+                                  <tr>
+                                    <th className="px-3 py-2 text-left text-gray-600">Book Title</th>
+                                    <th className="px-3 py-2 text-left text-gray-600">Language</th>
+                                    <th className="px-3 py-2 text-center text-gray-600">Qty</th>
+                                    <th className="px-3 py-2 text-right text-gray-600">Price</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {cat.books.map((book) => (
+                                    <tr key={book.bookId} className="border-b">
+                                      <td className="px-3 py-2 text-gray-700">{book.title}</td>
+                                      <td className="px-3 py-2 text-gray-600">{book.language}</td>
+                                      <td className="px-3 py-2 text-center text-gray-700">{book.quantity}</td>
+                                      <td className="px-3 py-2 text-right text-gray-700">
+                                        {formatAmount(book.price)}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
+
+        {leaderboardData.length === 0 && (
+          <div className="text-center py-12 bg-white rounded-lg">
+            <p className="text-gray-600">No data available for the selected date range.</p>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );
