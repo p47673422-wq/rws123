@@ -196,9 +196,9 @@ useEffect(() => {
           className="relative z-10 text-center w-full px-4"
         >
           <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg flex items-center justify-center gap-2">
-            🌸 Gita Jayanti Meditations 🌸
+           Gita Jayanti
           </h1>
-          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Kartik Month Special Vrata</p>
+          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">🌸 Mediation 🌸</p>
           <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Dec 1 – Dec 31</p>
           <div className="mb-4">
             <span className="text-lg font-bold text-pink-600 animate-pulse">Registration closes Dec 1!</span>
