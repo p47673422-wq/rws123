@@ -196,9 +196,9 @@ useEffect(() => {
           className="relative z-10 text-center w-full px-4"
         >
           <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg flex items-center justify-center gap-2">
-            🌸 Gita Jayanti Meditations 🌸
+           Gita Jayanti
           </h1>
-          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Kartik Month Special Vrata</p>
+          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">🌸 Mediation 🌸</p>
           <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Dec 1 – Dec 31</p>
           <div className="mb-4">
             <span className="text-lg font-bold text-pink-600 animate-pulse">Registration closes Dec 1!</span>
@@ -214,6 +214,8 @@ useEffect(() => {
               <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">View Details</button>
             </Link>
             <a href="tel:9985181358" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>📩</span> Contact Us: 9985181358</a>
+              <a href="#quizzes" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>🎯</span> Quiz Corner</a>
+          
           </div>
         </motion.div>
       </section>
