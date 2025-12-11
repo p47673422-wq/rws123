@@ -613,5 +613,30 @@ model UserCourse {
   @@unique([userId, courseCode])
 }
 
+model UserProfileb {
+  id        String     @id @default(cuid())
+  name      String
+  mobile    String
+  gender    String?
+  marital   String?
+  createdAt DateTime   @default(now())
+  meta      Json?
+  attempts  Attemptb[] @relation("UserAttemptsb")
+}
+
+model Attemptb {
+  id        String   @id @default(cuid())
+  userId    String
+  quizId    String
+  profile   Json
+  answers   Json
+  score     Json
+  createdAt DateTime @default(now())
+
+  user UserProfileb @relation("UserAttemptsb", fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
 
 

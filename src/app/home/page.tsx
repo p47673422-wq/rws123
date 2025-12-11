@@ -160,7 +160,7 @@ useEffect(() => {
       </header>
 
       {/* HERO SECTION - Dāmodara Mālā 2025 */}
-      {/* <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
+      <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
         <Image src="/images/damodar-hero.png" alt="Radha Damodar" width={1600} height={600} className="absolute inset-0 w-full h-full opacity-80 object-cover pointer-events-none select-none" />
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 via-blue-100 to-pink-100 opacity-70" />
         <motion.div
@@ -172,7 +172,6 @@ useEffect(() => {
           <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg flex items-center justify-center gap-2">
             🌸 Special Offer on Books 🌸
           </h1>
-          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Explore more</p>
           
           <div className="mb-4">
             <span className="text-lg font-bold text-pink-600 animate-pulse">Limited time offer!</span>
@@ -181,14 +180,17 @@ useEffect(() => {
             <a href="/home/krishnabasket/items">
               <GlowingButton className="text-lg">Krishna Basket</GlowingButton>
             </a>
-            <a href="#movie-quiz">
-              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">Narshima Movie Quiz</button>
+            <a href="/quiz">
+              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">Do Gita Meditation</button>
+            </a>
+            <a href="/quiz/gift">
+              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">Claim Gita Meditation Gift</button>
             </a>
             <a href="#quizzes" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>🎯</span> Quiz Corner</a>
           </div>
         </motion.div>
-      </section> */}
-      <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
+      </section>
+      {/* <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
         <Image src="/images/arjuna-krishna-chariot.jpg" alt="Radha Damodar" width={1600} height={600} className="absolute inset-0 w-full h-full opacity-80 object-cover pointer-events-none select-none" />
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 via-blue-100 to-pink-100 opacity-70" />
         <motion.div
@@ -220,7 +222,7 @@ useEffect(() => {
           
           </div>
         </motion.div>
-      </section>
+      </section> */}
 
       {/* ...existing homepage content... */}
 
