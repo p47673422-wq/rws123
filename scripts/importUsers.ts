@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import * as XLSX from 'xlsx';
+import XLSX from "xlsx";
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();

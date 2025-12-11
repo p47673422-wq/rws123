@@ -100,9 +100,10 @@ useEffect(() => {
             <Link href="/home/krishnabasket/items" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Krishna Basket</Link>
             <Link href="/counselling" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Free Counselling</Link>
             <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
+            <Link href="/login-ram" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Gita Course</Link>
           </div>
           {/* Right: Auth Buttons (Desktop) */}
-          <div className="hidden md:flex gap-2 items-center">
+          {/* <div className="hidden md:flex gap-2 items-center">
             {isLoggedIn ? (
               <Link href="/booking-home" className="rounded-full px-5 py-2 font-semibold bg-green-600 text-white shadow hover:scale-105 transition">Home</Link>
             ) : (
@@ -111,7 +112,7 @@ useEffect(() => {
                 <Link href="/signup" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-300 text-white shadow hover:scale-105 transition">Sign Up</Link>
               </>
             )}
-          </div>
+          </div> */}
           {/* Mobile Hamburger */}
           <div className="md:hidden flex items-center">
             <button
@@ -140,16 +141,17 @@ useEffect(() => {
                 <Link href="/home/krishnabasket/items" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Krishna Basket</Link>
                 <Link href="/counselling" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Free Counselling</Link>
                 <a href="https://rzp.io/rzp/D5Q6s9m" target="_blank" rel="noopener noreferrer" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Donate</a>
+                <Link href="/login-ram" className="nav-btn font-semibold text-yellow-900 hover:text-pink-700 transition">Gita Course</Link>
               </div>
               <div className="flex flex-col gap-2 mt-auto mb-16">
-                {isLoggedIn ? (
+                {/* {isLoggedIn ? (
                   <Link href="/booking-home" className="rounded-full px-5 py-2 font-semibold bg-green-600 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Home</Link>
                 ) : (
                   <>
                     <Link href="/login" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-yellow-500 via-pink-400 to-orange-400 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Login</Link>
                     <Link href="/signup" className="rounded-full px-5 py-2 font-semibold bg-gradient-to-r from-pink-400 via-yellow-400 to-orange-300 text-white shadow hover:scale-105 transition" onClick={() => setShowSummary(false)}>Sign Up</Link>
                   </>
-                )}
+                )} */}
                 <button className="mt-2 text-xs text-gray-500" onClick={() => setShowSummary(false)}>Close</button>
               </div>
             </motion.div>

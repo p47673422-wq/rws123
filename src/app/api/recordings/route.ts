@@ -103,7 +103,6 @@ export async function GET(): Promise<NextResponse<RecordingsResponse | { error: 
           `Error listing recordings for course ${courseData.courseCode}:`,
           error
         );
-        // Continue with other courses even if one fails
       }
     }
 
