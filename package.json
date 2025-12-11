@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "prisma generate && node ./scripts/write-sw-version.js && next build",
     "postinstall": "prisma generate",
+    "import-users": "ts-node scripts/importUsers.ts",
     "start": "next start"
   },
   "dependencies": {
@@ -22,7 +23,8 @@
     "next": "15.4.8",
     "node-fetch": "^3.3.2",
     "react-confetti": "^6.4.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "xlsx": "^0.18.5"
   },
   "optionalDependencies": {
     "web-push": "^3.6.7"

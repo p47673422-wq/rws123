@@ -13,6 +13,7 @@ interface VideoFile {
   mimeType: string;
   size?: string;
   createdTime?: string;
+  viewerUrl: string;
 }
 
 interface Folder {
@@ -74,29 +75,6 @@ export default function RecordingsPage() {
     fetchRecordings();
   }, []);
 
-  // Handle playback URL fetch
-  const handlePlayVideo = async (fileId: string, fileName: string) => {
-    try {
-      setPlaybackLoading(true);
-      setError(null);
-      const response = await fetch(`/api/playback?fileId=${encodeURIComponent(fileId)}`);
-
-      if (!response.ok) {
-        throw new Error(`Failed to get playback URL: ${response.statusText}`);
-      }
-
-      const data: PlaybackResponse = await response.json();
-      setPlaybackUrl(data.playbackUrl);
-      setSelectedVideoName(fileName);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load video';
-      setError(errorMessage);
-    } finally {
-      setPlaybackLoading(false);
-    }
-  };
-
-  // Toggle folder expansion
   const toggleFolder = (folderId: string) => {
     setExpandedFolders((prev) => {
       const newSet = new Set(prev);
@@ -285,7 +263,7 @@ export default function RecordingsPage() {
                           return (
                             <button
                               key={file.fileId}
-                              onClick={() => handlePlayVideo(file.fileId, file.name)}
+                              onClick={() => window.open(file.viewerUrl, "_blank")}
                               className="w-full flex items-center gap-4 p-4 bg-white rounded-lg hover:shadow-md transition-shadow group cursor-pointer border border-amber-100 hover:border-amber-300"
                             >
                               <Play className="w-5 h-5 text-amber-600 flex-shrink-0 group-hover:scale-110 transition-transform" />

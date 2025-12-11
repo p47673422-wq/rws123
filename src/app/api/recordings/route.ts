@@ -11,6 +11,7 @@ interface VideoFile {
   mimeType: string;
   size?: string;
   createdTime?: string;
+  viewerUrl: string;
 }
 
 interface Folder {
@@ -80,6 +81,7 @@ export async function GET(): Promise<NextResponse<RecordingsResponse | { error: 
             mimeType: file.mimeType || '',
             size: file.size,
             createdTime: file.createdTime,
+            viewerUrl: `https://drive.google.com/file/d/${file.id}/view`,
           }));
 
           if (files.length > 0) {
