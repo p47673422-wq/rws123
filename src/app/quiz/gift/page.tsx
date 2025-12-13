@@ -152,11 +152,10 @@ export default function GiftPage() {
     </ul>
 
     <a
-      href="https://vedabase.io/en/library/bg/"
-      target="_blank"
+      href="#"
       className="inline-block mt-4 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800 transition"
     >
-      Read Gita Online
+      Get your Bhagvad gita from stall
     </a>
   </div>
 </div>
@@ -189,7 +188,7 @@ export default function GiftPage() {
 
               <p className="text-sm text-slate-700 mb-3">
                 <span className="font-semibold">Score:</span>{" "}
-                {att.score.total} / {att.score.max}
+                {att.score.total} / {att.score.max}. Please show this score at stall to get gift. Hare Krishna!
               </p>
 
               {/* ---------------- SECTION-WISE RESULT ---------------- */}
