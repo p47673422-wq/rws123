@@ -11,15 +11,15 @@ export const fourConceptQuizDefinition = {
       title: "This Body is NOT All-in-All",
       subtitle: "The Soul Exists (BG 2.13)",
       video: {
-        url: "https://youtube.com/VIDEO_1",
+        url: "/v1.mp4",
       },
       items: [
         {
           id: "c1_q1",
-          type: "paragraph",
+          type: "one-word",
           graded: false,
-          html:
-            "<p><b>Reflection:</b> What is changing and what is not changing for the lady shown in the video?</p>",
+          question:
+            "What is changing and what is not changing for the lady shown in the video?",
         },
       ],
     },
@@ -59,18 +59,25 @@ export const fourConceptQuizDefinition = {
       },
       items: [
         {
-          id: "c3_reflect",
-          type: "paragraph",
-          graded: false,
-          html:
-            "<p><b>Reflection:</b> Share your comment about the video of common sense.</p>",
-        },
-        {
           id: "c3_q1",
           type: "one-word",
           graded: false,
           question:
+            "Share your comment about the video of common sense.",
+        },
+        {
+          id: "c3_q2",
+          type: "one-word",
+          graded: false,
+          question:
             "According to BG 7.7, what is the thread compared to and what are the pearls compared to?",
+        shloka: {
+  ref: "Bhagavad Gita 7.7",
+  iast:
+    "mattaḥ parataraṁ nānyat kiñcid asti dhanañ-jaya | mayi sarvam idaṁ protaṁ sūtre maṇi-gaṇā iva ||",
+  translation:
+    "O conqueror of wealth, there is no truth superior to Me. Everything rests upon Me, as pearls are strung on a thread."
+}
         },
       ],
     },
@@ -85,11 +92,11 @@ export const fourConceptQuizDefinition = {
       },
       items: [
         {
-          id: "c4_reflect",
-          type: "paragraph",
+          id: "c4_q1",
+          type: "one-word",
           graded: false,
-          html:
-            "<p><b>Reflection:</b> Who is compared to the father and who is compared to the child?</p>",
+          question:
+            "Who is compared to the father and who is compared to the child?",
         },
       ],
     },
