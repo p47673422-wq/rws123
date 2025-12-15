@@ -2,127 +2,123 @@
 
 import { useEffect, useState } from "react";
 import ProfileForm from "../../components/ProfileForm";
-import QuizPlayer from "../../components/QuizPlayer";
-import { quizDefinition } from "@/lib/quizDefinition";
+import QuizRunner from "../../components/QuizRunner";
+import { quizDefinition as gitaMeditationQuiz } from "@/lib/quizDefinition";
+import { fourConceptQuizDefinition } from "@/lib/fourConceptQuizDefinition";
+
+type Mode = "select" | "profile" | "quiz";
 
 export default function QuizPage() {
   const [profile, setProfile] = useState<any>(null);
-  const [mode, setMode] = useState<"home" | "profile" | "quiz">("home");
+  const [mode, setMode] = useState<Mode>("select");
+  const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
 
-  // Load stored profile
   useEffect(() => {
     const raw = localStorage.getItem("_mkt_profile_v1");
     if (raw) setProfile(JSON.parse(raw));
   }, []);
 
-  function startQuiz() {
+  function startQuiz(quiz: any) {
+    setSelectedQuiz(quiz);
     if (!profile) setMode("profile");
     else setMode("quiz");
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-white">
-      {/* ----------------------------- BANNER IMAGE ----------------------------- */}
-      <div className="w-full h-32 sm:h-40 md:h-48 bg-cover bg-center rounded-b-3xl shadow-md"
-        style={{
-          backgroundImage: "url('/images/BG.jpg')",
-        }}
+
+      {/* ================= HEADER ================= */}
+      <div
+        className="w-full h-36 md:h-44 bg-cover bg-center rounded-b-3xl shadow"
+        style={{ backgroundImage: "url('/images/BG.jpg')" }}
       />
 
-      {/* ----------------------------- HEADER ----------------------------- */}
-      <header className="max-w-3xl mx-auto px-6 mt-4 text-center">
-        <h1 className="text-3xl font-bold text-amber-800 tracking-wide drop-shadow-sm">
-          Gita Meditation Quiz
+      <header className="max-w-4xl mx-auto px-6 mt-4 text-center">
+        <h1 className="text-3xl font-bold text-amber-800">
+          Gita Learning Journey
         </h1>
         <p className="text-sm text-slate-600 mt-1">
-          Discover divine wisdom through a guided meditation quiz and earn gift.
+          Reflect • Learn • Transform
         </p>
       </header>
 
-      <main className="max-w-3xl mx-auto px-6 mt-8 pb-20">
+      <main className="max-w-4xl mx-auto px-6 mt-8 pb-24">
 
-        {/* =========================================================================
-           HOME SCREEN
-        ========================================================================= */}
-        {mode === "home" && (
-          <div className="space-y-8 animate-fadeIn">
+        {/* ================= QUIZ SELECTION ================= */}
+        {mode === "select" && (
+          <div className="grid md:grid-cols-2 gap-6 animate-fadeIn">
 
-            {/* ---------------------- INTRO CARD ---------------------- */}
-            <div className="bg-white p-6 rounded-2xl shadow-xl border border-amber-100">
-              <h2 className="text-xl font-semibold text-amber-800 mb-2">
-                Welcome to Gita Meditation
+            {/* -------- GITA MEDITATION QUIZ -------- */}
+            <div className="bg-white p-6 rounded-2xl shadow border border-amber-100">
+              <h2 className="text-xl font-semibold text-amber-800">
+                Gita Meditation Quiz
               </h2>
-
-              <p className="text-slate-700 text-sm leading-relaxed">
-                This meditation quiz is based on teachings from the
-                <span className="font-semibold"> Bhagavad Gita As It Is </span>
-                by <span className="font-semibold">Srila Prabhupada</span>.
-                <br />
-                You'll explore essential spiritual principles, cultivate
-                reflection, and deepen your connection with Krishna.
+              <p className="text-sm text-slate-700 mt-2">
+                A guided quiz based on Bhagavad Gita As It Is by Srila Prabhupada.
+                Ideal for first-time seekers.
               </p>
 
+              <ul className="text-sm text-slate-600 mt-3 list-disc ml-5">
+                <li>Multiple sections</li>
+                <li>Mixed question types</li>
+                <li>Gift after completion</li>
+              </ul>
+
               <button
-                onClick={startQuiz}
-                className="mt-6 w-full sm:w-auto px-6 py-3 bg-amber-600 hover:bg-amber-700 transition text-white text-sm font-semibold rounded-xl shadow-lg"
+                onClick={() => startQuiz(gitaMeditationQuiz)}
+                className="mt-4 px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl"
               >
-                Start Gita Meditation Quiz
+                Start Meditation Quiz
               </button>
             </div>
 
-            {/* ---------------------- ART STRIP ---------------------- */}
-            <div className="rounded-xl overflow-hidden shadow border border-amber-100">
-              <img
-                src="/images/arjuna-krishna-chariot.jpg"
-                className="w-full h-28 sm:h-40 object-cover"
-                alt="Krishna and Arjuna"
-              />
-            </div>
-
-            {/* ---------------------- TEXT SECTION ---------------------- */}
-            <div className="bg-amber-50 p-5 rounded-2xl shadow border border-amber-100">
-              <h3 className="font-semibold text-amber-800 text-lg mb-1">
-                Why This Quiz?
-              </h3>
-              <p className="text-sm text-slate-700 leading-relaxed">
-                Krishna says in <b>BG 4.38</b>,
-                <em> “There is no purifier equal to transcendental knowledge.”</em>
-                This quiz is designed to guide you gently into that wisdom.
+            {/* -------- FOUR CONCEPT JOURNEY -------- */}
+            <div className="bg-white p-6 rounded-2xl shadow border border-amber-100">
+              <h2 className="text-xl font-semibold text-amber-800">
+                Four Fundamental Truths of Gita
+              </h2>
+              <p className="text-sm text-slate-700 mt-2">
+                A deep, video-based journey exploring core truths of existence
+                taught by Krishna.
               </p>
+
+              <ul className="text-sm text-slate-600 mt-3 list-disc ml-5">
+                <li>4 core concepts</li>
+                <li>Video + reflection</li>
+                <li>Philosophical depth</li>
+              </ul>
+
+              <button
+                onClick={() => startQuiz(fourConceptQuizDefinition)}
+                className="mt-4 px-5 py-2 bg-green-700 hover:bg-green-800 text-white rounded-xl"
+              >
+                Begin Concept Journey
+              </button>
             </div>
           </div>
         )}
 
-        {/* =========================================================================
-           PROFILE SCREEN
-        ========================================================================= */}
+        {/* ================= PROFILE ================= */}
         {mode === "profile" && (
-          <div className="animate-fadeIn">
-            <ProfileForm
-              initial={profile}
-              onSave={(p: any) => {
-                localStorage.setItem("_mkt_profile_v1", JSON.stringify(p));
-                setProfile(p);
-                setMode("quiz");
-              }}
-              onCancel={() => setMode("home")}
-            />
-          </div>
+          <ProfileForm
+            initial={profile}
+            onSave={(p: any) => {
+              localStorage.setItem("_mkt_profile_v1", JSON.stringify(p));
+              setProfile(p);
+              setMode("quiz");
+            }}
+            onCancel={() => setMode("select")}
+          />
         )}
 
-        {/* =========================================================================
-           QUIZ PLAYER
-        ========================================================================= */}
-        {mode === "quiz" && profile && (
-          <div className="animate-fadeIn">
-            <QuizPlayer
-              quiz={quizDefinition}
-              profile={profile}
-              onExit={() => setMode("home")}
-            />
-          </div>
+        {/* ================= QUIZ PLAYER ================= */}
+        {mode === "quiz" && selectedQuiz && profile && (
+          <QuizRunner
+            quiz={selectedQuiz}
+            profile={profile}
+            onExit={() => setMode("select")}
+          />
         )}
-
       </main>
     </div>
   );
