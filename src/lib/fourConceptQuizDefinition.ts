@@ -30,7 +30,7 @@ export const fourConceptQuizDefinition = {
       title: "This Life is NOT All-in-All",
       subtitle: "Next Life Exists (BG 2.22)",
       video: {
-        url: "https://youtube.com/VIDEO_2",
+        url: "/v2.mp4",
       },
       items: [
         {
@@ -55,7 +55,7 @@ export const fourConceptQuizDefinition = {
       title: "We are NOT All-in-All",
       subtitle: "The Supreme Lord Exists (BG 7.7)",
       video: {
-        url: "https://youtube.com/VIDEO_3",
+        url: "/v3.mp4",
       },
       items: [
         {
@@ -88,7 +88,7 @@ export const fourConceptQuizDefinition = {
       title: "This World is NOT All-in-All",
       subtitle: "The Spiritual World Exists (BG 8.15–16, 8.21)",
       video: {
-        url: "https://youtube.com/VIDEO_4",
+        url: "/v4.mp4",
       },
       items: [
         {
