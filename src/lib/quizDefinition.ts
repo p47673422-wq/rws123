@@ -37,6 +37,14 @@ export const quizDefinition = {
           question: "BG 4.38 says: 'There is no purifier equal to transcendental knowledge.'",
           options: ["True", "False"],
           answerIndex: 0,
+          shloka: {
+  ref: "Bhagavad Gita 4.38",
+  iast:
+    "na hi jñānena sadṛśaṁ pavitram iha vidyate | tat svayaṁ yoga-saṁsiddhaḥ kālenātmani vindati ||",
+  translation:
+    "In this world, there is nothing so sublime and pure as transcendental knowledge. Such knowledge is the mature fruit of all mysticism. One who has achieved this knowledge enjoys it within himself in due course of time."
+}
+
         },
         // 4
         {
@@ -44,7 +52,7 @@ export const quizDefinition = {
           type: "paragraph",
           graded: false,
           html:
-            "<p>Krishna states in BG 10.10 — '<em>I give the intelligence by which they can come to Me</em>'. Read Srila Prabhupada’s purport for deeper insight: <a href='https://vedabase.io/en/library/bg/10/10/' target='_blank'>BG 10.10</a></p>",
+            "<p>Krishna states in BG 10.10 — '<em>I give the intelligence by which they can come to Me</em>'. Read Srila Prabhupada’s  Bhagavad Gita as it is</p>",
         },
         // 5 (One-word)
         {
@@ -52,6 +60,14 @@ export const quizDefinition = {
           type: "one-word",
           graded: false,
           question: "In one word, what does Krishna ask for in BG 18.66? (Hint: S____)",
+          shloka: {
+  ref: "Bhagavad Gita 18.66",
+  iast:
+    "sarva-dharmān parityajya mām ekaṁ śaraṇaṁ vraja | ahaṁ tvāṁ sarva-pāpebhyo mokṣayiṣyāmi mā śucaḥ ||",
+  translation:
+    "Abandon all varieties of religion and just surrender unto Me. I shall deliver you from all sinful reactions. Do not fear."
+}
+
         },
         // 6 (Image-based)
         {
@@ -93,6 +109,14 @@ export const quizDefinition = {
             "Offer results to Krishna",
           ],
           answerIndexes: [0, 2, 3],
+          shloka: {
+  ref: "Bhagavad Gita 2.47",
+  iast:
+    "karmaṇy evādhikāras te mā phaleṣu kadācana | mā karma-phala-hetur bhūr mā te saṅgo 'stvakarmaṇi ||",
+  translation:
+    "You have a right to perform your prescribed duty, but you are not entitled to the fruits of action. Never consider yourself the cause of the results of your activities, and never be attached to not doing your duty."
+}
+
         },
         // 2
         {
@@ -116,6 +140,14 @@ export const quizDefinition = {
           question: "Krishna says in BG 9.22 that He personally preserves what devotees lack.",
           options: ["True", "False"],
           answerIndex: 0,
+          shloka: {
+  ref: "Bhagavad Gita 9.22",
+  iast:
+    "ananyāś cintayanto māṁ ye janāḥ paryupāsate | teṣāṁ nityābhiyuktānāṁ yoga-kṣemaṁ vahāmy aham ||",
+  translation:
+    "But those who always worship Me with exclusive devotion, meditating on My transcendental form—to them I carry what they lack, and I preserve what they have."
+}
+
         },
         // 4 (Fill Blank)
         {
@@ -132,6 +164,14 @@ export const quizDefinition = {
           graded: false,
           html:
             "<p>In BG 9.26 Krishna says: '<em>Offer Me a leaf, a flower, fruit and water</em>'. Srila Prabhupada explains devotion matters more than the item offered.</p>",
+          shloka: {
+  ref: "Bhagavad Gita 9.26",
+  iast:
+    "patraṁ puṣpaṁ phalaṁ toyaṁ yo me bhaktyā prayacchati | tad ahaṁ bhakty-upahṛtam aśnāmi prayatātmanaḥ ||",
+  translation:
+    "If one offers Me with love and devotion a leaf, a flower, fruit or water, I will accept it."
+}
+
         },
       ],
     },
@@ -168,6 +208,15 @@ export const quizDefinition = {
           question: "Which quality is highlighted in BG 12.13–14?",
           options: ["Hatred", "Compassion", "Anger", "False ego"],
           answerIndex: 1,
+          shloka: {
+  ref: "Bhagavad Gita 12.13–14",
+  iast:
+    "adveṣṭā sarva-bhūtānāṁ maitraḥ karuṇa eva ca | nirmamo nirahaṅkāraḥ sama-duḥkha-sukhaḥ kṣamī ||\n" +
+    "santuṣṭaḥ satataṁ yogī yatātmā dṛḍha-niścayaḥ | mayy arpita-mano-buddhir yo mad-bhaktaḥ sa me priyaḥ ||",
+  translation:
+    "One who is not envious but is a kind friend to all living entities, who does not think himself a proprietor and is free from false ego, who is equal in both happiness and distress, who is tolerant, always satisfied, self-controlled, and engaged in devotional service with determination—such a devotee of Mine is very dear to Me."
+}
+
         },
         // 3
         {
@@ -178,6 +227,14 @@ export const quizDefinition = {
             "BG 6.5 teaches that the mind can be both a friend and an enemy.",
           options: ["True", "False"],
           answerIndex: 0,
+          shloka: {
+  ref: "Bhagavad Gita 6.5",
+  iast:
+    "uddhared ātmanātmānaṁ nātmānam avasādayet | ātmaiva hy ātmano bandhur ātmaiva ripur ātmanaḥ ||",
+  translation:
+    "One must deliver himself with the help of his mind, and not degrade himself. The mind is the friend of the conditioned soul, and his enemy as well."
+}
+
         },
         // 4
         {
@@ -194,6 +251,14 @@ export const quizDefinition = {
           graded: false,
           html:
             "<p>BG 12.20 summarizes: devotees engaged with faith are very dear to Krishna. See Srila Prabhupada’s purport for full meaning.</p>",
+        shloka: {
+  ref: "Bhagavad Gita 12.20",
+  iast:
+    "ye tu dharmyāmṛtam idaṁ yathoktaṁ paryupāsate | śraddadhānā mat-paramā bhaktās te 'tīva me priyāḥ ||",
+  translation:
+    "Those who follow this imperishable path of devotional service and who completely engage themselves with faith, making Me the supreme goal, are very, very dear to Me."
+}
+
         },
       ],
     },
