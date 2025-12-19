@@ -168,95 +168,160 @@ export default function QuestionRenderer({ item, value, onChange }: any) {
         )}
 
         {/* ================= MATCH (VISUAL DND – GRADED) ================= */}
-        {item.type === "match" && item.ui === "visual-dnd" && (() => {
-          const map = value || {};
+        {/* ================= MATCH (VISUAL – DESKTOP + MOBILE OPTIMIZED) ================= */}
+{item.type === "match" && item.ui === "visual-dnd" && (() => {
+  const map = value || {};
 
-          function assign(leftIdx: number, rightIdx: number) {
-            const next = { ...map };
+  function assign(leftIdx: number, rightIdx: number) {
+    const next = { ...map };
 
-            // ensure one-to-one mapping
-            Object.keys(next).forEach((k) => {
-              if (next[k] === rightIdx) delete next[k];
-            });
+    Object.keys(next).forEach((k) => {
+      if (next[k] === rightIdx) delete next[k];
+    });
 
-            next[leftIdx] = rightIdx;
-            onChange(next);
-            setSelectedLeft(null);
-          }
+    next[leftIdx] = rightIdx;
+    onChange(next);
+    setSelectedLeft(null);
+  }
+
+  function unassign(leftIdx: number) {
+    const next = { ...map };
+    delete next[leftIdx];
+    onChange(next);
+  }
+
+  const isAssigned = (rightIdx: number) =>
+    Object.values(map).includes(rightIdx);
+
+  /* ---------------- MOBILE LAYOUT ---------------- */
+  if (isMobile) {
+    return (
+      <div className="space-y-4">
+        <div className="text-xs bg-amber-50 border border-amber-200 p-3 rounded-lg">
+          Tap a card → choose the correct match → you may reassign anytime
+        </div>
+
+        {item.columnA.map((a: any, i: number) => {
+          const matchedIdx = map[i];
+          const matched = matchedIdx !== undefined
+            ? item.columnB[matchedIdx]
+            : null;
 
           return (
-            <div className="space-y-4">
-              <div className="text-xs bg-amber-50 border border-amber-200 p-3 rounded-lg">
-                {isMobile
-                  ? "Tap a left item, then tap its matching right item"
-                  : "Drag a left item and drop it on the matching right item"}
+            <div
+              key={i}
+              className="border rounded-xl p-3 bg-white space-y-3"
+            >
+              {/* LEFT CARD */}
+              <div
+                onClick={() =>
+                  setSelectedLeft(selectedLeft === i ? null : i)
+                }
+                className={`flex items-center gap-3 cursor-pointer
+                  ${
+                    selectedLeft === i
+                      ? "bg-amber-50 border-amber-400"
+                      : ""
+                  }`}
+              >
+                <img
+                  src={a.image}
+                  className="w-12 h-12 rounded-lg border"
+                />
+                <p className="font-medium">{a.label}</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* LEFT */}
-                <div className="space-y-3">
-                  {item.columnA.map((a: any, i: number) => (
-                    <div
-                      key={i}
-                      draggable={!isMobile}
-                      onDragStart={(e) =>
-                        e.dataTransfer.setData("text/plain", String(i))
-                      }
-                      onClick={() => isMobile && setSelectedLeft(i)}
-                      className={`flex items-center gap-3 p-3 border rounded-xl cursor-pointer
+              {/* MATCHED INFO */}
+              {matched && (
+                <div className="text-xs text-green-700 flex justify-between">
+                  <span>✓ Matched with: <b>{matched.label}</b></span>
+                  <button
+                    onClick={() => unassign(i)}
+                    className="text-red-600 underline"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+
+              {/* RIGHT OPTIONS INLINE */}
+              {selectedLeft === i && (
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  {item.columnB.map((b: any, j: number) => (
+                    <button
+                      key={j}
+                      disabled={isAssigned(j)}
+                      onClick={() => assign(i, j)}
+                      className={`flex items-center gap-2 p-2 border rounded-lg text-xs
                         ${
-                          selectedLeft === i
-                            ? "border-amber-500 bg-amber-50"
-                            : "border-slate-200"
+                          isAssigned(j)
+                            ? "opacity-40"
+                            : "hover:border-amber-500"
                         }`}
                     >
                       <img
-                        src={a.image}
-                        className="w-12 h-12 rounded-lg border"
-                        alt={a.label}
-                      />
-                      <div className="flex-1">
-                        <p className="font-medium">{a.label}</p>
-                        {map[i] !== undefined && (
-                          <p className="text-xs text-green-700 mt-1">
-                            Matched ✓
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* RIGHT */}
-                <div className="space-y-3">
-                  {item.columnB.map((b: any, j: number) => (
-                    <div
-                      key={j}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => {
-                        const left = e.dataTransfer.getData("text/plain");
-                        if (left !== "") assign(Number(left), j);
-                      }}
-                      onClick={() =>
-                        isMobile &&
-                        selectedLeft !== null &&
-                        assign(selectedLeft, j)
-                      }
-                      className="flex items-center gap-3 p-3 border rounded-xl cursor-pointer hover:border-amber-500"
-                    >
-                      <img
                         src={b.image}
-                        className="w-12 h-12 rounded-lg border"
-                        alt={b.label}
+                        className="w-8 h-8 rounded border"
                       />
-                      <p className="font-medium">{b.label}</p>
-                    </div>
+                      {b.label}
+                    </button>
                   ))}
                 </div>
-              </div>
+              )}
             </div>
           );
-        })()}
+        })}
+      </div>
+    );
+  }
+
+  /* ---------------- DESKTOP LAYOUT ---------------- */
+  return (
+    <div className="space-y-4">
+      <div className="text-xs bg-amber-50 border border-amber-200 p-3 rounded-lg">
+        Drag a LEFT item and drop it on the matching RIGHT item
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        {/* LEFT */}
+        <div className="space-y-3">
+          {item.columnA.map((a: any, i: number) => (
+            <div
+              key={i}
+              draggable
+              onDragStart={(e) =>
+                e.dataTransfer.setData("text/plain", String(i))
+              }
+              className="flex gap-3 p-3 border rounded-xl cursor-pointer"
+            >
+              <img src={a.image} className="w-12 h-12 rounded border" />
+              <p className="font-medium">{a.label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* RIGHT */}
+        <div className="space-y-3">
+          {item.columnB.map((b: any, j: number) => (
+            <div
+              key={j}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                const left = e.dataTransfer.getData("text/plain");
+                if (left !== "") assign(Number(left), j);
+              }}
+              className="flex gap-3 p-3 border rounded-xl hover:border-amber-500"
+            >
+              <img src={b.image} className="w-12 h-12 rounded border" />
+              <p className="font-medium">{b.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+})()}
+
       </div>
 
       {/* ================= SHLOKA MODAL ================= */}

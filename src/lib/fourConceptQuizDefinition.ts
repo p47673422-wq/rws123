@@ -108,6 +108,8 @@ export const fourConceptQuizDefinition = {
       video: { url: "/v3.mp4" },
 
       items: [
+        { id: "c3_q1", type: "one-word", graded: false, question: "Share your comment about the video of common sense.", }, 
+        { id: "c3_q2", type: "one-word", graded: false, question: "According to BG 7.7, what is the thread compared to and what are the pearls compared to?", shloka: { ref: "Bhagavad Gita 7.7", iast: "mattaḥ parataraṁ nānyat kiñcid asti dhanañ-jaya | mayi sarvam idaṁ protaṁ sūtre maṇi-gaṇā iva ||", translation: "O conqueror of wealth, there is no truth superior to Me. Everything rests upon Me, as pearls are strung on a thread." },},
         {
           id: "c3_match",
           type: "match",
@@ -117,21 +119,21 @@ export const fourConceptQuizDefinition = {
             "Match column A (country government) with column B (universal government):",
 
           columnA: [
-            { label: "Home Ministry \n(Law and order)\n", image: "/images/thread.png" },
-            { label: "Health Ministry", image: "/images/pearls.png" },
-            { label: "Ministry of Energy \n(Electricity and Lighting)", image: "/images/support.png" },
-            { label: "Finance Ministry\n(Currency or wealth)\n", image: "/images/connection.png" },
-            { label: "Defense Ministry\n(Protection from dangers)", image: "/images/foundation.png" },
-            { label: "Education Ministry\n(Education for citizens)\n", image: "/images/controller.png" },
+            { label: "Home Ministry \n(Law and order)\n", image: "/images/w1.png" },
+            { label: "Health Ministry", image: "/images/w2.jpg" },
+            { label: "Ministry of Energy \n(Electricity and Lighting)", image: "/images/w3.png" },
+            { label: "Finance Ministry\n(Currency or wealth)\n", image: "/images/w4.png" },
+            { label: "Defense Ministry\n(Protection from dangers)", image: "/images/w5.png" },
+            { label: "Education Ministry\n(Education for citizens)\n", image: "/images/w6.png" },
           ],
 
           columnB: [
-            { label: "Sun and Moon", image: "/images/krishna.png" },
-            { label: "Ozonosphere, \nImmunity in body,\n", image: "/images/living.png" },
-            { label: "Ayurvedic herbs", image: "/images/reality.png" },
-            { label: "Vedas, Bible, Quran", image: "/images/order.png" },
-            { label: "Illicit sex 🡪 AIDS\nSmoking 🡪 Cancer \nDrinking 🡪 Liver problem", image: "/images/cause.png" },
-            { label: "Gold, silver, nava ratnas, diamonds", image: "/images/sustainer.png" },
+            { label: "Sun and Moon", image: "/images/q1.jpg" },
+            { label: "Ozonosphere, \nImmunity in body,\n", image: "/images/r2.png" },
+            { label: "Ayurvedic herbs", image: "/images/r3.png" },
+            { label: "Vedas, Bible, Quran", image: "/images/r4.png" },
+            { label: "Illicit sex 🡪 AIDS\nSmoking 🡪 Cancer \nDrinking 🡪 Liver problem", image: "/images/r5.png" },
+            { label: "Gold, silver, nava ratnas, diamonds", image: "/images/r6.png" },
           ],
 
           correctMap: {
