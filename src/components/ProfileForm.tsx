@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { isValidPhoneNumber } from "libphonenumber-js";
 
 export default function ProfileForm({ initial, onSave, onCancel }: any) {
   const [name, setName] = useState(initial?.name || "");
@@ -7,9 +8,26 @@ export default function ProfileForm({ initial, onSave, onCancel }: any) {
   const [gender, setGender] = useState(initial?.gender || "");
   const [marital, setMarital] = useState(initial?.marital || "");
 
+  function isValidIndianMobile(mobile: string) {
+    // Remove spaces, dashes, etc.
+    const cleaned = mobile.replace(/\D/g, "");
+    // Static check: 10 digits, starts with 6-9
+    if (!/^([6-9][0-9]{9})$/.test(cleaned)) return false;
+    // Library check (libphonenumber-js)
+    try {
+      return isValidPhoneNumber(cleaned, 'IN');
+    } catch {
+      return false;
+    }
+  }
+
   function save() {
     if (!name || !mobile) {
       alert("Name & mobile required.");
+      return;
+    }
+    if (!isValidIndianMobile(mobile)) {
+      alert("Invalid mobile number.");
       return;
     }
     const profile = {
@@ -38,6 +56,9 @@ export default function ProfileForm({ initial, onSave, onCancel }: any) {
           value={mobile}
           onChange={(e) => setMobile(e.target.value)}
           placeholder="Mobile number"
+          maxLength={10}
+          pattern="[6-9]{1}[0-9]{9}"
+          inputMode="numeric"
         />
         <select
           className="border p-2 rounded w-full"

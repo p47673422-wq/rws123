@@ -97,6 +97,7 @@ export default function ConceptQuizPlayer({ quiz, profile, onExit }: any) {
               ← Previous Sutra
             </button>
           )}
+          {conceptIndex < quiz.sections.length - 1 && ( <button onClick={() => { setConceptIndex(conceptIndex + 1); setAnswers({}); }} className="px-4 py-2 bg-amber-100 text-amber-800 rounded-lg hover:bg-amber-200" > Next Sutra → </button> )}
         </div>
 
         {/* ================= VIDEO ================= */}

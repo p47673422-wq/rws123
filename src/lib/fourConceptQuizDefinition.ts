@@ -56,7 +56,7 @@ export const fourConceptQuizDefinition = {
       submitAs: "four-fundamental-truths:c2",
       title: "This Life is NOT All-in-All",
       subtitle: "The Next Life Exists (BG 2.22)",
-      video: { url: "/v2.mp4" },
+      video: { url: "/uio.mp4" },
 
       items: [
         {
