@@ -62,12 +62,12 @@ export default function ConceptQuizPlayer({ quiz, profile, onExit }: any) {
         <div className="flex justify-between items-center">
           <div>
             <p className="text-xs text-amber-700">
-              Concept {conceptIndex + 1} of {quiz.sections.length}
+              Sutra {conceptIndex + 1} of {quiz.sections.length}
             </p>
             <h2 className="text-xl font-semibold text-amber-800">
               {concept.title}
             </h2>
-            <p className="text-sm text-slate-600">{concept.subtitle}</p>
+            <p className="text-lg font-semibold text-amber-800">{concept.subtitle}</p>
           </div>
 
           <button className="text-sm underline" onClick={onExit}>
@@ -75,8 +75,34 @@ export default function ConceptQuizPlayer({ quiz, profile, onExit }: any) {
           </button>
         </div>
 
+        {/* NAVIGATION BUTTONS */}
+        <div className="flex gap-3">
+          {conceptIndex > 0 && (
+            <button
+              onClick={() => {
+                setConceptIndex(conceptIndex - 1);
+                setAnswers({});
+              }}
+              className="px-4 py-2 bg-amber-100 text-amber-800 rounded-lg hover:bg-amber-200"
+            >
+              ← Back Sutra
+            </button>
+          )}
+          {conceptIndex < quiz.sections.length - 1 && (
+            <button
+              onClick={() => {
+                setConceptIndex(conceptIndex + 1);
+                setAnswers({});
+              }}
+              className="px-4 py-2 bg-amber-100 text-amber-800 rounded-lg hover:bg-amber-200"
+            >
+              Next Sutra →
+            </button>
+          )}
+        </div>
+
         {/* VIDEO */}
-        {concept.video && (
+        {concept?.video && (
           <div className="rounded-2xl overflow-hidden shadow border border-amber-100">
             <iframe
               src={concept.video.url}
@@ -85,6 +111,15 @@ export default function ConceptQuizPlayer({ quiz, profile, onExit }: any) {
             />
           </div>
         )}
+        {concept.image && (
+  <div className="rounded-2xl overflow-hidden shadow border border-amber-100">
+    <img
+      src={concept.image}
+      
+      className="w-full h-48 sm:h-56 object-cover"
+    />
+  </div>
+)}
 
         {/* QUESTIONS */}
         {concept.items.map((item: any) => (
@@ -107,7 +142,7 @@ export default function ConceptQuizPlayer({ quiz, profile, onExit }: any) {
                 : "bg-amber-600 hover:bg-amber-700"
             }`}
         >
-          {isSubmitting ? "Submitting…" : "Submit This Concept"}
+          {isSubmitting ? "Submitting…" : "Submit This Sutra"}
         </button>
       </div>
 
@@ -116,11 +151,11 @@ export default function ConceptQuizPlayer({ quiz, profile, onExit }: any) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="bg-white max-w-md w-full p-6 rounded-2xl shadow-xl border border-amber-200 text-center">
             <h3 className="text-xl font-bold text-amber-800">
-              🙏 Concept Submitted
+              🙏 Sutra Submitted
             </h3>
 
             <p className="text-sm text-slate-700 mt-3">
-              Thank you for reflecting on this concept.
+              Thank you for reflecting on this sutra.
             </p>
 
             <div className="mt-6 flex flex-col gap-3">
@@ -129,7 +164,7 @@ export default function ConceptQuizPlayer({ quiz, profile, onExit }: any) {
                 className="px-5 py-2 bg-amber-600 text-white rounded-lg"
               >
                 {conceptIndex < quiz.sections.length - 1
-                  ? "Continue to Next Concept"
+                  ? "Continue to Next Sutra"
                   : "Finish Journey"}
               </button>
 
@@ -137,7 +172,7 @@ export default function ConceptQuizPlayer({ quiz, profile, onExit }: any) {
                 onClick={() => router.push("/quiz/gift")}
                 className="px-5 py-2 border rounded-lg"
               >
-                View My Progress
+                View My Progres & claim gifts
               </button>
             </div>
           </div>
