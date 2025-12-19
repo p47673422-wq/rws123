@@ -275,34 +275,64 @@ export default function QuestionRenderer({ item, value, onChange }: any) {
     );
   }
 
-  /* ---------------- DESKTOP LAYOUT ---------------- */
-  return (
-    <div className="space-y-4">
-      <div className="text-xs bg-amber-50 border border-amber-200 p-3 rounded-lg">
-        Drag a LEFT item and drop it on the matching RIGHT item
-      </div>
+  /* ---------------- DESKTOP LAYOUT (WITH VISUAL FEEDBACK) ---------------- */
+return (
+  <div className="space-y-4">
+    <div className="text-xs bg-amber-50 border border-amber-200 p-3 rounded-lg">
+      Drag a LEFT item and drop it on the matching RIGHT item.
+      You may remove and reassign anytime.
+    </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        {/* LEFT */}
-        <div className="space-y-3">
-          {item.columnA.map((a: any, i: number) => (
+    <div className="grid grid-cols-2 gap-6">
+      {/* LEFT */}
+      <div className="space-y-3">
+        {item.columnA.map((a: any, i: number) => {
+          const matchedIdx = map[i];
+          const matched =
+            matchedIdx !== undefined ? item.columnB[matchedIdx] : null;
+
+          return (
             <div
               key={i}
               draggable
               onDragStart={(e) =>
                 e.dataTransfer.setData("text/plain", String(i))
               }
-              className="flex gap-3 p-3 border rounded-xl cursor-pointer"
+              className="p-3 border rounded-xl bg-white cursor-pointer space-y-2"
             >
-              <img src={a.image} className="w-12 h-12 rounded border" />
-              <p className="font-medium">{a.label}</p>
-            </div>
-          ))}
-        </div>
+              <div className="flex items-center gap-3">
+                <img
+                  src={a.image}
+                  className="w-12 h-12 rounded border"
+                />
+                <p className="font-medium">{a.label}</p>
+              </div>
 
-        {/* RIGHT */}
-        <div className="space-y-3">
-          {item.columnB.map((b: any, j: number) => (
+              {/* MATCH INFO */}
+              {matched && (
+                <div className="text-xs text-green-700 flex justify-between items-center">
+                  <span>
+                    ✓ Matched with: <b>{matched.label}</b>
+                  </span>
+                  <button
+                    onClick={() => unassign(i)}
+                    className="text-red-600 underline"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* RIGHT */}
+      <div className="space-y-3">
+        {item.columnB.map((b: any, j: number) => {
+          const used = Object.values(map).includes(j);
+
+          return (
             <div
               key={j}
               onDragOver={(e) => e.preventDefault()}
@@ -310,16 +340,26 @@ export default function QuestionRenderer({ item, value, onChange }: any) {
                 const left = e.dataTransfer.getData("text/plain");
                 if (left !== "") assign(Number(left), j);
               }}
-              className="flex gap-3 p-3 border rounded-xl hover:border-amber-500"
+              className={`flex items-center gap-3 p-3 border rounded-xl transition
+                ${
+                  used
+                    ? "opacity-40 bg-slate-100"
+                    : "hover:border-amber-500 cursor-pointer bg-white"
+                }`}
             >
-              <img src={b.image} className="w-12 h-12 rounded border" />
+              <img
+                src={b.image}
+                className="w-12 h-12 rounded border"
+              />
               <p className="font-medium">{b.label}</p>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
-  );
+  </div>
+);
+
 })()}
 
       </div>

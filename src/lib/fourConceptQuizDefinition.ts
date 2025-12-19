@@ -178,8 +178,17 @@ export const fourConceptQuizDefinition = {
       submitAs: "four-fundamental-truths:c4",
       title: "This World is NOT All-in-All",
       subtitle: "The Spiritual World Exists (BG 8.15–16, 8.21)",
-      video: { url: "/v4.mp4" },
-      image: "/images/spiritual-world.jpg",
+      // video: { url: "/v4.mp4" },
+      images: [
+    "/images/i1.png",
+    "/images/i2.png",
+    "/images/i3.png",
+    "/images/i4.png",
+    "/images/i5.png",
+    "/images/i6.png",
+    "/images/i7.png",
+    "/images/i8.png",
+  ],
 
       items: [
         {
