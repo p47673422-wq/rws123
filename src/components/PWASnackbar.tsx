@@ -14,7 +14,7 @@ export default function PWASnackbar({
 
   return (
     <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 w-[92%] max-w-md">
-      <div className="flex items-center gap-3 rounded-xl bg-white/95 backdrop-blur shadow-lg px-4 py-3 border">
+      <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-saffron-200 via-pink-50 to-white backdrop-blur shadow-lg px-4 py-3 border">
         {isInstall ? (
           <Download className="text-pink-600" />
         ) : (

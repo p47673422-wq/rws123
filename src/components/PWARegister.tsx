@@ -1,49 +1,76 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import PWASnackbar from "./PWASnackbar";
 
+/* ---------------- HELPERS ---------------- */
+const isInstalled = () =>
+  window.matchMedia("(display-mode: standalone)").matches ||
+  (navigator as any).standalone === true ||
+  localStorage.getItem("pwa_installed") === "1";
+
+/* ---------------- COMPONENT ---------------- */
 export default function PWARegister() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstall, setShowInstall] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [swReg, setSwReg] = useState<ServiceWorkerRegistration | null>(null);
 
+  /* ---------- SERVICE WORKER REGISTRATION ---------- */
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/sw.js", { updateViaCache: "none" })
-        .then((reg) => {
-          setSwReg(reg);
-          if (reg.waiting) setShowUpdate(true);
+    if (!("serviceWorker" in navigator)) return;
 
-          reg.addEventListener("updatefound", () => {
-            const worker = reg.installing;
-            if (!worker) return;
-            worker.addEventListener("statechange", () => {
-              if (
-                worker.state === "installed" &&
-                navigator.serviceWorker.controller
-              ) {
-                setShowUpdate(true);
-              }
-            });
+    navigator.serviceWorker
+      .register("/sw.js", { updateViaCache: "none" })
+      .then((reg) => {
+        setSwReg(reg);
+
+        // Show update ONLY if app is installed
+        if (reg.waiting && isInstalled()) {
+          setShowUpdate(true);
+        }
+
+        reg.addEventListener("updatefound", () => {
+          const worker = reg.installing;
+          if (!worker) return;
+
+          worker.addEventListener("statechange", () => {
+            if (
+              worker.state === "installed" &&
+              navigator.serviceWorker.controller &&
+              isInstalled()
+            ) {
+              setShowUpdate(true);
+            }
           });
         });
-    }
+      });
+  }, []);
 
+  /* ---------- INSTALL PROMPT ---------- */
+  useEffect(() => {
     const beforeInstall = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setShowInstall(true);
+      setShowUpdate(false); // Install has priority
+    };
+
+    const onInstalled = () => {
+      localStorage.setItem("pwa_installed", "1");
+      setShowInstall(false);
     };
 
     window.addEventListener("beforeinstallprompt", beforeInstall);
+    window.addEventListener("appinstalled", onInstalled);
 
     return () => {
       window.removeEventListener("beforeinstallprompt", beforeInstall);
+      window.removeEventListener("appinstalled", onInstalled);
     };
   }, []);
 
+  /* ---------- INSTALL ACTION ---------- */
   const installApp = async () => {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
@@ -52,6 +79,7 @@ export default function PWARegister() {
     setShowInstall(false);
   };
 
+  /* ---------- UPDATE ACTION ---------- */
   const applyUpdate = () => {
     if (!swReg?.waiting) return;
     swReg.waiting.postMessage({ type: "SKIP_WAITING" });
@@ -60,7 +88,8 @@ export default function PWARegister() {
     );
   };
 
-  const enableThankYouNotification = async () => {
+  /* ---------- ONE-TIME THANK YOU NOTIFICATION ---------- */
+  const sendThankYouNotification = async () => {
     if (localStorage.getItem("install_thanked")) return;
 
     const perm = await Notification.requestPermission();
@@ -72,13 +101,13 @@ export default function PWARegister() {
     localStorage.setItem("install_thanked", "1");
   };
 
-  // Trigger thank-you after install
   useEffect(() => {
-    window.addEventListener("appinstalled", enableThankYouNotification);
+    window.addEventListener("appinstalled", sendThankYouNotification);
     return () =>
-      window.removeEventListener("appinstalled", enableThankYouNotification);
+      window.removeEventListener("appinstalled", sendThankYouNotification);
   }, []);
 
+  /* ---------- RENDER ---------- */
   return (
     <>
       {showInstall && (
