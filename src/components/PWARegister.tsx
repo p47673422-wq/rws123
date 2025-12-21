@@ -5,7 +5,7 @@ import PWASnackbar from "./PWASnackbar";
 
 export default function PWARegister() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [showInstall, setShowInstall] = useState(true); // 👈 ALWAYS TRUE
+  const [showInstall, setShowInstall] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [swReg, setSwReg] = useState<ServiceWorkerRegistration | null>(null);
 
@@ -41,24 +41,34 @@ export default function PWARegister() {
 
   /* ---------- CAPTURE INSTALL PROMPT (ONCE) ---------- */
   useEffect(() => {
-    const beforeInstall = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
+  // If app is already installed, never show install snackbar
+  if (isInstalled()) {
+    setShowInstall(false);
+    return;
+  }
 
-    const onInstalled = () => {
-      localStorage.setItem("pwa_installed", "1");
-      setShowInstall(false);
-    };
+  // Otherwise, show install snackbar
+  setShowInstall(true);
 
-    window.addEventListener("beforeinstallprompt", beforeInstall);
-    window.addEventListener("appinstalled", onInstalled);
+  const beforeInstall = (e: any) => {
+    e.preventDefault();
+    setDeferredPrompt(e);
+  };
 
-    return () => {
-      window.removeEventListener("beforeinstallprompt", beforeInstall);
-      window.removeEventListener("appinstalled", onInstalled);
-    };
-  }, []);
+  const onInstalled = () => {
+    localStorage.setItem("pwa_installed", "1");
+    setShowInstall(false);
+  };
+
+  window.addEventListener("beforeinstallprompt", beforeInstall);
+  window.addEventListener("appinstalled", onInstalled);
+
+  return () => {
+    window.removeEventListener("beforeinstallprompt", beforeInstall);
+    window.removeEventListener("appinstalled", onInstalled);
+  };
+}, []);
+
 
   /* ---------- INSTALL ACTION ---------- */
   const installApp = async () => {
