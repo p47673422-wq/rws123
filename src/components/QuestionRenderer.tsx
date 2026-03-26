@@ -110,13 +110,15 @@ export default function QuestionRenderer({ item, value, onChange }: any) {
             </label>
           ))}
 
-        {/* ================= ONE WORD ================= */}
+        {/* ================= ONE WORD (expanded) ================= */}
         {item.type === "one-word" && (
-          <input
+          <textarea
             value={value || ""}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Type answer"
-            className="border p-2 rounded w-full"
+            maxLength={250}
+            rows={3}
+            className="border p-2 rounded w-full min-h-[96px]"
           />
         )}
 

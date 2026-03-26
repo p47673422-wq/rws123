@@ -119,12 +119,12 @@ export default function QuizPlayer({ quiz, profile, onExit }: any) {
             </h3>
 
             <p className="text-sm text-slate-700 mt-3">
-              Thank you for participating in the Gita Meditation Quiz.
+              Thank you for participating in the Ram Navamii Meditation Quiz.
               Your responses have been recorded successfully.
             </p>
 
             <p className="text-sm text-slate-600 mt-2">
-              You can now view your results and claim your Gita meditation gift.
+              You can now view your results and claim your Ram Navami meditation gift.
             </p>
 
             <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">

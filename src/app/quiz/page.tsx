@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ProfileForm from "../../components/ProfileForm";
 import QuizRunner from "../../components/QuizRunner";
 import { quizDefinition as gitaMeditationQuiz } from "@/lib/quizDefinition";
-import { fourConceptQuizDefinition } from "@/lib/fourConceptQuizDefinition";
+// import { fourConceptQuizDefinition } from "@/lib/fourConceptQuizDefinition";
 
 type Mode = "select" | "profile" | "quiz";
 
@@ -35,7 +35,7 @@ export default function QuizPage() {
 
       <header className="max-w-4xl mx-auto px-6 mt-4 text-center">
         <h1 className="text-3xl font-bold text-amber-800">
-          Gita Learning Journey
+          Bhakti Path
         </h1>
         <p className="text-sm text-slate-600 mt-1">
           Reflect • Learn • Transform
@@ -51,16 +51,12 @@ export default function QuizPage() {
             {/* -------- GITA MEDITATION QUIZ -------- */}
             <div className="bg-white p-6 rounded-2xl shadow border border-amber-100">
               <h2 className="text-xl font-semibold text-amber-800">
-                Gita Meditation Quiz
+                Ram Navami Meditation Quiz
               </h2>
-              <p className="text-sm text-slate-700 mt-2">
-                A guided quiz based on Bhagavad Gita As It Is by Srila Prabhupada.
-                Ideal for first-time seekers.
-              </p>
-
+              
               <ul className="text-sm text-slate-600 mt-3 list-disc ml-5">
-                <li>Multiple sections</li>
-                <li>Mixed question types</li>
+                <li>Increase bhakti</li>
+                <li>Know about Lord Ram</li>
                 <li>Gift after completion</li>
               </ul>
 
@@ -73,28 +69,6 @@ export default function QuizPage() {
             </div>
 
             {/* -------- FOUR CONCEPT JOURNEY -------- */}
-            <div className="bg-white p-6 rounded-2xl shadow border border-amber-100">
-              <h2 className="text-xl font-semibold text-amber-800">
-                Four Fundamental Truths of Gita
-              </h2>
-              <p className="text-sm text-slate-700 mt-2">
-                A deep, video-based journey exploring core truths of existence
-                taught by Krishna.
-              </p>
-
-              <ul className="text-sm text-slate-600 mt-3 list-disc ml-5">
-                <li>4 core concepts</li>
-                <li>Video + reflection</li>
-                <li>Philosophical depth</li>
-              </ul>
-
-              <button
-                onClick={() => startQuiz(fourConceptQuizDefinition)}
-                className="mt-4 px-5 py-2 bg-green-700 hover:bg-green-800 text-white rounded-xl"
-              >
-                Begin Concept Journey
-              </button>
-            </div>
           </div>
         )}
 
