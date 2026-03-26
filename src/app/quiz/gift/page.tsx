@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { quizDefinition } from "@/lib/quizDefinition";
 
 /* ------------------------------------------------------------------ */
@@ -97,6 +97,14 @@ const conceptMap = {
 /* ------------------------------------------------------------------ */
 export default function GiftPage() {
   const [attempts, setAttempts] = useState<any[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+    useEffect(() => {
+      // Try to play background music on mount
+      if (audioRef.current) {
+        audioRef.current.volume = 0.5;
+        audioRef.current.play().catch(() => {});
+      }
+    }, []);
 
   useEffect(() => {
     const raw = localStorage.getItem("_mkt_profile_v1");
@@ -109,7 +117,7 @@ export default function GiftPage() {
   }, []);
 
   const meditationAttempts = attempts.filter(
-    (a) => a.quizId === "gita-meditation-2025"
+    (a) => a.quizId === "ram-navami-meditation-2025"
   );
 
   const conceptAttempts = attempts.filter(
@@ -118,9 +126,10 @@ export default function GiftPage() {
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-amber-50 to-white">
+      <audio ref={audioRef} src="/audio/qrn.mp3" autoPlay loop style={{ display: 'none' }} />
       <header className="max-w-3xl mx-auto pb-4 border-b border-amber-200">
         <h1 className="text-xl font-bold text-amber-800">
-          Claim Your Gita Meditation Gift
+          Claim Your Ram Navami Gift
         </h1>
       </header>
 
@@ -131,7 +140,7 @@ export default function GiftPage() {
         {/* ---------------- GITA PROMOTION ---------------- */}
         <div className="bg-white p-6 rounded-xl shadow border border-amber-100 flex gap-6">
           <img
-            src="/images/BG.jpg"
+            src="/images/ram.jpeg"
             alt="Bhagavad Gita As It Is"
             className="w-32 rounded-lg border shadow"
           />

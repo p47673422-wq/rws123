@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ProfileForm from "../../components/ProfileForm";
 import QuizRunner from "../../components/QuizRunner";
 import { quizDefinition as gitaMeditationQuiz } from "@/lib/quizDefinition";
@@ -12,6 +12,14 @@ export default function QuizPage() {
   const [profile, setProfile] = useState<any>(null);
   const [mode, setMode] = useState<Mode>("select");
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+    useEffect(() => {
+      // Try to play background music on mount
+      if (audioRef.current) {
+        audioRef.current.volume = 0.5;
+        audioRef.current.play().catch(() => {});
+      }
+    }, []);
 
   useEffect(() => {
     const raw = localStorage.getItem("_mkt_profile_v1");
@@ -26,6 +34,7 @@ export default function QuizPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-white">
+      <audio ref={audioRef} src="/audio/qrn.mp3" autoPlay loop style={{ display: 'none' }} />
 
       {/* ================= HEADER ================= */}
       <div
@@ -49,7 +58,7 @@ export default function QuizPage() {
           <div className="grid md:grid-cols-2 gap-6 animate-fadeIn">
 
             {/* -------- GITA MEDITATION QUIZ -------- */}
-            <div className="bg-white p-6 rounded-2xl shadow border border-amber-100">
+            <div className="bg-white p-6 rounded-2xl shadow border border-amber-100 md:col-span-2">
               <h2 className="text-xl font-semibold text-amber-800">
                 Ram Navami Meditation Quiz
               </h2>
