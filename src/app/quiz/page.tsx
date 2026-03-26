@@ -30,7 +30,7 @@ export default function QuizPage() {
       {/* ================= HEADER ================= */}
       <div
         className="w-full h-36 md:h-44 bg-cover bg-center rounded-b-3xl shadow"
-        style={{ backgroundImage: "url('/images/BG.jpg')" }}
+        style={{ backgroundImage: "url('/images/ram.jpeg')" }}
       />
 
       <header className="max-w-4xl mx-auto px-6 mt-4 text-center">

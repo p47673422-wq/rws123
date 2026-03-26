@@ -136,20 +136,19 @@ export default function GiftPage() {
             className="w-32 rounded-lg border shadow"
           />
           <div>
-            <h2 className="font-bold text-lg text-amber-800">
-              Why Bhagavad Gita Is Essential
-            </h2>
-            <p className="mt-2 text-sm text-slate-700">
-              <b>Bhagavad Gita As It Is</b> by <b>Srila Prabhupada</b> presents
-              Krishna’s teachings in their original purity and power.
-            </p>
-            <ul className="list-disc ml-5 mt-3 text-sm text-slate-700 space-y-1">
-              <li>Purifies the heart (BG 4.38)</li>
-              <li>Guides detached action (BG 2.47)</li>
-              <li>Assures divine protection (BG 18.66)</li>
-              <li>Strengthens devotion (BG 12.20)</li>
-            </ul>
-          </div>
+  <h2 className="font-bold text-lg text-amber-800">
+    Why Ramayana Is Essential
+  </h2>
+  <p className="mt-2 text-sm text-slate-700">
+    <b>Ramayana</b> as presented in disciplic succession reveals the divine pastimes of <b>Lord Ram</b>, the Supreme Personality of Godhead, and teaches perfect dharma and devotion.
+  </p>
+  <ul className="list-disc ml-5 mt-3 text-sm text-slate-700 space-y-1">
+    <li>Reveals Lord Ram as the embodiment of dharma (Ayodhya Kanda)</li>
+    <li>Teaches ideal character through His actions (entire Ramayana)</li>
+    <li>Demonstrates pure devotion (Hanuman & Shabari)</li>
+    <li>Guides righteous living in all situations</li>
+  </ul>
+</div>
         </div>
 
         {/* ---------------- NO ATTEMPTS ---------------- */}
@@ -172,7 +171,7 @@ export default function GiftPage() {
         {meditationAttempts.length > 0 && (
           <div className="bg-white p-6 rounded-xl shadow border border-amber-100">
             <h2 className="text-lg font-bold text-amber-800 mb-4">
-              Gita Meditation Quiz Result
+              Ram Navami Meditation Quiz Result
             </h2>
 
             {meditationAttempts.map((att) => (
@@ -226,7 +225,7 @@ export default function GiftPage() {
         )}
 
         {/* ================= CONCEPT JOURNEY ================= */}
-        <div className="bg-white p-6 rounded-xl shadow border border-amber-100">
+        {/* <div className="bg-white p-6 rounded-xl shadow border border-amber-100">
           <h2 className="text-lg font-bold text-amber-800 mb-2">
             Four Fundamental Truths of the Gita
           </h2>
@@ -264,7 +263,7 @@ export default function GiftPage() {
               </div>
             );
           })}
-        </div>
+        </div> */}
 
         {/* ---------------- STALL NOTE ---------------- */}
         <div className="bg-amber-100 p-4 rounded-xl border border-amber-200 text-center">
