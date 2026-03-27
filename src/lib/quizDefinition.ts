@@ -144,15 +144,16 @@ export const quizDefinition = {
           graded: false,
           question: "Ayodhya (Rama–Bharata), Kishkindha (Sugriva–Vali), Lanka (Ravana–Vibhishana): How did each respond to conflict? What does this teach about dharma and devotion?",
         },
-      ],
-    },
-    {
+        {
           id: "s4q2",
           type: "single-choice",
           graded: false,
           question: "Would you like to opt for free course on bhakti wisdom?",
-          options: ["Yes - Offlie mode", "AYes - Online mode", "No"],
+          options: ["Yes, in offlie mode", "Yes, in online mode", "No"],
           answerIndex: 0,
         },
+      ],
+    },
+    
   ],
 };
