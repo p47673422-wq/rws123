@@ -203,7 +203,7 @@ export default function GiftPage() {
                     </summary>
 
                     <div className="p-3 bg-white space-y-3">
-                      {section.items.map((q) => {
+                      {section.items?.map((q) => {
                         if (q.type === "paragraph") return null;
                         const ua = formatUserAnswer(q, att.answers[q.id]);
                         const ca = formatCorrectAnswer(q);
@@ -213,7 +213,15 @@ export default function GiftPage() {
                             key={q.id}
                             className="border rounded p-3"
                           >
+
                             <p className="font-medium">{q.question}</p>
+                            {"image" in q && q.image && (
+                              <img
+                                src={String((q as any).image)}
+                                alt={q.question ?? "question image"}
+                                className="w-48 h-28 object-contain rounded-md mb-3"
+                              />
+                            )}
                             <p className="text-sm mt-1">
                               <b>Your answer:</b> {ua}
                             </p>

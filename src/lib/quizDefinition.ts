@@ -146,5 +146,13 @@ export const quizDefinition = {
         },
       ],
     },
+    {
+          id: "s4q2",
+          type: "single-choice",
+          graded: false,
+          question: "Would you like to opt for free course on bhakti wisdom?",
+          options: ["Yes - Offlie mode", "AYes - Online mode", "No"],
+          answerIndex: 0,
+        },
   ],
 };
