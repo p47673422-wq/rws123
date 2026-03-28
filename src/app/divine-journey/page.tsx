@@ -159,8 +159,8 @@ export default function DivineJourneyPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedId = localStorage.getItem("userId1");
-      const storedInfo = localStorage.getItem("userInfo1");
+      const storedId = localStorage.getItem("userId2");
+      const storedInfo = localStorage.getItem("userInfo2");
       if (storedId) setUserId(storedId);
       if (storedInfo) {
         try {
@@ -427,7 +427,7 @@ export default function DivineJourneyPage() {
     }
     setUserError("");
     // Only create user if userId1 does not exist
-    if (typeof window !== "undefined" && localStorage.getItem("userId1")) {
+    if (typeof window !== "undefined" && localStorage.getItem("userId2")) {
       setShowUserForm(false);
       setShowCard(true);
       return;
@@ -448,9 +448,9 @@ export default function DivineJourneyPage() {
       if (res.ok) {
         const data = await res.json();
         if (typeof window !== "undefined") {
-          localStorage.setItem("userInfo1", JSON.stringify(userInfo));
+          localStorage.setItem("userInfo2", JSON.stringify(userInfo));
           if (data.userId) {
-            localStorage.setItem("userId1", data.userId);
+            localStorage.setItem("userId2", data.userId);
             setUserId(data.userId);
           }
         }

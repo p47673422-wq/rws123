@@ -66,7 +66,7 @@ export default function ShlokaDetailPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedId = localStorage.getItem("userId1");
+      const storedId = localStorage.getItem("userId2");
       if (storedId) setUserId(storedId);
     }
   }, []);
@@ -104,7 +104,7 @@ export default function ShlokaDetailPage() {
       return;
     }
      if (userId) {
-      const storedUserInfo = localStorage.getItem("userInfo1");
+      const storedUserInfo = localStorage.getItem("userInfo2");
         if (storedUserInfo) {
           try {
             const parsed = JSON.parse(storedUserInfo);
@@ -141,10 +141,10 @@ export default function ShlokaDetailPage() {
     if (res.ok) {
       setSubmitted(true);
       if (typeof window !== "undefined") {
-        localStorage.setItem("userInfo1", JSON.stringify(userInfo));
+        localStorage.setItem("userInfo2", JSON.stringify(userInfo));
         const data = await res.json();
         if (data.userId) {
-          localStorage.setItem("userId1", data.userId);
+          localStorage.setItem("userId2", data.userId);
         }
       }
       setTimeout(() => {

@@ -107,7 +107,7 @@ export default function GiftPage() {
     }, []);
 
   useEffect(() => {
-    const raw = localStorage.getItem("_mkt_profile_v1");
+    const raw = localStorage.getItem("_mkt_profile_v2");
     if (!raw) return;
 
     const user = JSON.parse(raw);

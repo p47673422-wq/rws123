@@ -14,9 +14,9 @@ export default function CartSummaryPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
+    const storedCart = localStorage.getItem("cart2");
     if (storedCart) setCart(JSON.parse(storedCart));
-    const storedUser = localStorage.getItem("userInfo1");
+    const storedUser = localStorage.getItem("userInfo2");
     if (storedUser) setUserInfo(JSON.parse(storedUser));
     else setStep("userinfo");
   }, []);
@@ -49,7 +49,7 @@ export default function CartSummaryPage() {
       return;
     }
     setError("");
-    localStorage.setItem("userInfo1", JSON.stringify(userInfo));
+    localStorage.setItem("userInfo2", JSON.stringify(userInfo));
     setStep("summary");
   }
 

@@ -55,7 +55,7 @@ export default function MahaavatarQuizPage() {
   useEffect(() => {
     // Try to load userId from localStorage and fetch user info
     if (typeof window !== "undefined") {
-      const storedId = localStorage.getItem("userId1");
+      const storedId = localStorage.getItem("userId2");
       if (storedId) {
         setUserId(storedId);
         setLoadingUser(true);
@@ -122,8 +122,8 @@ export default function MahaavatarQuizPage() {
     if (data.success && data.userId) {
       setUserId(data.userId);
       if (typeof window !== "undefined") {
-        localStorage.setItem("userInfo1", JSON.stringify(userInfo));
-        localStorage.setItem("userId1", data.userId);
+        localStorage.setItem("userInfo2", JSON.stringify(userInfo));
+        localStorage.setItem("userId2", data.userId);
       }
       setShowUserInfo(false);
     } else {

@@ -17,7 +17,7 @@ export default function GiftSummaryPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const user = localStorage.getItem("userInfo1");
+      const user = localStorage.getItem("userInfo2");
       if (user) {
         const u = JSON.parse(user);
         setUserMobile(u.mobile || "");

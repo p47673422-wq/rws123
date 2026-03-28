@@ -18,7 +18,7 @@ export default function PsMenuBar() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedId = localStorage.getItem("userId1");
+      const storedId = localStorage.getItem("userId2");
       if (storedId) {
         fetch(`/api/progress/user?id=${storedId}`)
           .then(res => res.json())

@@ -82,7 +82,7 @@ export default function DivinePurchasePage() {
 
 		function handleCheckout() {
 			// Store cart in localStorage and redirect to cart summary page
-			localStorage.setItem("cart", JSON.stringify(cartItems));
+			localStorage.setItem("cart2", JSON.stringify(cartItems));
 			window.location.href = "/home/8ps/purchase/cart-summary";
 		}
 

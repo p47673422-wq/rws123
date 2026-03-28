@@ -19,7 +19,7 @@ function PurchasePage() {
 
       useEffect(() => {
         if (typeof window !== "undefined") {
-          const storedId = localStorage.getItem("userId1");
+          const storedId = localStorage.getItem("userId2");
           if (storedId) {
             setUserId(storedId);
             fetch(`/api/progress/user?id=${storedId}`)
@@ -93,7 +93,7 @@ function PurchasePage() {
 
       useEffect(() => {
         if (typeof window !== "undefined") {
-          const storedId = localStorage.getItem("userId1");
+          const storedId = localStorage.getItem("userId2");
           if (storedId) {
             setUserId(storedId);
             setLoadingUser(true);
@@ -158,8 +158,8 @@ function PurchasePage() {
         if (data.success && data.userId) {
           setUserId(data.userId);
           if (typeof window !== "undefined") {
-        localStorage.setItem("userInfo1", JSON.stringify(userInfo));
-        localStorage.setItem("userId1", data.userId);
+        localStorage.setItem("userInfo2", JSON.stringify(userInfo));
+        localStorage.setItem("userId2", data.userId);
       }
           setSubmitted(true);
       setStep("result");

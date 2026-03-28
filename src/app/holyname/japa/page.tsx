@@ -125,7 +125,7 @@ export default function JapaChallengePage() {
     let userProfile = profile;
     if (!userProfile) {
       // Try fetch
-      const mobile = typeof window !== "undefined" ? localStorage.getItem("mkt_mobile") : "";
+      const mobile = typeof window !== "undefined" ? localStorage.getItem("mkt_mobile2") : "";
       if (mobile) {
         const res = await fetch(`/api/holyname/profile?mobile=${encodeURIComponent(mobile)}`);
         if (res.ok) {
@@ -411,7 +411,7 @@ export default function JapaChallengePage() {
               setProfileLoading(false);
               if (res.ok) {
                 const data = await res.json();
-                localStorage.setItem("mkt_mobile", profileForm.mobile);
+                localStorage.setItem("mkt_mobile2", profileForm.mobile);
                 setShowProfileModal(false);
                 setProfileForm({ name: "", mobile: "", gender: "", address: "" });
                 setTimeout(() => {

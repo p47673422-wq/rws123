@@ -8,7 +8,7 @@ export function useLocalProfile() {
   // Get mobile from localStorage
   const getMobile = () => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem("mkt_mobile") || "";
+      return localStorage.getItem("mkt_mobile2") || "";
     }
     return "";
   };
@@ -47,7 +47,7 @@ export function useLocalProfile() {
   // Save mobile to localStorage
   const setMobile = (mobile: string) => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("mkt_mobile", mobile);
+      localStorage.setItem("mkt_mobile2", mobile);
       fetchProfile();
     }
   };

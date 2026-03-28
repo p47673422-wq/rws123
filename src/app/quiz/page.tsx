@@ -22,7 +22,7 @@ export default function QuizPage() {
     }, []);
 
   useEffect(() => {
-    const raw = localStorage.getItem("_mkt_profile_v1");
+    const raw = localStorage.getItem("_mkt_profile_v2");
     if (raw) setProfile(JSON.parse(raw));
   }, []);
 
@@ -86,7 +86,7 @@ export default function QuizPage() {
           <ProfileForm
             initial={profile}
             onSave={(p: any) => {
-              localStorage.setItem("_mkt_profile_v1", JSON.stringify(p));
+              localStorage.setItem("_mkt_profile_v2", JSON.stringify(p));
               setProfile(p);
               setMode("quiz");
             }}

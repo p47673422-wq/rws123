@@ -26,7 +26,7 @@ export default function BhagavadGitaPage() {
   useEffect(() => {
     // Check localStorage for user details
     if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("userInfo1");
+      const stored = localStorage.getItem("userInfo2");
       if (stored) {
         const parsed = JSON.parse(stored);
         setUser(parsed);
@@ -66,7 +66,7 @@ export default function BhagavadGitaPage() {
       if (!user) {
         // Save user info in localStorage
         userInfo = { ...form };
-        localStorage.setItem("userInfo1", JSON.stringify(userInfo));
+        localStorage.setItem("userInfo2", JSON.stringify(userInfo));
       }
       // Check if already registered (by mobile+language)
       const checkRes = await fetch(`/api/bhagavad-gita/check?mobile=${encodeURIComponent(userInfo.mobile)}&language=${encodeURIComponent(form.language)}`);
