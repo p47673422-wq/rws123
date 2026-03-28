@@ -8,14 +8,7 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const tablesParam = url.searchParams.get('tables'); // optional comma-separated table list
 
-    // Optional simple protection: if EXPORT_SECRET is set in env, require ?secret=... to match
-    const requiredSecret = process.env.EXPORT_SECRET;
-    if (requiredSecret) {
-      const provided = url.searchParams.get('secret') || '';
-      if (provided !== requiredSecret) {
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
-      }
-    }
+    // No auth required for quick export (intentionally left open per user request)
 
     let tables: string[] = [];
 
