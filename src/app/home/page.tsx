@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import "./home-custom.css";
+// import "./home-custom.css";
 import Link from "next/link";
 import Image from "next/image";
 import GlowingButton from "../../components/GlowingButton";
@@ -160,8 +160,8 @@ useEffect(() => {
       </header>
 
       {/* HERO SECTION - Dāmodara Mālā 2025 */}
-      <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
-        <Image src="/images/ram.jpeg" alt="Radha Damodar" width={1600} height={600} className="absolute inset-0 w-full h-full opacity-80 object-cover pointer-events-none select-none" />
+      {/* <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
+        <Image src="/images/am.png" alt="Radha Damodar" width={1600} height={600} className="absolute inset-0 w-full h-full opacity-80 object-cover pointer-events-none select-none" />
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 via-blue-100 to-pink-100 opacity-70" />
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -189,9 +189,9 @@ useEffect(() => {
             <a href="#quizzes" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>🎯</span> Quiz Corner</a>
           </div>
         </motion.div>
-      </section>
-      {/* <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
-        <Image src="/images/arjuna-krishna-chariot.jpg" alt="Radha Damodar" width={1600} height={600} className="absolute inset-0 w-full h-full opacity-80 object-cover pointer-events-none select-none" />
+      </section> */}
+      <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
+        <Image src="/images/am.png" alt="Radha Damodar" width={1600} height={600} className="absolute inset-0 w-full h-full opacity-80 object-cover pointer-events-none select-none" />
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 via-blue-100 to-pink-100 opacity-70" />
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -200,29 +200,29 @@ useEffect(() => {
           className="relative z-10 text-center w-full px-4"
         >
           <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg flex items-center justify-center gap-2">
-           Gita Jayanti
+           Adhik Maas Special
           </h1>
           <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">🌸 Mediation 🌸</p>
-          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">Dec 1 – Dec 31</p>
+          <p className="text-xl md:text-2xl text-blue-700 mb-2 font-semibold">May 17 – Jun 15</p>
           <div className="mb-4">
-            <span className="text-lg font-bold text-pink-600 animate-pulse">Registration closes Dec 1!</span>
+            <span className="text-lg font-bold text-pink-600 animate-pulse">Registration closes May 17!</span>
           </div>
           <div className="mb-6">
             <CountdownTimer />
           </div>
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full mb-2">
-            <a href="https://pages.razorpay.com/pl_RerUM7s5oEyv5V/view" target="_blank" rel="noopener noreferrer">
+            <a href="https://tinyurl.com/mamekam" target="_blank" rel="noopener noreferrer">
               <GlowingButton className="text-lg">Register Now</GlowingButton>
             </a>
-            <Link href="gita-jayanti">
+            <Link href="aadhik-maas">
               <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">View Details</button>
             </Link>
-            <a href="tel:9985181358" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>📩</span> Contact Us: 9985181358</a>
+            <a href="tel:8074234585" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>📩</span> Contact Us: 8074234585</a>
               <a href="#quizzes" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"><span>🎯</span> Quiz Corner</a>
           
           </div>
         </motion.div>
-      </section> */}
+      </section>
 
       {/* ...existing homepage content... */}
 
