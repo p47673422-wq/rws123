@@ -129,7 +129,7 @@ export default function GiftPage() {
       <audio ref={audioRef} src="/audio/qrn.mp3" autoPlay loop style={{ display: 'none' }} />
       <header className="max-w-3xl mx-auto pb-4 border-b border-amber-200">
         <h1 className="text-xl font-bold text-amber-800">
-          Claim Your Ram Navami Gift
+          Claim Your Golden Jubilee Gift at stall
         </h1>
       </header>
 
@@ -140,11 +140,11 @@ export default function GiftPage() {
         {/* ---------------- GITA PROMOTION ---------------- */}
         <div className="bg-white p-6 rounded-xl shadow border border-amber-100 flex gap-6">
           <img
-            src="/images/ram.jpeg"
+            src="/images/sp3.jpeg"
             alt="Bhagavad Gita As It Is"
             className="w-32 rounded-lg border shadow"
           />
-          <div>
+          {/* <div>
   <h2 className="font-bold text-lg text-amber-800">
     Why Ramayana Is Essential
   </h2>
@@ -157,7 +157,7 @@ export default function GiftPage() {
     <li>Demonstrates pure devotion (Hanuman & Shabari)</li>
     <li>Guides righteous living in all situations</li>
   </ul>
-</div>
+</div> */}
         </div>
 
         {/* ---------------- NO ATTEMPTS ---------------- */}
@@ -180,7 +180,7 @@ export default function GiftPage() {
         {meditationAttempts.length > 0 && (
           <div className="bg-white p-6 rounded-xl shadow border border-amber-100">
             <h2 className="text-lg font-bold text-amber-800 mb-4">
-              Ram Navami Meditation Quiz Result
+              Golden Jubilee Quiz Result
             </h2>
 
             {meditationAttempts.map((att) => (

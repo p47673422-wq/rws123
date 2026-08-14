@@ -39,7 +39,7 @@ export default function QuizPage() {
       {/* ================= HEADER ================= */}
       <div
         className="w-full h-36 md:h-44 bg-cover bg-center rounded-b-3xl shadow"
-        style={{ backgroundImage: "url('/images/ram.jpeg')" }}
+        style={{ backgroundImage: "url('/images/sp3.jpeg')" }}
       />
 
       <header className="max-w-4xl mx-auto px-6 mt-4 text-center">
@@ -60,12 +60,12 @@ export default function QuizPage() {
             {/* -------- GITA MEDITATION QUIZ -------- */}
             <div className="bg-white p-6 rounded-2xl shadow border border-amber-100 md:col-span-2">
               <h2 className="text-xl font-semibold text-amber-800">
-                Ram Navami Meditation Quiz
+                Golden Jubilee Celebration Quiz
               </h2>
               
               <ul className="text-sm text-slate-600 mt-3 list-disc ml-5">
                 <li>Increase bhakti</li>
-                <li>Know about Lord Ram</li>
+                <li>Know about HDG AC Bhaktivedant Swami Prabhupada</li>
                 <li>Gift after completion</li>
               </ul>
 
@@ -73,7 +73,7 @@ export default function QuizPage() {
                 onClick={() => startQuiz(gitaMeditationQuiz)}
                 className="mt-4 px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl"
               >
-                Start Meditation Quiz
+                Start Quiz
               </button>
             </div>
 
