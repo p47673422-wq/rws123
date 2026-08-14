@@ -191,7 +191,7 @@ useEffect(() => {
         </motion.div>
       </section> */}
       <section className="relative w-full flex flex-col items-center justify-center py-16 md:py-24 bg-gradient-to-br from-yellow-100 via-blue-50 to-pink-50 overflow-hidden">
-        <Image src="/images/am.png" alt="Radha Damodar" width={1600} height={600} className="absolute inset-0 w-full h-full opacity-80 object-cover pointer-events-none select-none" />
+        <Image src="/images/sp2.jpeg" alt="Radha Damodar" width={1600} height={600} className="absolute inset-0 w-full h-full opacity-80 object-cover pointer-events-none select-none" />
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 via-blue-100 to-pink-100 opacity-70" />
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -203,9 +203,6 @@ useEffect(() => {
             🌸 Golden Jubilee 🌸
           </h1>
           
-          <div className="mb-4">
-            <span className="text-lg font-bold text-pink-600 animate-pulse">Limited time offer!</span>
-          </div>
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full mb-2">
             
               <GlowingButton className="text-lg">Hare Krishna 🙏</GlowingButton>

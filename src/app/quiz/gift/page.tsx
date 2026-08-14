@@ -126,7 +126,7 @@ export default function GiftPage() {
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-amber-50 to-white">
-      <audio ref={audioRef} src="/audio/qrn.mp3" autoPlay loop style={{ display: 'none' }} />
+      {/* <audio ref={audioRef} src="/audio/qrn.mp3" autoPlay loop style={{ display: 'none' }} /> */}
       <header className="max-w-3xl mx-auto pb-4 border-b border-amber-200">
         <h1 className="text-xl font-bold text-amber-800">
           Claim Your Golden Jubilee Gift at stall

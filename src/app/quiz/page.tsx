@@ -34,7 +34,7 @@ export default function QuizPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-white">
-      <audio ref={audioRef} src="/audio/qrn.mp3" autoPlay loop style={{ display: 'none' }} />
+      {/* <audio ref={audioRef} src="/audio/qrn.mp3" autoPlay loop style={{ display: 'none' }} /> */}
 
       {/* ================= HEADER ================= */}
       <div
