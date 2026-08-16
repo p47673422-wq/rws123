@@ -84,7 +84,7 @@ export const quizDefinition = {
       ],
     },
     {
-      id: "s5",
+      id: "s6",
       title: "Question 6",
   
       items: [
@@ -94,6 +94,21 @@ export const quizDefinition = {
           graded: false,
   image: "/images/sp1.png",
           question: "Read the below poster and share your comments"
+
+
+        }
+      ],
+    },
+    {
+      id: "s7",
+      title: "Question 7",
+  
+      items: [
+        {
+          id: "s7q1",
+          type: "one-word",
+          graded: false,
+          question: "Just like Hanuman crosses over ocean and found Mother Sita and delivered the message of Lord Rama, similarly Srila Prabhupada crossed over the oceans and travelled all across the globe to give the message of Lord to all the living entities who are like Mother Sita who is kidnapped by forces like Ravana. Srila Prabhupada used to say if i can do so much although i am old, so you all young boys and girls can do so much for making the world better. \n What practical steps would you like to take in your life for it - "
 
 
         }
