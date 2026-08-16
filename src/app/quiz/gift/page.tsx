@@ -96,6 +96,7 @@ const conceptMap = {
 /* MAIN PAGE                                                           */
 /* ------------------------------------------------------------------ */
 export default function GiftPage() {
+  let gender = "";
   const [attempts, setAttempts] = useState<any[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
     useEffect(() => {
@@ -111,6 +112,7 @@ export default function GiftPage() {
     if (!raw) return;
 
     const user = JSON.parse(raw);
+    gender = user.gender;
     fetch(`/api/attempts?userId=${user.id}`)
       .then((r) => r.json())
       .then(setAttempts);
@@ -140,24 +142,24 @@ export default function GiftPage() {
         {/* ---------------- GITA PROMOTION ---------------- */}
         <div className="bg-white p-6 rounded-xl shadow border border-amber-100 flex gap-6">
           <img
-            src="/images/sp3.jpeg"
+            src="/images/sp2.jpeg"
             alt="Bhagavad Gita As It Is"
             className="w-32 rounded-lg border shadow"
           />
-          {/* <div>
-  <h2 className="font-bold text-lg text-amber-800">
-    Why Ramayana Is Essential
-  </h2>
-  <p className="mt-2 text-sm text-slate-700">
-    <b>Ramayana</b> as presented in disciplic succession reveals the divine pastimes of <b>Lord Ram</b>, the Supreme Personality of Godhead, and teaches perfect dharma and devotion.
-  </p>
-  <ul className="list-disc ml-5 mt-3 text-sm text-slate-700 space-y-1">
-    <li>Reveals Lord Ram as the embodiment of dharma (Ayodhya Kanda)</li>
-    <li>Teaches ideal character through His actions (entire Ramayana)</li>
-    <li>Demonstrates pure devotion (Hanuman & Shabari)</li>
-    <li>Guides righteous living in all situations</li>
-  </ul>
-</div> */}
+          <div>
+ <h2 className="font-bold text-lg text-amber-800">
+  Join Our Online Free Bhakti Classes
+</h2>
+<p className="mt-2 text-sm text-slate-700">
+  Become part of our spiritual community and start your journey today by joining the official WhatsApp groups below.
+</p>
+<ul className="list-disc ml-5 mt-3 text-sm text-slate-700 space-y-1">
+  <li>
+    <a href={gender == 'Male' ? "https://chat.whatsapp.com/IybyiwpsjWe6uCt3rZcjsb" : gender == 'Female' ? "https://chat.whatsapp.com/EQgJfqb9A1gKE8rAQkK50y": ""} className="text-amber-800 underline font-medium">Click here to join</a>
+  </li>
+  
+</ul>
+</div>
         </div>
 
         {/* ---------------- NO ATTEMPTS ---------------- */}

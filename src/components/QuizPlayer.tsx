@@ -118,10 +118,18 @@ export default function QuizPlayer({ quiz, profile, onExit }: any) {
               🙏 Quiz Submitted Successfully
             </h3>
 
-            <p className="text-sm text-slate-700 mt-3">
-              Thank you for participating in the Golden Jubille Quiz. Please collect your gift from stall
-              Your responses have been recorded successfully.
-            </p>
+            
+<p className="mt-2 text-sm text-slate-700">
+  Become part of our spiritual community and start your journey today by joining the official WhatsApp groups below.
+</p>
+<ul className="list-disc ml-5 mt-3 text-sm text-slate-700 space-y-1">
+  <li>
+     <a href={profile.gender == 'Male' ? "https://chat.whatsapp.com/IybyiwpsjWe6uCt3rZcjsb" : profile.gender == 'Female' ? "https://chat.whatsapp.com/EQgJfqb9A1gKE8rAQkK50y": ""} className="text-amber-800 underline font-medium">Click here to join</a>
+  </li>
+</ul>
+<p className="text-sm text-slate-700 mt-3">
+  Thank you for participating in the Golden Jubilee Quiz. Please collect your gift from the stall. Your responses have been recorded successfully.
+</p>
 
             <p className="text-sm text-slate-600 mt-2">
               You can now view your results and claim your Gloden Jubilee gift.
