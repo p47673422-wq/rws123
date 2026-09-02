@@ -200,19 +200,18 @@ useEffect(() => {
           className="relative z-10 text-center w-full px-4"
         >
           <h1 className="text-4xl md:text-5xl font-extrabold text-pink-700 mb-2 drop-shadow-lg flex items-center justify-center gap-2">
-            🌸 Golden Jubilee 🌸
+            🌸 Janmashtami 🌸
           </h1>
           
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full mb-2">
-            
-              <GlowingButton className="text-lg">Hare Krishna 🙏</GlowingButton>
-            <a href="/quiz">
-              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">Golden Jubille Quiz</button>
+          <GlowingButton className="text-lg">Hare Krishna 🙏</GlowingButton>
+            <a href="/jm-quiz1">
+              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">Krishna Quest 1</button>
             </a>
-            <a href="/quiz/gift">
-              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">Claim  Gift</button>
+            <a href="/jm-quiz2">
+              <button className="w-full md:w-auto py-3 px-6 rounded-xl border-2 border-pink-400 text-pink-700 font-bold shadow-lg hover:scale-105 hover:border-yellow-400 transition flex items-center gap-2 bg-white">Krishna Quest 2</button>
             </a>
-            <a href="#quizzes" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"> Quiz Corner</a>
+            <a href="https://mybhakticonnectt.netlify/app/" className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-yellow-400 to-pink-400 shadow-lg hover:scale-105 transition flex items-center gap-2"> Bhakti Kit</a>
           </div>
         </motion.div>
       </section>
