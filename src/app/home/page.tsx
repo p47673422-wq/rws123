@@ -252,6 +252,38 @@ useEffect(() => {
           <Image src="/images/shloka.png" alt="Lotus Divider" width={120} height={32} className="opacity-30" />
         </div>
       </section> */}
+            {/* WHATSAPP CHANNEL */}
+      <section className="w-full bg-gradient-to-r from-green-50 via-yellow-50 to-pink-50 py-5 px-4 border-y border-yellow-200">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-4 text-center md:text-left">
+          
+          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-500 text-white shadow-lg shrink-0">
+            <FaWhatsapp className="text-2xl" />
+          </div>
+
+          <div>
+            <h2 className="text-lg md:text-xl font-bold text-green-700">
+              🌸 Join Our WhatsApp Channel
+            </h2>
+            <p className="text-sm md:text-base text-gray-700">
+              Follow the <span className="font-semibold text-pink-700">BHAKTI Shower @IBSC ISKCON Abids Hyderabad</span> channel for devotional updates.
+            </p>
+          </div>
+
+          <a
+            href="https://whatsapp.com/channel/0029Vb8ZjIIEAKWJ3bhCJQ1s"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 via-green-600 to-green-500 shadow-lg hover:scale-105 transition-all flex items-center gap-2 whitespace-nowrap"
+          >
+            <FaWhatsapp className="text-xl" />
+            Follow Channel
+          </a>
+
+        </div>
+      </section>
+
+      {/* WHY JOIN STRIP */}
+      
 
       {/* WHY JOIN STRIP */}
       <section className="w-full bg-gradient-to-r from-yellow-50 via-pink-50 to-white py-4 flex flex-col md:flex-row justify-center items-center gap-6 border-y border-yellow-200">
